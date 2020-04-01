@@ -1,12 +1,12 @@
 package com.example.tripguide.security.oauth2;
 
-import com.example.springsocial.exception.OAuth2AuthenticationProcessingException;
-import com.example.springsocial.model.AuthProvider;
-import com.example.springsocial.model.User;
-import com.example.springsocial.repository.UserRepository;
-import com.example.springsocial.security.UserPrincipal;
-import com.example.springsocial.security.oauth2.user.OAuth2UserInfo;
-import com.example.springsocial.security.oauth2.user.OAuth2UserInfoFactory;
+import com.example.tripguide.exception.OAuth2AuthenticationProcessingException;
+import com.example.tripguide.model.AuthProvider;
+import com.example.tripguide.model.User;
+import com.example.tripguide.repository.UserRepository;
+import com.example.tripguide.security.UserPrincipal;
+import com.example.tripguide.security.oauth2.user.OAuth2UserInfo;
+import com.example.tripguide.security.oauth2.user.OAuth2UserInfoFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;

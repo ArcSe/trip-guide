@@ -1,9 +1,9 @@
 package com.example.tripguide.security.oauth2;
 
-import com.example.springsocial.config.AppProperties;
-import com.example.springsocial.exception.BadRequestException;
-import com.example.springsocial.security.TokenProvider;
-import com.example.springsocial.util.CookieUtils;
+import com.example.tripguide.config.AppProperties;
+import com.example.tripguide.exception.BadRequestException;
+import com.example.tripguide.security.TokenProvider;
+import com.example.tripguide.util.CookieUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.Optional;
 
-import static com.example.springsocial.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME;
+import static com.example.tripguide.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME;
 
 @Component
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {

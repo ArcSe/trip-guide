@@ -1,6 +1,6 @@
 package com.example.tripguide.security;
 
-import com.example.springsocial.config.AppProperties;
+import com.example.tripguide.config.AppProperties;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

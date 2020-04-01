@@ -1,9 +1,9 @@
 package com.example.tripguide.security;
 
 
-import com.example.springsocial.exception.ResourceNotFoundException;
-import com.example.springsocial.model.User;
-import com.example.springsocial.repository.UserRepository;
+import com.example.tripguide.exception.ResourceNotFoundException;
+import com.example.tripguide.model.User;
+import com.example.tripguide.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

@@ -1,7 +1,7 @@
 package com.example.tripguide.security.oauth2.user;
 
-import com.example.springsocial.exception.OAuth2AuthenticationProcessingException;
-import com.example.springsocial.model.AuthProvider;
+import com.example.tripguide.exception.OAuth2AuthenticationProcessingException;
+import com.example.tripguide.model.AuthProvider;
 
 import java.util.Map;
 
