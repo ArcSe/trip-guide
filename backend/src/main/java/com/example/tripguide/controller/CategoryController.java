@@ -1,0 +1,21 @@
+package com.example.tripguide.controller;
+
+
+import com.example.tripguide.model.Category;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+
+@RestController
+public class CategoryController {
+
+    @Autowired
+    private CategoryController categoryController;
+
+    @GetMapping("/category")
+    public List<Category> getAllCategory(){
+        return categoryController.getAllCategory();
+    }
+}
