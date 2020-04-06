@@ -51,7 +51,7 @@ export function signup(signupRequest) {
 }
 export function addCategory (categoryRequest) {
     return request({
-        url: API_BASE_URL + "/category",
+        url: API_BASE_URL + "/category/add",
         method: 'POST',
         body: JSON.stringify(categoryRequest)
     });
