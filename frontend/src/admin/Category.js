@@ -39,14 +39,14 @@ class AddForm extends Component {
     handleSubmit(event) {
         event.preventDefault();
 
-        const signUpRequest = Object.assign({}, this.state);
+        const categoryRequest = Object.assign({}, this.state);
 
-        addCategory(signUpRequest)
+        addCategory(categoryRequest)
             .then(response => {
-                Alert.success("You're successfully registered. Please login to continue!");
-                this.props.history.push("/login");
+                Alert.success("Категория добавлена");
+                this.props.history.push("/category");
             }).catch(error => {
-            Alert.error((error && error.message) || 'Oops! Something went wrong. Please try again!');
+            Alert.error((error && error.message) || 'Что-то пошло не так. Повторите еще раз');
         });
     }
 
