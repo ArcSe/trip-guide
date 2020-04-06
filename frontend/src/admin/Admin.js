@@ -28,20 +28,21 @@ export default class Admin extends Component {
                     </div>
 
                     <div className='profile-content'>
-                        <div className="row ">
-                             <div className="container">
-                                 <div class="row">
-                                    <button type="button" className="btn btn-outline-dark" >Пользователи</button>
-                                     <button type="button" className="btn btn-outline-dark">События</button>
-                                    <button type="button" className="btn btn-outline-dark">Категории</button>
-                                    <button type="button" className="btn btn-outline-dark">Города</button>
-                                 </div>
-                             </div>
+                <div className="row ">
+                    <div className="container">
+                        <div class="row justify-content-center">
+                        <button type="button" className="btn btn-outline-dark" >Пользователи</button>
+                        <button type="button" className="btn btn-outline-dark">События</button>
+                        <button type="button" className="btn btn-outline-dark">Категории</button>
+                        <button type="button" className="btn btn-outline-dark">Города</button>
                         </div>
+                    </div>
+                </div>
                     </div>
 
                 <div className="row">
                     <div className="container">
+                        <div className='profile-content'>
                         <div className="input-group mb-3">
                             <input type="text" className="form-control" placeholder="Recipient's username"
                                    aria-label="Recipient's username" aria-describedby="basic-addon2" />
@@ -50,13 +51,16 @@ export default class Admin extends Component {
                                     <button className="btn btn-outline-secondary" type="button">Найти</button>
                                 </div>
                         </div>
+                        </div>
                     </div>
                 </div>
 
                 <div className="container">
                     <div className="row">
+                        <div className='profile-content'>
                         <div className="col-sm">
                             <h6>Имена пользователей</h6>
+                        </div>
                         </div>
                     </div>
                 </div>
