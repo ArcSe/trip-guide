@@ -9,6 +9,7 @@ import Login from '../user/login/Login';
 import Signup from '../user/signup/Signup';
 import Profile from '../user/profile/Profile';
 import Category from '../admin/Category';
+import Admin from '../admin/Admin';
 import OAuth2RedirectHandler from '../user/oauth2/OAuth2RedirectHandler';
 import NotFound from '../common/NotFound';
 import LoadingIndicator from '../common/LoadingIndicator';
@@ -80,6 +81,9 @@ class App extends Component {
             <Route exact path="/" component={Home}></Route>           
             <PrivateRoute path="/profile" authenticated={this.state.authenticated} currentUser={this.state.currentUser}
               component={Profile}></PrivateRoute>
+
+            <Route exact path="/admin" component={Admin}></Route>
+
             <Route path="/category" authenticated={this.state.authenticated} currentUser={this.state.currentUser}
                    component={Category}></Route>
             <Route path="/login"
