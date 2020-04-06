@@ -22,10 +22,6 @@ class Signup extends Component {
             <div className="signup-container">
                 <div className="signup-content">
                     <h1 className="signup-title">Signup with Trip guide</h1>
-                    <SocialSignup />
-                    <div className="or-separator">
-                        <span className="or-text">OR</span>
-                    </div>
                     <SignupForm {...this.props} />
                     <span className="login-link">Already have an account? <Link to="/login">Login!</Link></span>
                 </div>
