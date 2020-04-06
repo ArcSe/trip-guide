@@ -33,11 +33,7 @@ public class CategoryController {
             throw new BadRequestException("Категория уже создана.");
         }
 
-        // Creating new category
-        Category category = new Category();
-        category.setName(categoryRequest.getName());
-
-        Category result = categoryRepository.save(category);
+        Category result = categoryRepository.save(createNewCategory(categoryRequest));
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentContextPath().path("/category")
@@ -45,5 +41,11 @@ public class CategoryController {
 
         return ResponseEntity.created(location)
                 .body(new ApiResponse(true, "Категория создана успешно"));
+    }
+
+    private Category createNewCategory(CategoryRequest categoryRequest) {
+        Category category = new Category();
+        category.setName(categoryRequest.getName());
+        return category;
     }
 }
