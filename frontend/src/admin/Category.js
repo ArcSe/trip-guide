@@ -1,15 +1,15 @@
 import React, {Component} from 'react';
 import './Category.css';
-import {signup} from "../util/APIUtils";
+import {addCategory} from "../util/APIUtils";
 import Alert from "react-s-alert";
 
 class Category extends Component {
     
     render() {
         return (
-            <div className="container">
-                <div className="content">
-                    <h1 className="title">Add new category</h1>
+            <div className="category-container">
+                <div className="category-content">
+                    <h1 className="category-title">Add new category</h1>
                     <AddForm {...this.props} />
                 </div>
             </div>
@@ -41,7 +41,7 @@ class AddForm extends Component {
 
         const signUpRequest = Object.assign({}, this.state);
 
-        signup(signUpRequest)
+        addCategory(signUpRequest)
             .then(response => {
                 Alert.success("You're successfully registered. Please login to continue!");
                 this.props.history.push("/login");
