@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import '../admin/Admin.css'
 
 
 import {ButtonToolbar, ButtonGroup, Button, Container, Row, Col} from "react-bootstrap";
@@ -10,31 +11,38 @@ export default class Admin extends Component {
 
     render() {
         return (
-            <div className="container">
-                <div className="row">
 
-                    <div className="media">
-                        <img src="..." className="rounded" alt="Картинка"/>
-                        <div className="media-body">
-                            <h5 className="mt-0">Иван Иванов</h5>
-                            <p>Администратор</p>
-                            <p>Email: test@t.t</p>
+                <div className="container">
+                    <div className='profile-container'>
+                        <div className="row ">
+                            <div className="media">
+                                <img src="..." className="rounded" alt="Картинка"/>
+                                <div className="media-body">
+                                    <h1 className="display-4">Иван Иванов</h1>
+                                    <p class="lead">Администратор</p>
+                                    <p class="lead">Email: test@t.t</p>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
 
-                </div>
-
-                <div className="row">
+                    <div className='profile-content'>
+                <div className="row ">
                     <div className="container">
-                        <button type="button" className="btn btn-outline-primary">Пользователи</button>
-                        <button type="button" className="btn btn-outline-primary">События</button>
-                        <button type="button" className="btn btn-outline-primary">Категории</button>
-                        <button type="button" className="btn btn-outline-primary">Города</button>
+                        <div class="row justify-content-center">
+                        <button type="button" className="btn btn-outline-dark" >Пользователи</button>
+                        <button type="button" className="btn btn-outline-dark">События</button>
+                        <button type="button" className="btn btn-outline-dark">Категории</button>
+                        <button type="button" className="btn btn-outline-dark">Города</button>
+                        </div>
                     </div>
                 </div>
+                    </div>
 
                 <div className="row">
                     <div className="container">
+                        <div className='profile-content'>
                         <div className="input-group mb-3">
                             <input type="text" className="form-control" placeholder="Recipient's username"
                                    aria-label="Recipient's username" aria-describedby="basic-addon2" />
@@ -42,6 +50,17 @@ export default class Admin extends Component {
                                 <div className="input-group-append">
                                     <button className="btn btn-outline-secondary" type="button">Найти</button>
                                 </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="container">
+                    <div className="row">
+                        <div className='profile-content'>
+                        <div className="col-sm">
+                            <h6>Имена пользователей</h6>
+                        </div>
                         </div>
                     </div>
                 </div>
