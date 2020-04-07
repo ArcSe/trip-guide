@@ -6,8 +6,38 @@ import '../admin/Admin.css'
 import {ButtonToolbar, ButtonGroup, Button, Container, Row, Col} from "react-bootstrap";
 import Media from "react-bootstrap/Media";
 import ListGroup from "react-bootstrap/ListGroup";
+import {getCategories, getCurrentUser} from "../util/APIUtils";
 
 export default class Admin extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            authenticated: false,
+            currentUser: null,
+            loading: false
+        };
+
+        this.loadCurrentlyLoggedInUser = this.loadCurrentlyLoggedInUser.bind(this);
+    }
+
+    loadCurrentlyLoggedInUser() {
+        getCurrentUser()
+            .then(response => {
+                this.setState({
+                    currentUser: response,
+                    authenticated: true,
+                    loading: false
+                });
+            }).catch(error => {
+            this.setState({
+                loading: false
+            });
+        });
+    }
+
+    componentDidMount() {
+        //this.loadCurrentlyLoggedInUser();
+    }
 
     render() {
         return (
@@ -18,9 +48,9 @@ export default class Admin extends Component {
                             <div className="media">
                                 <img src="..." className="rounded" alt="Картинка"/>
                                 <div className="media-body">
-                                    <h1 className="display-4">Иван Иванов</h1>
+                                    <h4>{this.props.currentUser.name}</h4>
                                     <p class="lead">Администратор</p>
-                                    <p class="lead">Email: test@t.t</p>
+                                    <p class="lead">Email: {this.props.currentUser.email}</p>
                                 </div>
                             </div>
 
@@ -31,7 +61,7 @@ export default class Admin extends Component {
                 <div className="row ">
                     <div className="container">
                         <div class="row justify-content-center">
-                        <button type="button" className="btn btn-outline-dark" >Пользователи</button>
+                        <button type="button" className="btn btn-outline-dark" onClick={this.onClick}>Пользователи</button>
                         <button type="button" className="btn btn-outline-dark">События</button>
                         <button type="button" className="btn btn-outline-dark">Категории</button>
                         <button type="button" className="btn btn-outline-dark">Города</button>
@@ -64,6 +94,8 @@ export default class Admin extends Component {
                         </div>
                     </div>
                 </div>
+
+
 
                 <div className="row">
                     <div className="container">

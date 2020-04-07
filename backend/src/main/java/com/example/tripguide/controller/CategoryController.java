@@ -5,8 +5,11 @@ import com.example.tripguide.model.Category;
 import com.example.tripguide.payload.ApiResponse;
 import com.example.tripguide.payload.CategoryRequest;
 import com.example.tripguide.repository.CategoryRepository;
+import com.example.tripguide.security.CurrentUser;
+import com.example.tripguide.security.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,14 +19,15 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
-@RestController("/category")
+@RestController
 public class CategoryController {
 
     @Autowired
     private CategoryRepository categoryRepository;
 
-    @GetMapping
-    public List<Category> getAllCategory(){
+    @GetMapping("/api/categories")
+    @PreAuthorize("hasRole('USER')")
+    public List<Category> getAllCategory(@CurrentUser UserPrincipal userPrincipal){
         return categoryRepository.findAll();
     }
 
