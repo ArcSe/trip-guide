@@ -42,48 +42,51 @@ export default class Admin extends Component {
     render() {
         return (
 
-                <div className="container">
-                    <div className='profile-container'>
-                        <div className="row ">
-                            <div className="media">
-                                <img src="..." className="rounded" alt="Картинка"/>
-                                <div className="media-body">
-                                    <h4>{this.props.currentUser.name}</h4>
-                                    <p class="lead">Администратор</p>
-                                    <p class="lead">Email: {this.props.currentUser.email}</p>
-                                </div>
+            <div className="container">
+                <div className='profile-container'>
+                    <div className="row ">
+                        <div className="media">
+                            <img src="..." className="rounded" alt="Картинка"/>
+                            <div className="media-body">
+                                <h4 class="lead">{this.props.currentUser.name}</h4>
+                                <p class="lead">Администратор</p>
+                                <p class="lead">Email: {this.props.currentUser.email}</p>
                             </div>
-
                         </div>
-                    </div>
 
-                    <div className='profile-content'>
-                <div className="row ">
-                    <div className="container">
-                        <div class="row justify-content-center">
-                        <button type="button" className="btn btn-outline-dark" onClick={this.onClick}>Пользователи</button>
-                        <button type="button" className="btn btn-outline-dark">События</button>
-                        <button type="button" className="btn btn-outline-dark">Категории</button>
-                        <button type="button" className="btn btn-outline-dark">Города</button>
-                        </div>
                     </div>
                 </div>
-                    </div>
 
-                <div className="row">
-                    <div className="container">
-                        <div className='profile-content'>
-                        <div className="input-group mb-3">
-                            <input type="text" className="form-control" placeholder="Recipient's username"
-                                   aria-label="Recipient's username" aria-describedby="basic-addon2" />
 
-                                <div className="input-group-append">
-                                    <button className="btn btn-outline-secondary" type="button">Найти</button>
-                                </div>
-                        </div>
-                        </div>
+                <div className="form" >
+                    <div className="form-group">
+                        <nav className="navbar navbar-expand-lg navbar-light bg-white">
+                            <div className="collapse navbar-collapse" id="navbarSupportedContent">
+                                <ul className="navbar-nav mr-auto">
+                                    <div className="btn-group col-md-4">
+                                        <button type="button" className="btn btn-outline-dark" onClick={this.onClick}>Пользователи</button>
+                                    </div>
+                                    <div className="btn-group col-md-4">
+                                        <button type="button" className="btn btn-outline-dark">События</button>
+                                    </div>
+                                    <div className="btn-group col-md-4">
+                                        <button type="button" className="btn btn-outline-dark">Категории</button>
+                                    </div>
+                                    <div className="btn-group col-md-4">
+                                        <button type="button" className="btn btn-outline-dark">Города</button>
+                                    </div>
+                                </ul>
+                                <form className="form-inline my-2 my-lg-0">
+                                    <input className="form-control mr-sm-2" type="search" placeholder="Search"
+                                           aria-label="Search"/>
+                                        <button className="btn btn-outline-dark my-2 my-sm-0" type="submit">Search
+                                        </button>
+                                </form>
+                            </div>
+                        </nav>
                     </div>
                 </div>
+
 
                 <div className="row">
                     <div className="container">

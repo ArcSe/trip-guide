@@ -49,28 +49,10 @@ export function signup(signupRequest) {
         body: JSON.stringify(signupRequest)
     });
 }
-export function addCategory(categoryRequest) {
+export function addCategory (categoryRequest) {
     return request({
         url: API_BASE_URL + "/category/add",
         method: 'POST',
         body: JSON.stringify(categoryRequest)
-    });
-}
-
-export function getCategories() {
-
-    if(!localStorage.getItem(ACCESS_TOKEN)) {
-        return Promise.reject("No access token set.");
-    }
-
-    return request({
-        url: API_BASE_URL + "/user/me",
-        method: 'GET'
-    });
-
-
-    return request({
-        url: API_BASE_URL + "/api/categories",
-        method: 'GET'
     });
 }
