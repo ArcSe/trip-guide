@@ -85,18 +85,6 @@ export default class Admin extends Component {
                     </div>
                 </div>
 
-                <div className="container">
-                    <div className="row">
-                        <div className='profile-content'>
-                        <div className="col-sm">
-                            <h6>Имена пользователей</h6>
-                        </div>
-                        </div>
-                    </div>
-                </div>
-
-
-
                 <div className="row">
                     <div className="container">
                         <ul className="list-group">
