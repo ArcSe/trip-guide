@@ -17,7 +17,7 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     List<Category> findAll();
 
-    void deleteById();
+    void deleteById(Long id);
 
     @Modifying
     @Query("update Category c set c.name = ?1 where c.id = ?2")

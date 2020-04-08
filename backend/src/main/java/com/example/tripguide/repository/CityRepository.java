@@ -19,8 +19,9 @@ public interface CityRepository extends JpaRepository<City, Long> {
 
     void deleteById(Long id);
 
+
     @Modifying
-    @Query("update Cities c set c.name = ?1 where c.id = ?2")
+    @Query("update City c set c.name = ?1 where c.id = ?2")
     void setNameById(String name, Long id);
 
     boolean existsByName(String name);

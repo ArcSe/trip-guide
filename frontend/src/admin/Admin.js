@@ -59,7 +59,7 @@ class Cities extends React.Component {
                     {
                         this.state.cities.map(city =>
                             <div>
-                                <li className="list-group-item d-flex justify-content-between">
+                                <li className="mb-1 list-group-item d-flex justify-content-between">
                                     <p className="mt-2 flex-grow-1">{city.name}</p>
                                     <div className="btn-group" >
                                         <button type="button" className="mr-1 btn btn-outline-success">Изменить</button>
@@ -116,7 +116,7 @@ class Categories extends React.Component {
                     {
                         this.state.categories.map(category =>
                             <div>
-                                <li className="list-group-item d-flex justify-content-between">
+                                <li className="mb-1 list-group-item d-flex justify-content-between">
                                     <p className="mt-2 flex-grow-1">{category.name}</p>
                                     <div className="btn-group" >
                                         <button type="button" className="mr-1 btn btn-outline-success">Изменить</button>

@@ -76,7 +76,7 @@ export function getCategories() {
     }
 
     return request({
-        url: API_BASE_URL + "/api/categories",
+        url: API_BASE_URL + "/categories",
         method: 'GET'
     });
 }

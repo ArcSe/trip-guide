@@ -25,13 +25,12 @@ public class CategoryController {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    @GetMapping("/api/categories")
-    // @PreAuthorize("hasRole('USER')")
+    @GetMapping("/categories")
     public List<Category> getAllCategory(){
         return categoryRepository.findAll();
     }
 
-    @PostMapping("/add")
+    @PostMapping("/categories/add")
     public ResponseEntity<?> addCategory(@RequestBody CategoryRequest categoryRequest){
         if(categoryRepository.existsByName(categoryRequest.getName())) {
             throw new BadRequestException("Категория уже создана.");
