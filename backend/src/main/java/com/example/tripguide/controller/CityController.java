@@ -13,7 +13,7 @@ public class CityController {
     @Autowired
     private CityRepository cityRepository;
 
-    @GetMapping("/api/cities")
+    @GetMapping("/cities")
     public List<City> getAllCities(){
         return cityRepository.findAll();
     }

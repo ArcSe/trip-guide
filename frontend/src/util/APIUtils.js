@@ -64,7 +64,7 @@ export function getCities() {
     }
 
     return request({
-        url: API_BASE_URL + "/api/cities",
+        url: API_BASE_URL + "/cities",
         method: 'GET'
     });
 }
