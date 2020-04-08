@@ -8,17 +8,90 @@ import Media from "react-bootstrap/Media";
 import ListGroup from "react-bootstrap/ListGroup";
 import {getCategories, getCurrentUser} from "../util/APIUtils";
 
+class Empty extends React.Component {
+    render() {
+        return (
+            <h1>Empty</h1>
+        )
+    }
+}
+
+class Users extends React.Component {
+    render() {
+        return (
+            <h1>Users</h1>
+        )
+    }
+};
+
+class Cities extends React.Component {
+    render() {
+        return (
+            <h1>Cities</h1>
+        )
+    }
+};
+
+class Events extends React.Component {
+    render() {
+        return (
+            <h1>Events</h1>
+        )
+    }
+};
+
+class Categories extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            categories: null,
+        }
+
+        this.getCategoriesFromDB = this.getCategoriesFromDB.bind(this);
+    }
+
+    componentDidMount() {
+        this.getCategoriesFromDB();
+    }
+
+    getCategoriesFromDB() {
+        getCategories()
+            .then(response => {
+                alert(JSON.stringify(response));
+                this.setState({categories: JSON.parse(JSON.stringify(response))});
+            });
+    }
+
+    render() {
+        if (!this.state.categories){
+            return <div>Loading...</div>
+        }
+        return (
+            <div className="list-group">
+                {
+                    this.state.categories.map(category =>
+                        <button type="button"
+                                className="list-group-item list-group-item-action">
+                            {category.name}</button>)
+                }
+            </div>
+        )
+    }
+};
+
+
 export default class Admin extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            authenticated: false,
-            currentUser: null,
-            loading: false
+            state: "empty",
         };
 
         this.loadCurrentlyLoggedInUser = this.loadCurrentlyLoggedInUser.bind(this);
+        this.handleClick = this.handleClick.bind(this);
     }
+
+
 
     loadCurrentlyLoggedInUser() {
         getCurrentUser()
@@ -37,6 +110,10 @@ export default class Admin extends Component {
 
     componentDidMount() {
         //this.loadCurrentlyLoggedInUser();
+    }
+
+    handleClick(name) {
+        this.setState({state: name});
     }
 
     render() {
@@ -61,10 +138,14 @@ export default class Admin extends Component {
                 <div className="row ">
                     <div className="container">
                         <div class="row justify-content-center">
-                        <button type="button" className="btn btn-outline-dark" onClick={this.onClick}>Пользователи</button>
-                        <button type="button" className="btn btn-outline-dark">События</button>
-                        <button type="button" className="btn btn-outline-dark">Категории</button>
-                        <button type="button" className="btn btn-outline-dark">Города</button>
+                        <button type="button" className="btn btn-outline-dark"
+                                onClick={() => this.handleClick("users")}>Пользователи</button>
+                        <button type="button" className="btn btn-outline-dark"
+                                onClick={() => this.handleClick("events")}>События</button>
+                        <button type="button" className="btn btn-outline-dark"
+                                onClick={() => this.handleClick("categories")}>Категории</button>
+                        <button type="button" className="btn btn-outline-dark"
+                                onClick={() => this.handleClick("cities")}>Города</button>
                         </div>
                     </div>
                 </div>
@@ -87,13 +168,11 @@ export default class Admin extends Component {
 
                 <div className="row">
                     <div className="container">
-                        <ul className="list-group">
-                            <li className="list-group-item active">Первое</li>
-                            <li className="list-group-item">Второе</li>
-                            <li className="list-group-item">Третье</li>
-                            <li className="list-group-item">Четвертое</li>
-                            <li className="list-group-item">Пятое</li>
-                        </ul>
+                        {(this.state.state == "empty") && <Empty></Empty>}
+                        {(this.state.state == "users") && <Users></Users>}
+                        {(this.state.state == "events") && <Events></Events>}
+                        {(this.state.state == "categories") && <Categories></Categories>}
+                        {(this.state.state == "cities") && <Cities></Cities>}
                     </div>
                 </div>
             </div>

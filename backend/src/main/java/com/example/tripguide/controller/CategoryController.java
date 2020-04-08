@@ -26,8 +26,8 @@ public class CategoryController {
     private CategoryRepository categoryRepository;
 
     @GetMapping("/api/categories")
-    @PreAuthorize("hasRole('USER')")
-    public List<Category> getAllCategory(@CurrentUser UserPrincipal userPrincipal){
+    // @PreAuthorize("hasRole('USER')")
+    public List<Category> getAllCategory(){
         return categoryRepository.findAll();
     }
 

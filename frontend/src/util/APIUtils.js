@@ -64,12 +64,6 @@ export function getCategories() {
     }
 
     return request({
-        url: API_BASE_URL + "/user/me",
-        method: 'GET'
-    });
-
-
-    return request({
         url: API_BASE_URL + "/api/categories",
         method: 'GET'
     });
