@@ -97,18 +97,21 @@ class Categories extends React.Component {
             return "";
         }
         return (
-            <div className="list-group">
-                {
-                    this.state.categories.map(category =>
-                        <div className="btn-group btn-block">
-                            <button type="button"
-                                    className="list-group-item list-group-item-action">
-                                {category.name}</button>
-                            <button type="button" className="btn btn-outline-success">Change</button>
+            <div className="container">
+                <button type="button" className="btn btn-outline-dark">Добавить</button>
+                <div className="list-group button-in-list">
+                    {
+                        this.state.categories.map(category =>
+                            <div className="btn-group " >
+                                <button type="button"
+                                        className="list-group-item list-group-item-action">
+                                    {category.name}</button>
+                                <button type="button" className="btn btn-outline-success">Изменить</button>
 
-                            <button type="button" className="btn btn-outline-danger">Delete</button>
-                        </div>)
-                }
+                                <button type="button" className="btn btn-outline-danger">Удалить</button>
+                            </div>)
+                    }
+                </div>
             </div>
 
         )
