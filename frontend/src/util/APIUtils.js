@@ -49,16 +49,20 @@ export function signup(signupRequest) {
         body: JSON.stringify(signupRequest)
     });
 }
+
 export function addCategory (categoryRequest) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
     return request({
-        url: API_BASE_URL + "/category/add",
+        url: API_BASE_URL + "/categories",
         method: 'POST',
         body: JSON.stringify(categoryRequest)
     });
 }
 
 export function getCities() {
-
     if(!localStorage.getItem(ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
     }

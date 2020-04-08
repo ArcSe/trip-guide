@@ -30,20 +30,13 @@ public class CategoryController {
         return categoryRepository.findAll();
     }
 
-    @PostMapping("/categories/add")
-    public ResponseEntity<?> addCategory(@RequestBody CategoryRequest categoryRequest){
-        if(categoryRepository.existsByName(categoryRequest.getName())) {
-            throw new BadRequestException("Категория уже создана.");
+    @PostMapping("/categories")
+    public Category addCategory(@RequestBody Category category) {
+        if(categoryRepository.existsByName(category.getName())) {
+            throw new BadRequestException("Такая категория уже создана");
         }
 
-        Category result = categoryRepository.save(createNewCategory(categoryRequest));
-
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentContextPath().path("/category")
-                .buildAndExpand(result.getId()).toUri();
-
-        return ResponseEntity.created(location)
-                .body(new ApiResponse(true, "Категория создана успешно"));
+        return this.categoryRepository.save(category);
     }
 
     private Category createNewCategory(CategoryRequest categoryRequest) {

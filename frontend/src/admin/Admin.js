@@ -6,8 +6,10 @@ import '../admin/Admin.css'
 import {ButtonToolbar, ButtonGroup, Button, Container, Row, Col} from "react-bootstrap";
 import Media from "react-bootstrap/Media";
 import ListGroup from "react-bootstrap/ListGroup";
-import {getCategories, getCities, getCurrentUser} from "../util/APIUtils";
+import {addCategory, getCategories, getCities, getCurrentUser, signup} from "../util/APIUtils";
 import userLogo from "../img/user.jpg";
+import Modal from "react-bootstrap/Modal";
+import Alert from "react-s-alert";
 
 class Empty extends React.Component {
     render() {
@@ -82,14 +84,18 @@ class Events extends React.Component {
     }
 };
 
-class Categories extends React.Component {
+class Categories extends Component {
     constructor(props) {
         super(props);
         this.state = {
             categories: null,
-        }
+            showModal: false,
+            newCategoryData: null,
+        };
 
         this.getCategoriesFromDB = this.getCategoriesFromDB.bind(this);
+        this.changeShowModal = this.changeShowModal.bind(this);
+        this.addNewCategory = this.addNewCategory.bind(this);
     }
 
     componentDidMount() {
@@ -103,14 +109,58 @@ class Categories extends React.Component {
             });
     }
 
+    changeShowModal() {
+        this.setState({showModal: !this.state.showModal});
+    }
+
+    addNewCategory() {
+        alert(this.state.newCategoryData);
+        const categoryRequest = {name: this.state.newCategoryData};
+
+        addCategory(categoryRequest)
+            .then(response => {
+                Alert.success("Категория успешно добавлена!");
+                this.setState({showModal: false});
+            }).catch(error => {
+            Alert.error((error && error.message) || 'Oops! Something went wrong. Please try again!');
+        })
+    }
+
     render() {
         if (!this.state.categories){
-            return "";
+            return null;
         }
+
         return (
             <div className="container">
+                <Modal show={this.state.showModal} onHide={this.changeShowModal}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Добавить новую категорию</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <form>
+                            <div className="form-group">
+                                <label htmlFor="exampleInputEmail1">Название категории</label>
+                                <input type="text" className="form-control" id="textInput"
+                                       onChange={e => {this.state.newCategoryData = e.target.value; }}
+                                       placeholder="Введите название категории"/>
+                            </div>
+                        </form>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={this.changeShowModal}>
+                            Закрыть
+                        </Button>
+                        <Button variant="primary" onClick={this.addNewCategory}>
+                            Добавить
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+
+
                 <div>
-                    <button type="button" className="mb-1 btn btn-outline-dark">Добавить</button>
+                    <button type="button" className="mb-1 btn btn-outline-dark"
+                    onClick={this.changeShowModal}>Добавить</button>
                 </div>
                 <div className="list-group">
                     {
