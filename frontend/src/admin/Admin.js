@@ -162,48 +162,45 @@ export default class Admin extends Component {
                     </div>
                 </div>
 
-
-                <div className="form" >
-                    <div className="form-group">
-                        <nav className="navbar navbar-expand-lg navbar-light bg-white">
-                            <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                                <ul className="navbar-nav mr-auto">
-                                    <div className="btn-group col-md-4">
-                                        <button type="button" className="btn btn-outline-dark"
-                                                onClick={() => this.handleClick("users")}>Пользователи</button>
-                                    </div>
-                                    <div className="btn-group col-md-4">
-                                        <button type="button" className="btn btn-outline-dark"
-                                                onClick={() => this.handleClick("events")}>События</button>
-                                    </div>
-                                    <div className="btn-group col-md-4">
-                                        <button type="button" className="btn btn-outline-dark"
-                                                onClick={() => this.handleClick("categories")}>Категории</button>
-                                    </div>
-                                    <div className="btn-group col-md-4">
-                                        <button type="button" className="btn btn-outline-dark"
-                                                onClick={() => this.handleClick("cities")}>Города</button>
-                                    </div>
-                                </ul>
-                                <form className="form-inline my-2 my-lg-0">
-                                    <input className="form-control mr-sm-2" type="search" placeholder="Search"
-                                           aria-label="Search"/>
-                                        <button className="btn btn-outline-dark my-2 my-sm-0" type="submit">Search
-                                        </button>
-                                </form>
+                <div className="profile-button" >
+                    <div className="btn-toolbar justify-content-between" role="toolbar"
+                         aria-label="Toolbar with button groups">
+                        <div className="btn-group" role="group" aria-label="First group">
+                            <div className="btn-group col-md-4">
+                                <button type="button" className="btn btn-outline-dark"
+                                        onClick={() => this.handleClick("users")}>Пользователи</button>
                             </div>
-                        </nav>
+                            <div className="btn-group col-md-4">
+                                <button type="button" className="btn btn-outline-dark"
+                                        onClick={() => this.handleClick("events")}>События</button>
+                            </div>
+                            <div className="btn-group col-md-4">
+                                <button type="button" className="btn btn-outline-dark"
+                                        onClick={() => this.handleClick("categories")}>Категории</button>
+                            </div>
+                            <div className="btn-group col-md-4">
+                                <button type="button" className="btn btn-outline-dark"
+                                        onClick={() => this.handleClick("cities")}>Города</button>
+                            </div>
+                        </div>
+                        <form className="form-inline my-2 my-lg-0">
+                            <input className="form-control mr-sm-2" type="search" placeholder="Search"
+                                   aria-label="Search"/>
+                                   <button className="btn btn-outline-dark my-2 my-sm-0" type="submit">Search
+                                    </button>
+                        </form>
                     </div>
                 </div>
 
-
-                <div className="row">
-                    <div className="container">
-                        {(this.state.state == "empty") && <Empty></Empty>}
-                        {(this.state.state == "users") && <Users></Users>}
-                        {(this.state.state == "events") && <Events></Events>}
-                        {(this.state.state == "categories") && <Categories></Categories>}
-                        {(this.state.state == "cities") && <Cities></Cities>}
+                <div className="profile-button">
+                    <div className="row">
+                        <div className="container">
+                            {(this.state.state == "empty") && <Empty></Empty>}
+                            {(this.state.state == "users") && <Users></Users>}
+                            {(this.state.state == "events") && <Events></Events>}
+                            {(this.state.state == "categories") && <Categories></Categories>}
+                            {(this.state.state == "cities") && <Cities></Cities>}
+                        </div>
                     </div>
                 </div>
             </div>
