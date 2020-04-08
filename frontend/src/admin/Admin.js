@@ -191,17 +191,17 @@ export default class Admin extends Component {
                     <div className="btn-toolbar justify-content-between" role="toolbar"
                          aria-label="Toolbar with button groups">
                         <div className="btn-group" role="group" aria-label="First group">
-                            <button type="button" className="mr-1 btn btn-outline-dark"
+                            <button type="button" className="ml-3 btn btn-outline-dark"
                                     onClick={() => this.handleClick("users")}>Пользователи</button>
-                            <button type="button" className="mr-1 btn btn-outline-dark"
+                            <button type="button" className="ml-1 btn btn-outline-dark"
                                     onClick={() => this.handleClick("events")}>События</button>
-                            <button type="button" className="mr-1 btn btn-outline-dark"
+                            <button type="button" className="ml-1 btn btn-outline-dark"
                                     onClick={() => this.handleClick("categories")}>Категории</button>
-                            <button type="button" className="mr-1 btn btn-outline-dark"
+                            <button type="button" className="ml-1 btn btn-outline-dark"
                                     onClick={() => this.handleClick("cities")}>Города</button>
                         </div>
                         <form className="form-inline my-2 my-lg-0">
-                            <input className="form-control mr-sm-2" type="search" placeholder="Search"
+                            <input className="form-control mr-sm-1" type="search" placeholder="Search"
                                    aria-label="Search"/>
                                    <button className="btn btn-outline-dark my-2 my-sm-0" type="submit">Search
                                     </button>
