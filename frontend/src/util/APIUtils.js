@@ -62,6 +62,18 @@ export function addCategory (categoryRequest) {
     });
 }
 
+export function deleteCities (cityRequest) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/cities",
+        method: 'DELETE',
+        body: JSON.stringify(cityRequest)
+    });
+}
+
 export function addCities (cityRequest) {
     if(!localStorage.getItem(ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");

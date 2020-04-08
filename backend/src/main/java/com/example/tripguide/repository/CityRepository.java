@@ -17,8 +17,8 @@ public interface CityRepository extends JpaRepository<City, Long> {
 
     List<City> findAll();
 
-    void deleteById(Long id);
-    
+    void deleteByName(String name);
+
 
     @Modifying
     @Query("update City c set c.name = ?1 where c.id = ?2")

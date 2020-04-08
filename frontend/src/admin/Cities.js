@@ -1,5 +1,5 @@
 import React from "react";
-import {addCities, getCities} from "../util/APIUtils";
+import {deleteCities, addCities, getCities} from "../util/APIUtils";
 import Alert from "react-s-alert";
 import Modal from "react-bootstrap/Modal";
 import {Button} from "react-bootstrap";
@@ -38,7 +38,7 @@ export class Cities extends React.Component {
 
         addCities(cityRequest)
             .then(response => {
-                Alert.success("Город успешно добавлена!");
+                Alert.success("Город успешно добавлен!");
                 this.setState({showModal: false});
 
                 let { cities } = this.state;
@@ -48,6 +48,7 @@ export class Cities extends React.Component {
             Alert.error((error && error.message) || 'Oops! Something went wrong. Please try again!');
         })
     }
+
     render() {
         if (!this.state.cities){
             return null;
@@ -57,7 +58,7 @@ export class Cities extends React.Component {
 
                 <Modal show={this.state.showModal} onHide={this.changeShowModal}>
                     <Modal.Header closeButton>
-                        <Modal.Title>Добавить новую категорию</Modal.Title>
+                        <Modal.Title>Добавить новый город</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <form>
@@ -89,7 +90,7 @@ export class Cities extends React.Component {
                                 <li className="mb-1 list-group-item d-flex justify-content-between">
                                     <p className="mt-2 flex-grow-1">{city.name}</p>
                                     <div className="btn-group" >
-                                        <button type="button" className="mr-1 btn btn-outline-success">Изменить</button>
+                                        <button type="button" className="mr-1 btn btn-outline-success" >Изменить</button>
                                         <button type="button" className="mr-1 btn btn-outline-danger">Удалить</button>
                                     </div>
                                 </li>
