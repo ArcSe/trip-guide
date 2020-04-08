@@ -62,8 +62,8 @@ class Cities extends React.Component {
                                 <li className="list-group-item d-flex justify-content-between">
                                     <p className="mt-2 flex-grow-1">{city.name}</p>
                                     <div className="btn-group" >
-                                        <button type="button" className="btn btn-outline-success">Изменить</button>
-                                        <button type="button" className="btn btn-outline-danger">Удалить</button>
+                                        <button type="button" className="mr-1 btn btn-outline-success">Изменить</button>
+                                        <button type="button" className="mr-1 btn btn-outline-danger">Удалить</button>
                                     </div>
                                 </li>
                             </div>)
@@ -119,8 +119,8 @@ class Categories extends React.Component {
                                 <li className="list-group-item d-flex justify-content-between">
                                     <p className="mt-2 flex-grow-1">{category.name}</p>
                                     <div className="btn-group" >
-                                        <button type="button" className="btn btn-outline-success">Изменить</button>
-                                        <button type="button" className="btn btn-outline-danger">Удалить</button>
+                                        <button type="button" className="mr-1 btn btn-outline-success">Изменить</button>
+                                        <button type="button" className="mr-1 btn btn-outline-danger">Удалить</button>
                                     </div>
                                 </li>
                             </div>)
