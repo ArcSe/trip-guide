@@ -7,6 +7,7 @@ import {ButtonToolbar, ButtonGroup, Button, Container, Row, Col} from "react-boo
 import Media from "react-bootstrap/Media";
 import ListGroup from "react-bootstrap/ListGroup";
 import {getCategories, getCities, getCurrentUser} from "../util/APIUtils";
+import userLogo from "../img/user.jpg";
 
 class Empty extends React.Component {
     render() {
@@ -152,7 +153,7 @@ export default class Admin extends Component {
                 <div className='profile-container'>
                     <div className="row ">
                         <div className="media">
-                            <img src="..." className="rounded" alt="Картинка"/>
+                            <img src={userLogo} className="img-rounded" alt="img"/>
                             <div className="media-body">
                                 <h4 class="lead">{this.props.currentUser.name}</h4>
                                 <p class="lead">Администратор</p>
@@ -161,6 +162,7 @@ export default class Admin extends Component {
                         </div>
                     </div>
                 </div>
+
 
                 <div className="profile-button" >
                     <div className="btn-toolbar justify-content-between" role="toolbar"
