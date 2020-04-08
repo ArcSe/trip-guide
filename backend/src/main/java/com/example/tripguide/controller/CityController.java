@@ -28,4 +28,12 @@ public class CityController {
         return cityRepository.findAll();
     }
 
+    @PostMapping("/cities")
+    public City addCity(@RequestBody City city){
+        if(cityRepository.existsByName(city.getName())){
+            throw new BadRequestException("Такой город уже создан");
+        }
+        return this.cityRepository.save(city);
+    }
+
 }

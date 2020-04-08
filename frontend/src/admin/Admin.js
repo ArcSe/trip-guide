@@ -1,6 +1,10 @@
 import React, {Component} from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../admin/Admin.css'
+import {Cities} from  './Cities'
+import {Categories} from './Categories'
+import {Users} from  './Users'
+import {Events} from './Events'
 
 
 import {ButtonToolbar, ButtonGroup, Button, Container, Row, Col} from "react-bootstrap";
@@ -19,173 +23,6 @@ class Empty extends React.Component {
     }
 }
 
-class Users extends React.Component {
-    render() {
-        return (
-            <h1>Users</h1>
-        )
-    }
-};
-
-class Cities extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            cities: null,
-        }
-
-        this.getCitiesFromDB = this.getCitiesFromDB.bind(this);
-    }
-
-    componentDidMount() {
-        this.getCitiesFromDB();
-    }
-
-    getCitiesFromDB() {
-        getCities()
-            .then(response => {
-                this.setState({cities: JSON.parse(JSON.stringify(response))});
-            });
-    }
-
-    render() {
-        if (!this.state.cities){
-            return "";
-        }
-        return (
-            <div className="container">
-                <div>
-                    <button type="button" className="mb-1 btn btn-outline-dark">Добавить</button>
-                </div>
-                <div className="list-group">
-                    {
-                        this.state.cities.map(city =>
-                            <div>
-                                <li className="mb-1 list-group-item d-flex justify-content-between">
-                                    <p className="mt-2 flex-grow-1">{city.name}</p>
-                                    <div className="btn-group" >
-                                        <button type="button" className="mr-1 btn btn-outline-success">Изменить</button>
-                                        <button type="button" className="mr-1 btn btn-outline-danger">Удалить</button>
-                                    </div>
-                                </li>
-                            </div>)
-                    }
-                </div>
-            </div>
-        )
-    }
-};
-
-class Events extends React.Component {
-    render() {
-        return (
-            <h1>Events</h1>
-        )
-    }
-};
-
-class Categories extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            categories: null,
-            showModal: false,
-            newCategoryData: null,
-        };
-
-        this.getCategoriesFromDB = this.getCategoriesFromDB.bind(this);
-        this.changeShowModal = this.changeShowModal.bind(this);
-        this.addNewCategory = this.addNewCategory.bind(this);
-    }
-
-    componentDidMount() {
-        this.getCategoriesFromDB();
-    }
-
-    getCategoriesFromDB() {
-        getCategories()
-            .then(response => {
-                this.setState({categories: JSON.parse(JSON.stringify(response))});
-            });
-    }
-
-    changeShowModal() {
-        this.setState({showModal: !this.state.showModal});
-    }
-
-    addNewCategory() {
-        const categoryRequest = {name: this.state.newCategoryData};
-
-        addCategory(categoryRequest)
-            .then(response => {
-                Alert.success("Категория успешно добавлена!");
-                this.setState({showModal: false});
-
-                let { categories } = this.state;
-                categories.push({id: response.id, name: response.name});
-                this.setState({categoties: categories});
-            }).catch(error => {
-            Alert.error((error && error.message) || 'Oops! Something went wrong. Please try again!');
-        })
-    }
-
-    render() {
-        if (!this.state.categories){
-            return null;
-        }
-
-        return (
-            <div className="container">
-                <Modal show={this.state.showModal} onHide={this.changeShowModal}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Добавить новую категорию</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <form>
-                            <div className="form-group">
-                                <label htmlFor="exampleInputEmail1">Название категории</label>
-                                <input type="text" className="form-control" id="textInput"
-                                       onChange={e => {this.state.newCategoryData = e.target.value; }}
-                                       placeholder="Введите название категории"/>
-                            </div>
-                        </form>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button variant="secondary" onClick={this.changeShowModal}>
-                            Закрыть
-                        </Button>
-                        <Button variant="primary" onClick={this.addNewCategory}>
-                            Добавить
-                        </Button>
-                    </Modal.Footer>
-                </Modal>
-
-
-                <div>
-                    <button type="button" className="mb-1 btn btn-outline-dark"
-                    onClick={this.changeShowModal}>Добавить</button>
-                </div>
-                <div className="list-group">
-                    {
-                        this.state.categories.map(category =>
-                            <div>
-                                <li className="mb-1 list-group-item d-flex justify-content-between">
-                                    <p className="mt-2 flex-grow-1">{category.name}</p>
-                                    <div className="btn-group" >
-                                        <button type="button" className="mr-1 btn btn-outline-success">Изменить</button>
-                                        <button type="button" className="mr-1 btn btn-outline-danger">Удалить</button>
-                                    </div>
-                                </li>
-                            </div>)
-                    }
-                </div>
-            </div>
-
-        )
-    }
-};
-
-
 export default class Admin extends Component {
     constructor(props) {
         super(props);
@@ -196,8 +33,6 @@ export default class Admin extends Component {
         this.loadCurrentlyLoggedInUser = this.loadCurrentlyLoggedInUser.bind(this);
         this.handleClick = this.handleClick.bind(this);
     }
-
-
 
     loadCurrentlyLoggedInUser() {
         getCurrentUser()
