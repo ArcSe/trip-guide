@@ -2,6 +2,10 @@
     text-align: left;
     background: #ffffff;
 }
+.profile-button {
+    margin-top: 25px;
+}
+
 .profile-content {
-    margin-top: 15px;
+    margin-top: 5px;
 }
