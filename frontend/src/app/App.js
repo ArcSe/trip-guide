@@ -1,14 +1,10 @@
 import React, { Component } from 'react';
-import {
-  Route,
-  Switch
-} from 'react-router-dom';
+import {Route, Switch} from 'react-router-dom';
 import AppHeader from '../common/AppHeader';
 import Home from '../home/Home';
 import Login from '../user/login/Login';
 import Signup from '../user/signup/Signup';
 import Profile from '../user/profile/Profile';
-import Category from '../admin/Category';
 import Admin from '../admin/Admin';
 import OAuth2RedirectHandler from '../user/oauth2/OAuth2RedirectHandler';
 import NotFound from '../common/NotFound';
@@ -62,6 +58,7 @@ class App extends Component {
     Alert.success("You're safely logged out!");
   }
 
+
   componentDidMount() {
     this.loadCurrentlyLoggedInUser();
   }
@@ -78,17 +75,16 @@ class App extends Component {
           </div>
           <div className="app-body">
             <Switch>
-              <Route exact path="/" component={Home}></Route>
-              <PrivateRoute path="/profile" authenticated={this.state.authenticated} currentUser={this.state.currentUser}
-                            component={Profile}></PrivateRoute>
-              <PrivateRoute path="/admin" authenticated={this.state.authenticated} currentUser={this.state.currentUser}
-                            component={Admin}></PrivateRoute>
-
+              <Route exact path="/" render={() => <Home />}></Route>
               <Route path="/login"
                      render={(props) => <Login authenticated={this.state.authenticated} {...props} />}></Route>
               <Route path="/signup"
                      render={(props) => <Signup authenticated={this.state.authenticated} {...props} />}></Route>
               <Route path="/oauth2/redirect" component={OAuth2RedirectHandler}></Route>
+              <PrivateRoute path="/profile" authenticated={this.state.authenticated} currentUser={this.state.currentUser}
+                            component={Profile}></PrivateRoute>
+              <PrivateRoute path="/admin" authenticated={this.state.authenticated} currentUser={this.state.currentUser}
+                            component={Admin}></PrivateRoute>
               <Route component={NotFound}></Route>
             </Switch>
           </div>
