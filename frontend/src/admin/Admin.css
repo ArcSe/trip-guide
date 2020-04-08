@@ -7,5 +7,11 @@
 }
 
 .profile-content {
-    margin-top: px;
+    margin-top: 5px;
+}
+.media-body-left{
+    margin-left: 30px;
+}
+.media-container{
+    margin-left: 15px;
 }

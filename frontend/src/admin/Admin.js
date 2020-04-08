@@ -100,11 +100,17 @@ class Categories extends React.Component {
             <div className="list-group">
                 {
                     this.state.categories.map(category =>
-                        <button type="button"
-                                className="list-group-item list-group-item-action">
-                            {category.name}</button>)
+                        <div className="btn-group btn-block">
+                            <button type="button"
+                                    className="list-group-item list-group-item-action">
+                                {category.name}</button>
+                            <button type="button" className="btn btn-outline-success">Change</button>
+
+                            <button type="button" className="btn btn-outline-danger">Delete</button>
+                        </div>)
                 }
             </div>
+
         )
     }
 };
@@ -151,10 +157,10 @@ export default class Admin extends Component {
 
             <div className="container">
                 <div className='profile-container'>
-                    <div className="row ">
+                    <div className="media-container ">
                         <div className="media">
-                            <img src={userLogo} className="img-rounded" alt="img"/>
-                            <div className="media-body">
+                            <img src={userLogo} className="rounded img" alt="img" width="150" height="150"/>
+                            <div className="media-body-left">
                                 <h4 class="lead">{this.props.currentUser.name}</h4>
                                 <p class="lead">Администратор</p>
                                 <p class="lead">Email: {this.props.currentUser.email}</p>
