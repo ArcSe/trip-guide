@@ -51,13 +51,24 @@ class Cities extends React.Component {
             return "";
         }
         return (
-            <div className="list-group">
-                {
-                    this.state.cities.map(cities =>
-                        <button type="button"
-                                className="list-group-item list-group-item-action">
-                            {cities.name}</button>)
-                }
+            <div className="container">
+                <div>
+                    <button type="button" className="mb-1 btn btn-outline-dark">Добавить</button>
+                </div>
+                <div className="list-group">
+                    {
+                        this.state.cities.map(city =>
+                            <div>
+                                <li className="list-group-item d-flex justify-content-between">
+                                    <p className="mt-2 flex-grow-1">{city.name}</p>
+                                    <div className="btn-group" >
+                                        <button type="button" className="btn btn-outline-success">Изменить</button>
+                                        <button type="button" className="btn btn-outline-danger">Удалить</button>
+                                    </div>
+                                </li>
+                            </div>)
+                    }
+                </div>
             </div>
         )
     }
@@ -98,17 +109,20 @@ class Categories extends React.Component {
         }
         return (
             <div className="container">
-                <button type="button" className="btn btn-outline-dark">Добавить</button>
-                <div className="list-group button-in-list">
+                <div>
+                    <button type="button" className="mb-1 btn btn-outline-dark">Добавить</button>
+                </div>
+                <div className="list-group">
                     {
                         this.state.categories.map(category =>
-                            <div className="btn-group " >
-                                <button type="button"
-                                        className="list-group-item list-group-item-action">
-                                    {category.name}</button>
-                                <button type="button" className="btn btn-outline-success">Изменить</button>
-
-                                <button type="button" className="btn btn-outline-danger">Удалить</button>
+                            <div>
+                                <li className="list-group-item d-flex justify-content-between">
+                                    <p className="mt-2 flex-grow-1">{category.name}</p>
+                                    <div className="btn-group" >
+                                        <button type="button" className="btn btn-outline-success">Изменить</button>
+                                        <button type="button" className="btn btn-outline-danger">Удалить</button>
+                                    </div>
+                                </li>
                             </div>)
                     }
                 </div>
@@ -164,7 +178,7 @@ export default class Admin extends Component {
                         <div className="media">
                             <img src={userLogo} className="rounded img" alt="img" width="150" height="150"/>
                             <div className="media-body-left">
-                                <h4 class="lead">{this.props.currentUser.name}</h4>
+                                <h4>{this.props.currentUser.name}</h4>
                                 <p class="lead">Администратор</p>
                                 <p class="lead">Email: {this.props.currentUser.email}</p>
                             </div>
@@ -177,22 +191,14 @@ export default class Admin extends Component {
                     <div className="btn-toolbar justify-content-between" role="toolbar"
                          aria-label="Toolbar with button groups">
                         <div className="btn-group" role="group" aria-label="First group">
-                            <div className="btn-group col-md-4">
-                                <button type="button" className="btn btn-outline-dark"
-                                        onClick={() => this.handleClick("users")}>Пользователи</button>
-                            </div>
-                            <div className="btn-group col-md-4">
-                                <button type="button" className="btn btn-outline-dark"
-                                        onClick={() => this.handleClick("events")}>События</button>
-                            </div>
-                            <div className="btn-group col-md-4">
-                                <button type="button" className="btn btn-outline-dark"
-                                        onClick={() => this.handleClick("categories")}>Категории</button>
-                            </div>
-                            <div className="btn-group col-md-4">
-                                <button type="button" className="btn btn-outline-dark"
-                                        onClick={() => this.handleClick("cities")}>Города</button>
-                            </div>
+                            <button type="button" className="mr-1 btn btn-outline-dark"
+                                    onClick={() => this.handleClick("users")}>Пользователи</button>
+                            <button type="button" className="mr-1 btn btn-outline-dark"
+                                    onClick={() => this.handleClick("events")}>События</button>
+                            <button type="button" className="mr-1 btn btn-outline-dark"
+                                    onClick={() => this.handleClick("categories")}>Категории</button>
+                            <button type="button" className="mr-1 btn btn-outline-dark"
+                                    onClick={() => this.handleClick("cities")}>Города</button>
                         </div>
                         <form className="form-inline my-2 my-lg-0">
                             <input className="form-control mr-sm-2" type="search" placeholder="Search"
@@ -206,11 +212,11 @@ export default class Admin extends Component {
                 <div className="profile-button">
                     <div className="row">
                         <div className="container">
-                            {(this.state.state == "empty") && <Empty></Empty>}
-                            {(this.state.state == "users") && <Users></Users>}
-                            {(this.state.state == "events") && <Events></Events>}
-                            {(this.state.state == "categories") && <Categories></Categories>}
-                            {(this.state.state == "cities") && <Cities></Cities>}
+                            {(this.state.state === "empty") && <Empty></Empty>}
+                            {(this.state.state === "users") && <Users></Users>}
+                            {(this.state.state === "events") && <Events></Events>}
+                            {(this.state.state === "categories") && <Categories></Categories>}
+                            {(this.state.state === "cities") && <Cities></Cities>}
                         </div>
                     </div>
                 </div>
