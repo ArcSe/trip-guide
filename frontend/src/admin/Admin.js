@@ -114,13 +114,16 @@ class Categories extends Component {
     }
 
     addNewCategory() {
-        alert(this.state.newCategoryData);
         const categoryRequest = {name: this.state.newCategoryData};
 
         addCategory(categoryRequest)
             .then(response => {
                 Alert.success("Категория успешно добавлена!");
                 this.setState({showModal: false});
+
+                let { categories } = this.state;
+                categories.push({id: response.id, name: response.name});
+                this.setState({categoties: categories});
             }).catch(error => {
             Alert.error((error && error.message) || 'Oops! Something went wrong. Please try again!');
         })
