@@ -6,7 +6,7 @@ import '../admin/Admin.css'
 import {ButtonToolbar, ButtonGroup, Button, Container, Row, Col} from "react-bootstrap";
 import Media from "react-bootstrap/Media";
 import ListGroup from "react-bootstrap/ListGroup";
-import {getCategories, getCurrentUser} from "../util/APIUtils";
+import {getCategories, getCities, getCurrentUser} from "../util/APIUtils";
 
 class Empty extends React.Component {
     render() {
@@ -25,9 +25,39 @@ class Users extends React.Component {
 };
 
 class Cities extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            cities: null,
+        }
+
+        this.getCitiesFromDB = this.getCitiesFromDB.bind(this);
+    }
+
+    componentDidMount() {
+        this.getCitiesFromDB();
+    }
+
+    getCitiesFromDB() {
+        getCities()
+            .then(response => {
+                this.setState({cities: JSON.parse(JSON.stringify(response))});
+            });
+    }
+
     render() {
+        if (!this.state.cities){
+            return "";
+        }
         return (
-            <h1>Cities</h1>
+            <div className="list-group">
+                {
+                    this.state.cities.map(cities =>
+                        <button type="button"
+                                className="list-group-item list-group-item-action">
+                            {cities.name}</button>)
+                }
+            </div>
         )
     }
 };
