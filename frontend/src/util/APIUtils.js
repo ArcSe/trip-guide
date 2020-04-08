@@ -57,6 +57,18 @@ export function addCategory (categoryRequest) {
     });
 }
 
+export function getCities() {
+
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/api/cities",
+        method: 'GET'
+    });
+}
+
 export function getCategories() {
 
     if(!localStorage.getItem(ACCESS_TOKEN)) {
