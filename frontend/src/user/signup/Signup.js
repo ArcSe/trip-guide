@@ -21,9 +21,9 @@ class Signup extends Component {
         return (
             <div className="signup-container">
                 <div className="signup-content">
-                    <h1 className="signup-title">Signup with Trip guide</h1>
+                    <h1 className="signup-title">Регистрация в Trip Guide</h1>
                     <SignupForm {...this.props} />
-                    <span className="login-link">Already have an account? <Link to="/login">Login!</Link></span>
+                    <span className="login-link">Уже есть аккаунт? <Link to="/login">Войти!</Link></span>
                 </div>
             </div>
         );
@@ -52,8 +52,9 @@ class SignupForm extends Component {
         this.state = {
             name: '',
             email: '',
-            password: ''
-        }
+            password: '',
+            confirmPassword: '',
+        };
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -75,10 +76,10 @@ class SignupForm extends Component {
 
         signup(signUpRequest)
         .then(response => {
-            Alert.success("You're successfully registered. Please login to continue!");
+            Alert.success("Вы успешно зарегестрированы. Пожалуйста, войдите, чтобы продолжить!");
             this.props.history.push("/login");
         }).catch(error => {
-            Alert.error((error && error.message) || 'Oops! Something went wrong. Please try again!');            
+            Alert.error((error && error.message) || 'Упс! Что-то пошло не так. Пожалуйста, попробуйте снова!');
         });
     }
 
@@ -86,8 +87,8 @@ class SignupForm extends Component {
         return (
             <form onSubmit={this.handleSubmit}>
                 <div className="form-item">
-                    <input type="text" name="name" 
-                        className="form-control" placeholder="Name"
+                    <input type="text" name="name"
+                        className="form-control" placeholder="Имя"
                         value={this.state.name} onChange={this.handleInputChange} required/>
                 </div>
                 <div className="form-item">
@@ -97,11 +98,16 @@ class SignupForm extends Component {
                 </div>
                 <div className="form-item">
                     <input type="password" name="password" 
-                        className="form-control" placeholder="Password"
+                        className="form-control" placeholder="Пароль" pattern="[0-9a-zA-Z]{6,}"
                         value={this.state.password} onChange={this.handleInputChange} required/>
                 </div>
                 <div className="form-item">
-                    <button type="submit" className="btn btn-block btn-primary" >Sign Up</button>
+                    <input type="password" name="confirmPassword"
+                           className="form-control" placeholder="Подтвердите пароль" pattern="[0-9a-zA-Z]{6,}"
+                           value={this.state.confirmPassword} onChange={this.handleInputChange} required/>
+                </div>
+                <div className="form-item">
+                    <button type="submit" className="btn btn-block btn-primary" >Зарегистрироваться</button>
                 </div>
             </form>                    
 

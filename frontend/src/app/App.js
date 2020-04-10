@@ -55,7 +55,7 @@ class App extends Component {
       authenticated: false,
       currentUser: null
     });
-    Alert.success("You're safely logged out!");
+    Alert.success("Вы успешно вышли!");
   }
 
 
@@ -75,17 +75,17 @@ class App extends Component {
           </div>
           <div className="app-body">
             <Switch>
-              <Route exact path="/" render={() => <Home />}></Route>
+              <Route exact path="/" render={() => <Home />} />
               <Route path="/login"
-                     render={(props) => <Login authenticated={this.state.authenticated} {...props} />}></Route>
+                     render={(props) => <Login authenticated={this.state.authenticated} {...props} />} />
               <Route path="/signup"
-                     render={(props) => <Signup authenticated={this.state.authenticated} {...props} />}></Route>
-              <Route path="/oauth2/redirect" component={OAuth2RedirectHandler}></Route>
+                     render={(props) => <Signup authenticated={this.state.authenticated} {...props} />} />
+              <Route path="/oauth2/redirect" component={OAuth2RedirectHandler} />
               <PrivateRoute path="/profile" authenticated={this.state.authenticated} currentUser={this.state.currentUser}
-                            component={Profile}></PrivateRoute>
+                            component={Profile} />
               <PrivateRoute path="/admin" authenticated={this.state.authenticated} currentUser={this.state.currentUser}
-                            component={Admin}></PrivateRoute>
-              <Route component={NotFound}></Route>
+                            component={Admin} />
+              <Route component={NotFound} />
             </Switch>
           </div>
           <Alert stack={{limit: 3}}

@@ -8,27 +8,27 @@ class AppHeader extends Component {
             <header className="app-header">
                 <div className="container">
                     <div className="app-branding">
-                        <Link to="/" className="app-title">Trip guide</Link>
+                        <Link to="/" className="app-title">Trip Guide</Link>
                     </div>
                     <div className="app-options">
                         <nav className="app-nav">
                                 { this.props.authenticated ? (
                                     <ul>
                                         <li>
-                                            <NavLink to="/profile">Profile</NavLink>
-                                            <NavLink to="/admin">Admin</NavLink>
+                                            <NavLink to="/profile">Профиль</NavLink>
+                                            <NavLink to="/admin">Админ</NavLink>
                                         </li>
                                         <li>
-                                            <a onClick={this.props.onLogout}>Logout</a>
+                                            <a onClick={this.props.onLogout}>Выйти</a>
                                         </li>
                                     </ul>
                                 ): (
                                     <ul>
                                         <li>
-                                            <NavLink to="/login">Login</NavLink>        
+                                            <NavLink to="/login">Войти</NavLink>
                                         </li>
                                         <li>
-                                            <NavLink to="/signup">Signup</NavLink>        
+                                            <NavLink to="/signup">Регистрация</NavLink>
                                         </li>
                                     </ul>
                                 )}

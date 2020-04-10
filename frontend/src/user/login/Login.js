@@ -37,13 +37,13 @@ class Login extends Component {
         return (
             <div className="login-container">
                 <div className="login-content">
-                    <h1 className="login-title">Login to Trip guide</h1>
+                    <h1 className="login-title">Войти в Trip Guide</h1>
                     <SocialLogin />
                     <div className="or-separator">
-                        <span className="or-text">OR</span>
+                        <span className="or-text">ИЛИ</span>
                     </div>
                     <LoginForm {...this.props} />
-                    <span className="signup-link">New user? <Link to="/signup">Sign up!</Link></span>
+                    <span className="signup-link">Новый пользователь? <Link to="/signup">Регистрация!</Link></span>
                 </div>
             </div>
         );
@@ -55,11 +55,11 @@ class SocialLogin extends Component {
         return (
             <div className="social-login">
                 <a className="btn btn-block social-btn google" href={GOOGLE_AUTH_URL}>
-                    <img src={googleLogo} alt="Google" /> Log in with Google</a>
+                    <img src={googleLogo} alt="Google" /> Войти с Google</a>
                 <a className="btn btn-block social-btn facebook" href={FACEBOOK_AUTH_URL}>
-                    <img src={fbLogo} alt="Facebook" /> Log in with Facebook</a>
+                    <img src={fbLogo} alt="Facebook" /> Войти с Facebook</a>
                 <a className="btn btn-block social-btn github" href={GITHUB_AUTH_URL}>
-                    <img src={githubLogo} alt="Github" /> Log in with Github</a>
+                    <img src={githubLogo} alt="Github" /> Войти с Github</a>
             </div>
         );
     }
@@ -95,11 +95,11 @@ class LoginForm extends Component {
         login(loginRequest)
         .then(response => {
             localStorage.setItem(ACCESS_TOKEN, response.accessToken);
-            Alert.success("You're successfully logged in!");
+            Alert.success("Вы успешно вошли!");
             window.location.reload();
             // Костыль вместо: this.props.history.push("/");
         }).catch(error => {
-            Alert.error((error && error.message) || 'Oops! Something went wrong. Please try again!');
+            Alert.error((error && error.message) || 'Упс! Что-то пошло не так. Пожалуйста, попробуйте снова!');
         });
     }
     
@@ -113,11 +113,11 @@ class LoginForm extends Component {
                 </div>
                 <div className="form-item">
                     <input type="password" name="password" 
-                        className="form-control" placeholder="Password"
+                        className="form-control" placeholder="Пароль"
                         value={this.state.password} onChange={this.handleInputChange} required/>
                 </div>
                 <div className="form-item">
-                    <button type="submit" className="btn btn-block btn-primary">Login</button>
+                    <button type="submit" className="btn btn-block btn-primary">Войти</button>
                 </div>
             </form>                    
         );
