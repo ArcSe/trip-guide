@@ -1,7 +1,10 @@
 package com.example.tripguide.payload;
 
+import lombok.Data;
+
 import javax.validation.constraints.NotBlank;
 
+@Data
 public class CategoryRequest {
 
     @NotBlank
@@ -9,9 +12,5 @@ public class CategoryRequest {
 
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 }

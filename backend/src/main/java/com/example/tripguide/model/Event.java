@@ -1,7 +1,10 @@
 package com.example.tripguide.model;
 
+import lombok.Data;
+
 import javax.persistence.*;
 
+@Data
 @Entity
 @Table(name = "Events")
 public class Event {
@@ -17,42 +20,4 @@ public class Event {
 
     @Column(nullable = false)
     private String address;
-
-
-    public Event() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Float getRating() {
-        return rating;
-    }
-
-    public void setRating(Float rating) {
-        this.rating = rating;
-    }
-
-    public Integer getPrice() {
-        return price;
-    }
-
-    public void setPrice(Integer price) {
-        this.price = price;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-
 }
