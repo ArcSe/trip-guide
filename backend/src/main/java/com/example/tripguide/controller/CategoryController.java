@@ -2,43 +2,56 @@ package com.example.tripguide.controller;
 
 import com.example.tripguide.exception.BadRequestException;
 import com.example.tripguide.model.Category;
-import com.example.tripguide.payload.ApiResponse;
-import com.example.tripguide.payload.CategoryRequest;
 import com.example.tripguide.repository.CategoryRepository;
-import com.example.tripguide.security.CurrentUser;
-import com.example.tripguide.security.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Optional;
 
-@RestController("/api")
+@RestController
+@RequestMapping("/api")
 public class CategoryController {
 
     @Autowired
     private CategoryRepository categoryRepository;
 
     @GetMapping("/categories")
-    public List<Category> getAllCategory(){
-        return categoryRepository.findAll();
+    public List<Category> getAllCategories(){
+        return this.categoryRepository.findAll();
     }
 
-    @PostMapping("/categories")
-    public Category addCategory(@RequestBody Category category) {
-        if(categoryRepository.existsByName(category.getName())) {
+    @GetMapping("/category/{id}")
+    public ResponseEntity<?> getCategory(@PathVariable Long id) {
+        Optional<Category> category = this.categoryRepository.findById(id);
+        return category.map(response -> ResponseEntity.ok().body(response))
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping("/category")
+    public ResponseEntity<Category> createCategory(@RequestBody Category category) throws URISyntaxException {
+        if (this.categoryRepository.existsByName(category.getName())) {
             throw new BadRequestException("Такая категория уже создана");
         }
 
-        return this.categoryRepository.save(category);
+        Category result = this.categoryRepository.save(category);
+
+        return ResponseEntity.created(new URI("/api/category/" + result.getId()))
+                .body(result);
     }
 
-    private Category createNewCategory(CategoryRequest categoryRequest) {
-        Category category = new Category();
-        category.setName(categoryRequest.getName());
-        return category;
+    @PutMapping("/category/{id}")
+    public ResponseEntity<Category> updateCategory(@RequestBody Category category) {
+        Category result = this.categoryRepository.save(category);
+        return ResponseEntity.ok().body(result);
+    }
+
+    @DeleteMapping("/category/{id}")
+    public ResponseEntity<?> deleteCategory(@PathVariable Long id) {
+        this.categoryRepository.deleteById(id);
+        return ResponseEntity.ok().build();
     }
 }

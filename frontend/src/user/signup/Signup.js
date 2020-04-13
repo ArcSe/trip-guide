@@ -79,7 +79,7 @@ class SignupForm extends Component {
             Alert.success("Вы успешно зарегестрированы. Пожалуйста, войдите, чтобы продолжить!");
             this.props.history.push("/login");
         }).catch(error => {
-            Alert.error((error && error.message) || 'Упс! Что-то пошло не так. Пожалуйста, попробуйте снова!');
+            Alert.error((error && error.message) || "Упс! Что-то пошло не так. Пожалуйста, попробуйте снова!");
         });
     }
 

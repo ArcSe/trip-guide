@@ -13,16 +13,16 @@ export class Categories extends Component {
             newCategoryData: null,
         };
 
-        this.getCategoriesFromDB = this.getCategoriesFromDB.bind(this);
+        this.getCategories = this.getCategories.bind(this);
         this.changeShowModal = this.changeShowModal.bind(this);
         this.addNewCategory = this.addNewCategory.bind(this);
     }
 
     componentDidMount() {
-        this.getCategoriesFromDB();
+        this.getCategories();
     }
 
-    getCategoriesFromDB() {
+    getCategories() {
         getCategories()
             .then(response => {
                 this.setState({categories: JSON.parse(JSON.stringify(response))});
@@ -43,9 +43,9 @@ export class Categories extends Component {
 
                 let { categories } = this.state;
                 categories.push({id: response.id, name: response.name});
-                this.setState({categoties: categories});
+                this.setState({categories: categories});
             }).catch(error => {
-            Alert.error((error && error.message) || 'Oops! Something went wrong. Please try again!');
+            Alert.error((error && error.message) || "Упс! Что-то пошло не так. Пожалуйста, попробуйте снова!");
         })
     }
 
