@@ -1,5 +1,7 @@
 package com.example.tripguide.config;
 
+import lombok.Data;
+import lombok.Getter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.ArrayList;
@@ -7,28 +9,17 @@ import java.util.List;
 
 @ConfigurationProperties(prefix = "app")
 public class AppProperties {
+
+    @Getter
     private final Auth auth = new Auth();
+
+    @Getter
     private final OAuth2 oauth2 = new OAuth2();
 
+    @Data
     public static class Auth {
         private String tokenSecret;
         private long tokenExpirationMsec;
-
-        public String getTokenSecret() {
-            return tokenSecret;
-        }
-
-        public void setTokenSecret(String tokenSecret) {
-            this.tokenSecret = tokenSecret;
-        }
-
-        public long getTokenExpirationMsec() {
-            return tokenExpirationMsec;
-        }
-
-        public void setTokenExpirationMsec(long tokenExpirationMsec) {
-            this.tokenExpirationMsec = tokenExpirationMsec;
-        }
     }
 
     public static final class OAuth2 {
@@ -42,13 +33,5 @@ public class AppProperties {
             this.authorizedRedirectUris = authorizedRedirectUris;
             return this;
         }
-    }
-
-    public Auth getAuth() {
-        return auth;
-    }
-
-    public OAuth2 getOauth2() {
-        return oauth2;
     }
 }
