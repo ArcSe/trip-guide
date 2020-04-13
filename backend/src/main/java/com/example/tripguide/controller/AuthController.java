@@ -60,7 +60,7 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
         if(userRepository.existsByEmail(signUpRequest.getEmail())) {
-            throw new BadRequestException("Email address already in use.");
+            throw new BadRequestException("Такой email уже существует");
         }
 
         User result = userRepository.save(createNewUser(signUpRequest));
@@ -70,7 +70,7 @@ public class AuthController {
                 .buildAndExpand(result.getId()).toUri();
 
         return ResponseEntity.created(location)
-                .body(new ApiResponse(true, "User registered successfully@"));
+                .body(new ApiResponse(true, "Пользователь успешно зарегистрирован"));
     }
 
     private User createNewUser(SignUpRequest signUpRequest) {
