@@ -50,39 +50,49 @@ export function signup(signupRequest) {
     });
 }
 
-export function addCategory (categoryRequest) {
+export function deleteCity(cityId) {
     if(!localStorage.getItem(ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
     }
 
     return request({
-        url: API_BASE_URL + "/categories",
+        url: `${API_BASE_URL}/api/city/${cityId}`,
+        method: 'DELETE'
+    });
+}
+
+export function deleteCategory(categoryId) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: `${API_BASE_URL}/api/category/${categoryId}`,
+        method: 'DELETE'
+    });
+}
+
+export function createCity(cityRequest) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/api/city",
+        method: 'POST',
+        body: JSON.stringify(cityRequest)
+    });
+}
+
+export function createCategory(categoryRequest) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/api/category",
         method: 'POST',
         body: JSON.stringify(categoryRequest)
-    });
-}
-
-export function deleteCities (cityRequest) {
-    if(!localStorage.getItem(ACCESS_TOKEN)) {
-        return Promise.reject("No access token set.");
-    }
-
-    return request({
-        url: API_BASE_URL + "/cities",
-        method: 'DELETE',
-        body: JSON.stringify(cityRequest)
-    });
-}
-
-export function addCities (cityRequest) {
-    if(!localStorage.getItem(ACCESS_TOKEN)) {
-        return Promise.reject("No access token set.");
-    }
-
-    return request({
-        url: API_BASE_URL + "/cities",
-        method: 'POST',
-        body: JSON.stringify(cityRequest)
     });
 }
 
@@ -92,7 +102,7 @@ export function getCities() {
     }
 
     return request({
-        url: API_BASE_URL + "/cities",
+        url: API_BASE_URL + "/api/cities",
         method: 'GET'
     });
 }
@@ -104,7 +114,7 @@ export function getCategories() {
     }
 
     return request({
-        url: API_BASE_URL + "/categories",
+        url: API_BASE_URL + "/api/categories",
         method: 'GET'
     });
 }
