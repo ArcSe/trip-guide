@@ -1,5 +1,5 @@
 import React from "react";
-import {deleteCities, addCities, getCities, createCity, deleteCity} from "../util/APIUtils";
+import {createCity, deleteCity, getCities} from "../util/APIUtils";
 import Alert from "react-s-alert";
 import Modal from "react-bootstrap/Modal";
 import {Button} from "react-bootstrap";
@@ -11,6 +11,8 @@ export class Cities extends React.Component {
             cities: null,
             showModal: false,
             newCityData: null,
+            showEditModal: false,
+            newEditCityData: null,
         }
 
         this.getCities = this.getCities.bind(this);
@@ -100,7 +102,8 @@ export class Cities extends React.Component {
                                 <li className="mb-1 list-group-item d-flex justify-content-between">
                                     <p className="mt-2 flex-grow-1">{city.name}</p>
                                     <div className="btn-group" >
-                                        <button type="button" className="mr-1 btn btn-outline-success" >Изменить</button>
+                                        <button type="button" className="mr-1 btn btn-outline-success"
+                                                onClick={() => this.deleteCity(city.id)}>Изменить</button>
                                         <button type="button" className="mr-1 btn btn-outline-danger"
                                                 onClick={() => this.deleteCity(city.id)}>Удалить</button>
                                     </div>

@@ -1,19 +1,12 @@
 import React, {Component} from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../admin/Admin.css'
-import {Cities} from  './Cities'
+import {Cities} from './Cities'
 import {Categories} from './Categories'
-import {Users} from  './Users'
+import {Users} from './Users'
 import {Events} from './Events'
-
-
-import {ButtonToolbar, ButtonGroup, Button, Container, Row, Col} from "react-bootstrap";
-import Media from "react-bootstrap/Media";
-import ListGroup from "react-bootstrap/ListGroup";
-import {addCategory, getCategories, getCities, getCurrentUser, signup} from "../util/APIUtils";
+import {getCurrentUser} from "../util/APIUtils";
 import userLogo from "../img/user.jpg";
-import Modal from "react-bootstrap/Modal";
-import Alert from "react-s-alert";
 
 class Empty extends React.Component {
     render() {
