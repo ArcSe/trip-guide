@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {addCategory, getCategories} from "../util/APIUtils";
+import {addCategory, createCategory, deleteCategory, getCategories} from "../util/APIUtils";
 import Alert from "react-s-alert";
 import Modal from "react-bootstrap/Modal";
 import {Button} from "react-bootstrap";
@@ -15,7 +15,7 @@ export class Categories extends Component {
 
         this.getCategories = this.getCategories.bind(this);
         this.changeShowModal = this.changeShowModal.bind(this);
-        this.addNewCategory = this.addNewCategory.bind(this);
+        this.createCategory = this.createCategory.bind(this);
     }
 
     componentDidMount() {
@@ -25,7 +25,7 @@ export class Categories extends Component {
     getCategories() {
         getCategories()
             .then(response => {
-                this.setState({categories: JSON.parse(JSON.stringify(response))});
+                this.setState({categories: response});
             });
     }
 
@@ -33,10 +33,10 @@ export class Categories extends Component {
         this.setState({showModal: !this.state.showModal});
     }
 
-    addNewCategory() {
+    createCategory() {
         const categoryRequest = {name: this.state.newCategoryData};
 
-        addCategory(categoryRequest)
+        createCategory(categoryRequest)
             .then(response => {
                 Alert.success("Категория успешно добавлена!");
                 this.setState({showModal: false});
@@ -46,7 +46,19 @@ export class Categories extends Component {
                 this.setState({categories: categories});
             }).catch(error => {
             Alert.error((error && error.message) || "Упс! Что-то пошло не так. Пожалуйста, попробуйте снова!");
-        })
+        });
+    }
+
+    deleteCategory(categoryId) {
+        deleteCategory(categoryId)
+            .then(() => {
+                Alert.success("Категория успешно удалена!");
+                let {categories} = this.state;
+                let filteredCategories = categories.filter(category => category.id !== categoryId);
+                this.setState({categories: filteredCategories});
+            }).catch(error => {
+                Alert.error((error && error.message) || "Упс! Что-то пошло не так. Пожалуйста, попробуйте снова!");
+        });
     }
 
     render() {
@@ -74,7 +86,7 @@ export class Categories extends Component {
                         <Button variant="secondary" onClick={this.changeShowModal}>
                             Закрыть
                         </Button>
-                        <Button variant="primary" onClick={this.addNewCategory}>
+                        <Button variant="primary" onClick={this.createCategory}>
                             Добавить
                         </Button>
                     </Modal.Footer>
@@ -93,7 +105,8 @@ export class Categories extends Component {
                                     <p className="mt-2 flex-grow-1">{category.name}</p>
                                     <div className="btn-group" >
                                         <button type="button" className="mr-1 btn btn-outline-success">Изменить</button>
-                                        <button type="button" className="mr-1 btn btn-outline-danger">Удалить</button>
+                                        <button type="button" className="mr-1 btn btn-outline-danger"
+                                                onClick={() => this.deleteCategory(category.id)}>Удалить</button>
                                     </div>
                                 </li>
                             </div>)

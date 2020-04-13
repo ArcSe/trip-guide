@@ -1,5 +1,5 @@
 import React from "react";
-import {deleteCities, addCities, getCities} from "../util/APIUtils";
+import {deleteCities, addCities, getCities, createCity, deleteCity} from "../util/APIUtils";
 import Alert from "react-s-alert";
 import Modal from "react-bootstrap/Modal";
 import {Button} from "react-bootstrap";
@@ -13,30 +13,28 @@ export class Cities extends React.Component {
             newCityData: null,
         }
 
-        this.getCitiesFromDB = this.getCitiesFromDB.bind(this);
+        this.getCities = this.getCities.bind(this);
         this.changeShowModal = this.changeShowModal.bind(this);
-        this.addNewCity = this.addNewCity.bind(this);
+        this.createCity = this.createCity.bind(this);
     }
 
     componentDidMount() {
-        this.getCitiesFromDB();
+        this.getCities();
     }
 
-    getCitiesFromDB() {
+    getCities() {
         getCities()
-            .then(response => {
-                this.setState({cities: JSON.parse(JSON.stringify(response))});
-            });
+            .then(data => this.setState({cities: data}));
     }
 
     changeShowModal() {
         this.setState({showModal: !this.state.showModal});
     }
 
-    addNewCity() {
+    createCity() {
         const cityRequest = {name: this.state.newCityData};
 
-        addCities(cityRequest)
+        createCity(cityRequest)
             .then(response => {
                 Alert.success("Город успешно добавлен!");
                 this.setState({showModal: false});
@@ -47,6 +45,18 @@ export class Cities extends React.Component {
             }).catch(error => {
             Alert.error((error && error.message) || 'Oops! Something went wrong. Please try again!');
         })
+    }
+
+    deleteCity(cityId) {
+        deleteCity(cityId)
+            .then(() => {
+                Alert.success("Город успешно удален!");
+                let {cities} = this.state;
+                let filteredCities = cities.filter(city => city.id !== cityId);
+                this.setState({cities: filteredCities});
+            }).catch(error => {
+            Alert.error((error && error.message) || "Упс! Что-то пошло не так. Пожалуйста, попробуйте снова!");
+        });
     }
 
     render() {
@@ -74,7 +84,7 @@ export class Cities extends React.Component {
                         <Button variant="secondary" onClick={this.changeShowModal}>
                             Закрыть
                         </Button>
-                        <Button variant="primary" onClick={this.addNewCity}>
+                        <Button variant="primary" onClick={this.createCity}>
                             Добавить
                         </Button>
                     </Modal.Footer>
@@ -91,7 +101,8 @@ export class Cities extends React.Component {
                                     <p className="mt-2 flex-grow-1">{city.name}</p>
                                     <div className="btn-group" >
                                         <button type="button" className="mr-1 btn btn-outline-success" >Изменить</button>
-                                        <button type="button" className="mr-1 btn btn-outline-danger">Удалить</button>
+                                        <button type="button" className="mr-1 btn btn-outline-danger"
+                                                onClick={() => this.deleteCity(city.id)}>Удалить</button>
                                     </div>
                                 </li>
                             </div>)

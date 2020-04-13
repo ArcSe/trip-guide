@@ -16,11 +16,34 @@ const request = (options) => {
     .then(response => 
         response.json().then(json => {
             if(!response.ok) {
+                alert("rejected");
                 return Promise.reject(json);
             }
             return json;
         })
     );
+};
+
+// Временна заглушка для delete метода
+const request2 = (options) => {
+    const headers = new Headers({
+        'Content-Type': 'application/json',
+    })
+
+    if(localStorage.getItem(ACCESS_TOKEN)) {
+        headers.append('Authorization', 'Bearer ' + localStorage.getItem(ACCESS_TOKEN))
+    }
+
+    const defaults = {headers: headers};
+    options = Object.assign({}, defaults, options);
+
+    return fetch(options.url, options)
+        .then(response => {
+            if (!response.ok) {
+                return Promise.reject(request);
+            }
+            return response;
+        });
 };
 
 export function getCurrentUser() {
@@ -55,7 +78,7 @@ export function deleteCity(cityId) {
         return Promise.reject("No access token set.");
     }
 
-    return request({
+    return request2({
         url: `${API_BASE_URL}/api/city/${cityId}`,
         method: 'DELETE'
     });
@@ -66,7 +89,7 @@ export function deleteCategory(categoryId) {
         return Promise.reject("No access token set.");
     }
 
-    return request({
+    return request2({
         url: `${API_BASE_URL}/api/category/${categoryId}`,
         method: 'DELETE'
     });
