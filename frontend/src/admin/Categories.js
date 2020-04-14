@@ -11,11 +11,13 @@ export class Categories extends Component {
             categories: null,
             showModal: false,
             newCategoryData: null,
+            search: "",
         };
 
         this.getCategories = this.getCategories.bind(this);
         this.changeShowModal = this.changeShowModal.bind(this);
         this.createCategory = this.createCategory.bind(this);
+        this.handleSearchChange = this.handleSearchChange.bind(this);
     }
 
     componentDidMount() {
@@ -61,10 +63,19 @@ export class Categories extends Component {
         });
     }
 
+    handleSearchChange(event) {
+        event.preventDefault();
+        this.setState({search: event.target.value});
+    }
+
     render() {
         if (!this.state.categories){
             return null;
         }
+
+        let filteredCategories = this.state.categories.filter(category => {
+            return category.name.indexOf(this.state.search) !== -1;
+            });
 
         return (
             <div className="container">
@@ -93,13 +104,19 @@ export class Categories extends Component {
                 </Modal>
 
 
-                <div>
+                <div className="btn-toolbar justify-content-between" role="toolbar"
+                     aria-label="Toolbar with button groups">
                     <button type="button" className="mb-1 btn btn-outline-dark"
                             onClick={this.changeShowModal}>Добавить</button>
+                    <div>
+                        <input className="form-control mr-sm-1" type="search" placeholder="Поиск"
+                               aria-label="Search" value={this.state.search} onChange={this.handleSearchChange}/>
+                    </div>
+
                 </div>
                 <div className="list-group">
                     {
-                        this.state.categories.map(category =>
+                        filteredCategories.map(category =>
                             <div>
                                 <li className="mb-1 list-group-item d-flex justify-content-between">
                                     <p className="mt-2 flex-grow-1">{category.name}</p>

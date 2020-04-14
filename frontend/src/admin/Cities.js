@@ -16,6 +16,7 @@ export class Cities extends React.Component {
                 id: '',
                 name: ''
             },
+            search: "",
         }
 
         this.getCities = this.getCities.bind(this);
@@ -23,7 +24,7 @@ export class Cities extends React.Component {
         this.changeShowModal = this.changeShowModal.bind(this);
         this.createCity = this.createCity.bind(this);
         this.updateCity = this.updateCity.bind(this);
-
+        this.handleSearchChange = this.handleSearchChange.bind(this);
     }
 
     componentDidMount() {
@@ -88,10 +89,20 @@ export class Cities extends React.Component {
         });
     }
 
+    handleSearchChange(event) {
+        event.preventDefault();
+        this.setState({search: event.target.value});
+    }
+
     render() {
         if (!this.state.cities){
             return null;
         }
+
+        let filteredCities = this.state.cities.filter(city => {
+            return city.name.indexOf(this.state.search) !== -1;
+        });
+
         return (
             <div className="container">
 
@@ -118,9 +129,14 @@ export class Cities extends React.Component {
                         </Button>
                     </Modal.Footer>
                 </Modal>
-                <div>
+                <div className="btn-toolbar justify-content-between" role="toolbar"
+                     aria-label="Toolbar with button groups">
                     <button type="button" className="mb-1 btn btn-outline-dark"
                             onClick={this.changeShowModal}>Добавить</button>
+                    <div>
+                        <input className="form-control mr-sm-1" type="search" placeholder="Поиск"
+                               aria-label="Search" value={this.state.search} onChange={this.handleSearchChange}/>
+                    </div>
                 </div>
 
 
@@ -155,7 +171,7 @@ export class Cities extends React.Component {
                 </Modal>
                 <div className="list-group">
                     {
-                        this.state.cities.map(city =>
+                        filteredCities.map(city =>
                             <div>
                                 <li className="mb-1 list-group-item d-flex justify-content-between">
                                     <p className="mt-2 flex-grow-1">{city.name}</p>
