@@ -102,7 +102,7 @@ export function editCities(cityId,cityRequest) {
 
     return request({
         url: `${API_BASE_URL}/api/city/${cityId}`,
-        method: 'POST',
+        method: 'PUT',
         body: JSON.stringify(cityRequest)
     });
 }

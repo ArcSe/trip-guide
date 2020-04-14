@@ -22,6 +22,7 @@ export class Cities extends React.Component {
         this.changeEditModal = this.changeEditModal.bind(this);
         this.changeShowModal = this.changeShowModal.bind(this);
         this.createCity = this.createCity.bind(this);
+        this.updateCity = this.updateCity.bind(this);
 
     }
 
@@ -53,8 +54,22 @@ export class Cities extends React.Component {
             Alert.error((error && error.message) || 'Oops! Something went wrong. Please try again!');
         })
     }
+
+
     changeEditModal(){
         this.setState({showEditModal: !this.state.showEditModal});
+    }
+
+    updateCity(){
+        const cityRequest = {id:this.state.newEditCityData.id, name: this.state.newEditCityData.name};
+        alert(cityRequest.id + " " + cityRequest.name);
+        editCities(cityRequest.id, cityRequest)
+            .then(() =>{
+                Alert.success("Город успешно изменен!");
+
+            }).catch(error => {
+            Alert.error((error && error.message) || 'Что-то пошло не так');
+        })
     }
 
     editCity(id, name){
@@ -119,7 +134,12 @@ export class Cities extends React.Component {
                                 <label htmlFor="exampleInputEmail1">Название города</label>
                                 <input type="text" className="form-control" id="textInput"
                                        value={this.state.newEditCityData.name}
-                                       onChange={e => {this.state.newEditCityData = e.target.value;}}/>
+                                       onChange={e => {let {newEditCityData} = this.state;
+
+                                           newEditCityData.name = e.target.value;
+
+                                            this.setState({newEditCityData});
+                                       }}/>
                             </div>
                         </form>
                     </Modal.Body>
