@@ -12,7 +12,7 @@ export class Cities extends React.Component {
             showModal: false,
             newCityData: null,
             showEditModal: false,
-            newEditCityData: {
+            editCityData: {
                 id: '',
                 name: ''
             },
@@ -62,7 +62,7 @@ export class Cities extends React.Component {
     }
 
     updateCity(){
-        const cityRequest = {id:this.state.newEditCityData.id, name: this.state.newEditCityData.name};
+        const cityRequest = {id:this.state.editCityData.id, name: this.state.editCityData.name};
         editCities(cityRequest.id, cityRequest)
             .then(response =>{
                 Alert.success("Город успешно изменен!");
@@ -75,7 +75,7 @@ export class Cities extends React.Component {
     }
 
     editCity(id, name){
-        this.setState({newEditCityData: {id, name}, showEditModal: !this.state.showEditModal});
+        this.setState({editCityData: {id, name}, showEditModal: !this.state.showEditModal});
     }
     deleteCity(cityId) {
         deleteCity(cityId)
@@ -150,12 +150,12 @@ export class Cities extends React.Component {
                             <div className="form-group">
                                 <label htmlFor="exampleInputEmail1">Название города</label>
                                 <input type="text" className="form-control" id="textInput"
-                                       value={this.state.newEditCityData.name}
-                                       onChange={e => {let {newEditCityData} = this.state;
+                                       value={this.state.editCityData.name}
+                                       onChange={e => {let {editCityData} = this.state;
 
-                                           newEditCityData.name = e.target.value;
+                                           editCityData.name = e.target.value;
 
-                                            this.setState({newEditCityData});
+                                            this.setState({editCityData});
                                        }}/>
                             </div>
                         </form>
