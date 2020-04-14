@@ -23,13 +23,11 @@ class Empty extends React.Component {
     }
 }
 
-
-
 export default class Admin extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            state: "empty",
+            state: null,
         };
 
         this.loadCurrentlyLoggedInUser = this.loadCurrentlyLoggedInUser.bind(this);
@@ -90,12 +88,7 @@ export default class Admin extends Component {
                             <button type="button" className="ml-1 btn btn-outline-dark"
                                     onClick={() => this.handleClick("cities")}>Города</button>
                         </div>
-                        <form className="form-inline my-2 my-lg-0">
-                            <input className="form-control mr-sm-1" type="search" placeholder="Search"
-                                   aria-label="Search"/>
-                                   <button className="btn btn-outline-dark my-2 my-sm-0" type="submit">Search
-                                    </button>
-                        </form>
+
                     </div>
                 </div>
 
