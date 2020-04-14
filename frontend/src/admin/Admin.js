@@ -10,7 +10,7 @@ import {Events} from './Events'
 import {ButtonToolbar, ButtonGroup, Button, Container, Row, Col} from "react-bootstrap";
 import Media from "react-bootstrap/Media";
 import ListGroup from "react-bootstrap/ListGroup";
-import {createCategory, getCategories, getCities, getCurrentUser, signup} from "../util/APIUtils";
+import {addCategory, getCategories, getCities, getCurrentUser, signup} from "../util/APIUtils";
 import userLogo from "../img/user.jpg";
 import Modal from "react-bootstrap/Modal";
 import Alert from "react-s-alert";
@@ -67,8 +67,8 @@ export default class Admin extends Component {
                             <img src={userLogo} className="rounded img" alt="img" width="150" height="150"/>
                             <div className="media-body-left">
                                 <h4>{this.props.currentUser.name}</h4>
-                                <p>Администратор</p>
-                                <p>Email: {this.props.currentUser.email}</p>
+                                <p class="lead">Администратор</p>
+                                <p class="lead">Email: {this.props.currentUser.email}</p>
                             </div>
                         </div>
                     </div>
@@ -95,11 +95,11 @@ export default class Admin extends Component {
                 <div className="profile-button">
                     <div className="row">
                         <div className="container">
-                            {(this.state.state === "empty") && <Empty />}
-                            {(this.state.state === "users") && <Users />}
-                            {(this.state.state === "events") && <Events />}
-                            {(this.state.state === "categories") && <Categories />}
-                            {(this.state.state === "cities") && <Cities />}
+                            {(this.state.state === "empty") && <Empty></Empty>}
+                            {(this.state.state === "users") && <Users></Users>}
+                            {(this.state.state === "events") && <Events></Events>}
+                            {(this.state.state === "categories") && <Categories></Categories>}
+                            {(this.state.state === "cities") && <Cities></Cities>}
                         </div>
                     </div>
                 </div>

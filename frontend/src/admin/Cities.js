@@ -1,5 +1,5 @@
 import React from "react";
-import {deleteCities, addCities, getCities, createCity, deleteCity} from "../util/APIUtils";
+import {editCities, createCity, deleteCity, getCities} from "../util/APIUtils";
 import Alert from "react-s-alert";
 import Modal from "react-bootstrap/Modal";
 import {Button} from "react-bootstrap";
@@ -11,12 +11,19 @@ export class Cities extends React.Component {
             cities: null,
             showModal: false,
             newCityData: null,
+            showEditModal: false,
+            editCityData: {
+                id: '',
+                name: ''
+            },
             search: "",
         }
 
         this.getCities = this.getCities.bind(this);
+        this.changeEditModal = this.changeEditModal.bind(this);
         this.changeShowModal = this.changeShowModal.bind(this);
         this.createCity = this.createCity.bind(this);
+        this.updateCity = this.updateCity.bind(this);
         this.handleSearchChange = this.handleSearchChange.bind(this);
     }
 
@@ -49,6 +56,27 @@ export class Cities extends React.Component {
         })
     }
 
+
+    changeEditModal(){
+        this.setState({showEditModal: !this.state.showEditModal});
+    }
+
+    updateCity(){
+        const cityRequest = {id:this.state.editCityData.id, name: this.state.editCityData.name};
+        editCities(cityRequest.id, cityRequest)
+            .then(() =>{
+                Alert.success("Город успешно изменен!");
+                this.setState({showEditModal: false});
+                this.getCities();
+
+            }).catch(error => {
+            Alert.error((error && error.message) || 'Что-то пошло не так');
+        })
+    }
+
+    editCity(id, name){
+        this.setState({editCityData: {id, name}, showEditModal: !this.state.showEditModal});
+    }
     deleteCity(cityId) {
         deleteCity(cityId)
             .then(() => {
@@ -110,6 +138,37 @@ export class Cities extends React.Component {
                                aria-label="Search" value={this.state.search} onChange={this.handleSearchChange}/>
                     </div>
                 </div>
+
+
+
+                <Modal show={this.state.showEditModal} onHide={this.changeEditModal}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Изменить название города</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <form>
+                            <div className="form-group">
+                                <label htmlFor="exampleInputEmail1">Название города</label>
+                                <input type="text" className="form-control" id="textInput"
+                                       value={this.state.editCityData.name}
+                                       onChange={e => {let {editCityData} = this.state;
+
+                                           editCityData.name = e.target.value;
+
+                                            this.setState({editCityData});
+                                       }}/>
+                            </div>
+                        </form>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={this.changeEditModal}>
+                            Закрыть
+                        </Button>
+                        <Button variant="primary" onClick={this.updateCity}>
+                            Изменить
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
                 <div className="list-group">
                     {
                         filteredCities.map(city =>
@@ -117,7 +176,8 @@ export class Cities extends React.Component {
                                 <li className="mb-1 list-group-item d-flex justify-content-between">
                                     <p className="mt-2 flex-grow-1">{city.name}</p>
                                     <div className="btn-group" >
-                                        <button type="button" className="mr-1 btn btn-outline-success" >Изменить</button>
+                                        <button type="button" className="mr-1 btn btn-outline-success"
+                                                onClick={() => this.editCity(city.id, city.name)}>Изменить</button>
                                         <button type="button" className="mr-1 btn btn-outline-danger"
                                                 onClick={() => this.deleteCity(city.id)}>Удалить</button>
                                     </div>

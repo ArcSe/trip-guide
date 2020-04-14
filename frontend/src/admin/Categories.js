@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {addCategory, createCategory, deleteCategory, getCategories} from "../util/APIUtils";
+import {editCategories, createCategory, deleteCategory, getCategories} from "../util/APIUtils";
 import Alert from "react-s-alert";
 import Modal from "react-bootstrap/Modal";
 import {Button} from "react-bootstrap";
@@ -11,12 +11,19 @@ export class Categories extends Component {
             categories: null,
             showModal: false,
             newCategoryData: null,
+            showEditModal: false,
+            editCategoryData: {
+                id: '',
+                name: ''
+            },
             search: "",
         };
 
         this.getCategories = this.getCategories.bind(this);
+        this.changeEditModal = this.changeEditModal.bind(this);
         this.changeShowModal = this.changeShowModal.bind(this);
         this.createCategory = this.createCategory.bind(this);
+        this.updateCategory = this.updateCategory.bind(this);
         this.handleSearchChange = this.handleSearchChange.bind(this);
     }
 
@@ -51,6 +58,26 @@ export class Categories extends Component {
         });
     }
 
+    changeEditModal(){
+        this.setState({showEditModal: !this.state.showEditModal});
+    }
+
+    updateCategory(){
+        const categoryRequest = {id:this.state.editCategoryData.id, name: this.state.editCategoryData.name};
+        editCategories(categoryRequest.id, categoryRequest)
+            .then(() =>{
+                Alert.success("Категория успешно изменена!");
+                this.setState({showEditModal: false});
+                this.getCategories();
+
+            }).catch(error => {
+            Alert.error((error && error.message) || 'Что-то пошло не так');
+        })
+    }
+
+    editCategory(id, name){
+        this.setState({editCategoryData: {id, name}, showEditModal: !this.state.showEditModal});
+    }
     deleteCategory(categoryId) {
         deleteCategory(categoryId)
             .then(() => {
@@ -103,6 +130,35 @@ export class Categories extends Component {
                     </Modal.Footer>
                 </Modal>
 
+                <Modal show={this.state.showEditModal} onHide={this.changeEditModal}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Изменить категорию</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <form>
+                            <div className="form-group">
+                                <label htmlFor="exampleInputEmail1">Название категории</label>
+                                <input type="text" className="form-control" id="textInput"
+                                       value={this.state.editCategoryData.name}
+                                       onChange={e => {let {editCategoryData} = this.state;
+
+                                           editCategoryData.name = e.target.value;
+
+                                           this.setState({editCategoryData});
+                                       }}/>
+                            </div>
+                        </form>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={this.changeEditModal}>
+                            Закрыть
+                        </Button>
+                        <Button variant="primary" onClick={this.updateCategory}>
+                            Добавить
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+
 
                 <div className="btn-toolbar justify-content-between" role="toolbar"
                      aria-label="Toolbar with button groups">
@@ -121,7 +177,8 @@ export class Categories extends Component {
                                 <li className="mb-1 list-group-item d-flex justify-content-between">
                                     <p className="mt-2 flex-grow-1">{category.name}</p>
                                     <div className="btn-group" >
-                                        <button type="button" className="mr-1 btn btn-outline-success">Изменить</button>
+                                        <button type="button" className="mr-1 btn btn-outline-success"
+                                                onClick={() => this.editCategory(category.id, category.name)}>Изменить</button>
                                         <button type="button" className="mr-1 btn btn-outline-danger"
                                                 onClick={() => this.deleteCategory(category.id)}>Удалить</button>
                                     </div>
