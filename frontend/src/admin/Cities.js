@@ -62,10 +62,11 @@ export class Cities extends React.Component {
 
     updateCity(){
         const cityRequest = {id:this.state.newEditCityData.id, name: this.state.newEditCityData.name};
-        alert(cityRequest.id + " " + cityRequest.name);
         editCities(cityRequest.id, cityRequest)
-            .then(() =>{
+            .then(response =>{
                 Alert.success("Город успешно изменен!");
+                this.setState({showEditModal: false});
+                this.getCities();
 
             }).catch(error => {
             Alert.error((error && error.message) || 'Что-то пошло не так');
