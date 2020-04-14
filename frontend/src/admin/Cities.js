@@ -64,7 +64,7 @@ export class Cities extends React.Component {
     updateCity(){
         const cityRequest = {id:this.state.editCityData.id, name: this.state.editCityData.name};
         editCities(cityRequest.id, cityRequest)
-            .then(response =>{
+            .then(() =>{
                 Alert.success("Город успешно изменен!");
                 this.setState({showEditModal: false});
                 this.getCities();
