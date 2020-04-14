@@ -16,7 +16,9 @@ export class Categories extends Component {
                 id: '',
                 name: ''
             },
-            search: "",
+            search: '',
+            activePage: 0,
+            pageSize: 5,
         };
 
         this.getCategories = this.getCategories.bind(this);
@@ -25,6 +27,8 @@ export class Categories extends Component {
         this.createCategory = this.createCategory.bind(this);
         this.updateCategory = this.updateCategory.bind(this);
         this.handleSearchChange = this.handleSearchChange.bind(this);
+        this.handleBackButton = this.handleBackButton.bind(this);
+        this.handleNextButton = this.handleNextButton.bind(this);
     }
 
     componentDidMount() {
@@ -32,9 +36,10 @@ export class Categories extends Component {
     }
 
     getCategories() {
-        getCategories()
+        getCategories({page: this.state.activePage, size: this.state.pageSize})
             .then(response => {
-                this.setState({categories: response});
+                this.setState({totalPages: response.totalPages})
+                this.setState({categories: response.content});
             });
     }
 
@@ -53,6 +58,7 @@ export class Categories extends Component {
                 let { categories } = this.state;
                 categories.push({id: response.id, name: response.name});
                 this.setState({categories: categories});
+                this.getCategories();
             }).catch(error => {
             Alert.error((error && error.message) || "Упс! Что-то пошло не так. Пожалуйста, попробуйте снова!");
         });
@@ -69,7 +75,6 @@ export class Categories extends Component {
                 Alert.success("Категория успешно изменена!");
                 this.setState({showEditModal: false});
                 this.getCategories();
-
             }).catch(error => {
             Alert.error((error && error.message) || 'Что-то пошло не так');
         })
@@ -78,6 +83,7 @@ export class Categories extends Component {
     editCategory(id, name){
         this.setState({editCategoryData: {id, name}, showEditModal: !this.state.showEditModal});
     }
+
     deleteCategory(categoryId) {
         deleteCategory(categoryId)
             .then(() => {
@@ -85,6 +91,7 @@ export class Categories extends Component {
                 let {categories} = this.state;
                 let filteredCategories = categories.filter(category => category.id !== categoryId);
                 this.setState({categories: filteredCategories});
+                this.getCategories();
             }).catch(error => {
                 Alert.error((error && error.message) || "Упс! Что-то пошло не так. Пожалуйста, попробуйте снова!");
         });
@@ -93,6 +100,23 @@ export class Categories extends Component {
     handleSearchChange(event) {
         event.preventDefault();
         this.setState({search: event.target.value});
+    }
+
+    handleBackButton() {
+        console.log(this.state.activePage);
+        if (this.state.activePage !== 0) {
+            this.setState({activePage: this.state.activePage - 1});
+        }
+
+        this.getCategories();
+    }
+
+    handleNextButton() {
+        if (this.state.activePage !== this.state.totalPages - 1) {
+            this.setState({activePage: this.state.activePage + 1});
+        }
+
+        this.getCategories();
     }
 
     render() {
@@ -186,6 +210,20 @@ export class Categories extends Component {
                             </div>)
                     }
                 </div>
+
+                <nav aria-label="Page navigation example">
+                    <ul className="pagination justify-content-center">
+                        <li className="page-item disabled">
+                            <button type="button" className="btn btn-light"
+                                    onClick={this.handleBackButton}>Предыдущая</button>
+                        </li>
+                        <li className="page-item">
+                            <button type="button" className="btn btn-light"
+                                    onClick={this.handleNextButton}>Следующая</button>
+                        </li>
+                    </ul>
+                </nav>
+
             </div>
 
         )

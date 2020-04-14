@@ -144,25 +144,31 @@ export function createCategory(categoryRequest) {
 }
 
 
-export function getCities() {
+export function getCities(citiesRequest) {
     if(!localStorage.getItem(ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
     }
 
+    const page = citiesRequest.page;
+    const size = citiesRequest.size;
+
     return request({
-        url: API_BASE_URL + "/api/cities",
+        url: `${API_BASE_URL}/api/cities/?page=${page}&size=${size}`,
         method: 'GET'
     });
 }
 
-export function getCategories() {
+export function getCategories(categoriesRequest) {
 
     if(!localStorage.getItem(ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
     }
 
+    const page = categoriesRequest.page;
+    const size = categoriesRequest.size;
+
     return request({
-        url: API_BASE_URL + "/api/categories",
+        url: `${API_BASE_URL}/api/categories/?page=${page}&size=${size}`,
         method: 'GET'
     });
 }

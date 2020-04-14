@@ -16,8 +16,10 @@ export class Cities extends React.Component {
                 id: '',
                 name: ''
             },
-            search: "",
-        }
+            search: '',
+            activePage: 0,
+            pageSize: 5,
+        };
 
         this.getCities = this.getCities.bind(this);
         this.changeEditModal = this.changeEditModal.bind(this);
@@ -25,6 +27,8 @@ export class Cities extends React.Component {
         this.createCity = this.createCity.bind(this);
         this.updateCity = this.updateCity.bind(this);
         this.handleSearchChange = this.handleSearchChange.bind(this);
+        this.handleBackButton = this.handleBackButton.bind(this);
+        this.handleNextButton = this.handleNextButton.bind(this);
     }
 
     componentDidMount() {
@@ -32,8 +36,11 @@ export class Cities extends React.Component {
     }
 
     getCities() {
-        getCities()
-            .then(data => this.setState({cities: data}));
+        getCities({page: this.state.activePage, size: this.state.pageSize})
+            .then(response => {
+                this.setState({totalPages: response.totalPages})
+                this.setState({cities: response.content});
+            });
     }
 
     changeShowModal() {
@@ -51,6 +58,7 @@ export class Cities extends React.Component {
                 let { cities } = this.state;
                 cities.push({id: response.id, name: response.name});
                 this.setState({cities: cities});
+                this.getCities();
             }).catch(error => {
             Alert.error((error && error.message) || 'Oops! Something went wrong. Please try again!');
         })
@@ -68,7 +76,6 @@ export class Cities extends React.Component {
                 Alert.success("Город успешно изменен!");
                 this.setState({showEditModal: false});
                 this.getCities();
-
             }).catch(error => {
             Alert.error((error && error.message) || 'Что-то пошло не так');
         })
@@ -77,6 +84,7 @@ export class Cities extends React.Component {
     editCity(id, name){
         this.setState({editCityData: {id, name}, showEditModal: !this.state.showEditModal});
     }
+
     deleteCity(cityId) {
         deleteCity(cityId)
             .then(() => {
@@ -84,6 +92,7 @@ export class Cities extends React.Component {
                 let {cities} = this.state;
                 let filteredCities = cities.filter(city => city.id !== cityId);
                 this.setState({cities: filteredCities});
+                this.getCities();
             }).catch(error => {
             Alert.error((error && error.message) || "Упс! Что-то пошло не так. Пожалуйста, попробуйте снова!");
         });
@@ -92,6 +101,23 @@ export class Cities extends React.Component {
     handleSearchChange(event) {
         event.preventDefault();
         this.setState({search: event.target.value});
+    }
+
+    handleBackButton() {
+        console.log(this.state.activePage);
+        if (this.state.activePage !== 0) {
+            this.setState({activePage: this.state.activePage - 1});
+        }
+
+        this.getCities();
+    }
+
+    handleNextButton() {
+        if (this.state.activePage !== this.state.totalPages - 1) {
+            this.setState({activePage: this.state.activePage + 1});
+        }
+
+        this.getCities();
     }
 
     render() {
@@ -185,6 +211,20 @@ export class Cities extends React.Component {
                             </div>)
                     }
                 </div>
+
+                <nav aria-label="Page navigation example">
+                    <ul className="pagination justify-content-center">
+                        <li className="page-item disabled">
+                            <button type="button" className="btn btn-light"
+                                    onClick={this.handleBackButton}>Предыдущая</button>
+                        </li>
+                        <li className="page-item">
+                            <button type="button" className="btn btn-light"
+                                    onClick={this.handleNextButton}>Следующая</button>
+                        </li>
+                    </ul>
+                </nav>
+
             </div>
         )
     }

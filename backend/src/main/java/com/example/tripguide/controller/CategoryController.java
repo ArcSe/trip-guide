@@ -4,6 +4,8 @@ import com.example.tripguide.exception.BadRequestException;
 import com.example.tripguide.model.Category;
 import com.example.tripguide.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,8 +22,8 @@ public class CategoryController {
     private CategoryRepository categoryRepository;
 
     @GetMapping("/categories")
-    public List<Category> getAllCategories(){
-        return this.categoryRepository.findAll();
+    public Page<Category> getAllCategories(Pageable pageable){
+        return this.categoryRepository.findAll(pageable);
     }
 
     @GetMapping("/category/{id}")
