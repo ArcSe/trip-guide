@@ -18,6 +18,6 @@ public class City {
     @Column(nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "city", cascade = CascadeType.ALL)
+    @OneToMany
     private Set<Event> events;
 }

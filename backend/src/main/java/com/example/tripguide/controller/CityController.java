@@ -51,7 +51,7 @@ public class CityController {
     }
 
     @DeleteMapping("/city/{id}")
-    public ResponseEntity<?> deleteCategory(@PathVariable Long id) {
+    public ResponseEntity<?> deleteCity(@PathVariable Long id) {
         this.cityRepository.deleteById(id);
         return ResponseEntity.ok().build();
     }

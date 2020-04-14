@@ -15,6 +15,9 @@ public class Event {
     private Long id;
 
     @Column(nullable = false)
+    private String name;
+
+    @Column(nullable = false)
     private Float rating;
 
     @Column(nullable = false)
@@ -30,6 +33,8 @@ public class Event {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
+
+
 
 
 
