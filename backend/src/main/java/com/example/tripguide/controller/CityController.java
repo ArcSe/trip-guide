@@ -5,6 +5,8 @@ import com.example.tripguide.model.Category;
 import com.example.tripguide.model.City;
 import com.example.tripguide.repository.CityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,8 +23,8 @@ public class CityController {
     private CityRepository cityRepository;
 
     @GetMapping("/cities")
-    public List<City> getAllCities() {
-        return this.cityRepository.findAll();
+    public Page<City> getAllCities(Pageable pageable) {
+        return this.cityRepository.findAll(pageable);
     }
 
     @GetMapping("/city/{id}")
