@@ -1,5 +1,5 @@
 import React from "react";
-import {createCity, deleteCity, getCities} from "../util/APIUtils";
+import {editCities, createCity, deleteCity, getCities} from "../util/APIUtils";
 import Alert from "react-s-alert";
 import Modal from "react-bootstrap/Modal";
 import {Button} from "react-bootstrap";
@@ -12,12 +12,17 @@ export class Cities extends React.Component {
             showModal: false,
             newCityData: null,
             showEditModal: false,
-            newEditCityData: null,
+            newEditCityData: {
+                id: '',
+                name: ''
+            },
         }
 
         this.getCities = this.getCities.bind(this);
+        this.changeEditModal = this.changeEditModal.bind(this);
         this.changeShowModal = this.changeShowModal.bind(this);
         this.createCity = this.createCity.bind(this);
+
     }
 
     componentDidMount() {
@@ -48,7 +53,13 @@ export class Cities extends React.Component {
             Alert.error((error && error.message) || 'Oops! Something went wrong. Please try again!');
         })
     }
+    changeEditModal(){
+        this.setState({showEditModal: !this.state.showEditModal});
+    }
 
+    editCity(id, name){
+        this.setState({newEditCityData: {id, name}, showEditModal: !this.state.showEditModal});
+    }
     deleteCity(cityId) {
         deleteCity(cityId)
             .then(() => {
@@ -95,6 +106,32 @@ export class Cities extends React.Component {
                     <button type="button" className="mb-1 btn btn-outline-dark"
                             onClick={this.changeShowModal}>Добавить</button>
                 </div>
+
+
+
+                <Modal show={this.state.showEditModal} onHide={this.changeEditModal}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Изменить название города</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <form>
+                            <div className="form-group">
+                                <label htmlFor="exampleInputEmail1">Название города</label>
+                                <input type="text" className="form-control" id="textInput"
+                                       value={this.state.newEditCityData.name}
+                                       onChange={e => {this.state.newEditCityData = e.target.value;}}/>
+                            </div>
+                        </form>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={this.changeEditModal}>
+                            Закрыть
+                        </Button>
+                        <Button variant="primary" onClick={this.updateCity}>
+                            Изменить
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
                 <div className="list-group">
                     {
                         this.state.cities.map(city =>
@@ -103,7 +140,7 @@ export class Cities extends React.Component {
                                     <p className="mt-2 flex-grow-1">{city.name}</p>
                                     <div className="btn-group" >
                                         <button type="button" className="mr-1 btn btn-outline-success"
-                                                onClick={() => this.deleteCity(city.id)}>Изменить</button>
+                                                onClick={() => this.editCity(city.id, city.name)}>Изменить</button>
                                         <button type="button" className="mr-1 btn btn-outline-danger"
                                                 onClick={() => this.deleteCity(city.id)}>Удалить</button>
                                     </div>

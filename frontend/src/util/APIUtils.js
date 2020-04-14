@@ -95,7 +95,7 @@ export function deleteCategory(categoryId) {
     });
 }
 
-export function editCity(cityId,cityRequest) {
+export function editCities(cityId,cityRequest) {
     if(!localStorage.getItem(ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
     }
