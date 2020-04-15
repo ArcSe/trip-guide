@@ -29,7 +29,7 @@ public class EventController {
     private EventRepository eventRepository;
 
     @Autowired
-    EntityManager em;
+    EntityManager entityManager;
 
     @GetMapping("/events")
     public Page<Event> getAllEvents(Pageable page ) {
@@ -38,8 +38,9 @@ public class EventController {
 
 
     @GetMapping("/event")
-    public Page<Event> getEvents(@RequestParam(required = false) String name, Integer rating, Integer price) {
-        return filter(name, rating, price);
+    public Page<Event> getEvents(@RequestParam(required = false) String name,
+                                 Integer rating, Integer price, Long cityId, Long categoryId) {
+        return filter(name, rating, price, cityId, categoryId);
     }
 
     @GetMapping("/event/{id}")
@@ -74,26 +75,36 @@ public class EventController {
         return ResponseEntity.ok().build();
     }
 
-    public Page<Event> filter(String name, Integer rating, Integer price ){
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Event> cq = cb.createQuery(Event.class);
+    public Page<Event> filter(String name, Integer rating, Integer price, Long cityId, Long categoryId) {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Event> criteriaQuery = criteriaBuilder.createQuery(Event.class);
 
-        Root<Event> event = cq.from(Event.class);
+        Root<Event> event = criteriaQuery.from(Event.class);
         List<Predicate> predicates = new ArrayList<>();
 
-
         if (rating != null) {
-            predicates.add(cb.gt(event.get("rating"), rating));
+            predicates.add(criteriaBuilder.ge(event.get("rating"), rating));
         }
-        if (price != null) {
-            predicates.add(cb.gt(event.get("rating"), price));
-        }
-        if (name != null) {
-            predicates.add(cb.like(event.get("name"), "%" +name + "%"));
-        }
-        cq.where(predicates.toArray(new Predicate[0]));
 
-        return new PageImpl<>(em.createQuery(cq).getResultList());
+        if (price != null) {
+            predicates.add(criteriaBuilder.gt(event.get("rating"), price));
+        }
+
+        if (name != null) {
+            predicates.add(criteriaBuilder.like(event.get("name"), "%" +name + "%"));
+        }
+
+        if (cityId != null) {
+            predicates.add(criteriaBuilder.equal(event.get("city").<Long> get("id"), cityId));
+        }
+
+        if (categoryId != null) {
+            predicates.add(criteriaBuilder.equal(event.get("category").<Long> get("id"), categoryId));
+        }
+
+        criteriaQuery.where(predicates.toArray(new Predicate[0]));
+
+        return new PageImpl<>(entityManager.createQuery(criteriaQuery).getResultList());
     }
 
 }
