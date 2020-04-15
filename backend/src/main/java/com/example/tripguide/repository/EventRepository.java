@@ -13,13 +13,14 @@ import java.util.Optional;
 public interface EventRepository extends JpaRepository<Event, Long> {
 
     boolean existsByName(String name);
+
     Page<Event> findAll(Pageable page);
+
     boolean existsByAddressAndCity(String address, City city);
+
     boolean existsByRating(Float rating);
+
     boolean existsByCategory(Category category);
 
     Optional<Event> findById(Long id);
-
-
-
 }

@@ -14,13 +14,11 @@ class CityDropDown extends Component {
         };
 
         this.getCities = this.getCities.bind(this);
-        this.handleCityClick = this.handleCityClick.bind(this);
     }
 
     componentDidMount() {
         this.getCities();
     }
-
 
     getCities() {
         const citiesRequest = {page: null, size: null};
@@ -31,10 +29,6 @@ class CityDropDown extends Component {
                 this.props.setFilterState("city", cities[0]);
                 this.setState({loading: false});
             });
-    }
-
-    handleCityClick(city) {
-        this.props.setFilterState("city", city);
     }
 
     render() {
@@ -53,7 +47,7 @@ class CityDropDown extends Component {
                         this.state.cities.map(city =>
                             <button className="dropdown-item"
                                     type="button"
-                                    onClick={() => this.handleCityClick(city)}>{city.name}</button>)
+                                    onClick={() => this.props.setFilterState("city", city)}>{city.name}</button>)
                     }
                 </div>
             </div>
@@ -65,7 +59,6 @@ class DateSelector extends Component {
     constructor(props) {
         super(props);
     }
-
 
     render() {
         return (
@@ -102,7 +95,6 @@ class CategoryDropDown extends Component {
         };
 
         this.getCategories = this.getCategories.bind(this);
-        this.handleCategoryClick = this.handleCategoryClick.bind(this);
     }
 
     componentDidMount() {
@@ -118,11 +110,6 @@ class CategoryDropDown extends Component {
             });
     }
 
-    handleCategoryClick(category) {
-        this.props.setFilterState("category", category);
-    }
-
-
     render() {
         if (this.state.loading) {
             return null;
@@ -137,7 +124,7 @@ class CategoryDropDown extends Component {
                 <div className="dropdown-menu" aria-labelledby="dropdownCategoryManu">
 
                     <button className="dropdown-item"
-                            type="button" onClick={() => this.handleCategoryClick(null)}>Очистить</button>
+                            type="button" onClick={() => this.props.setFilterState("category", category)}>Очистить</button>
                     {
                         this.state.categories.map(category =>
                             <button className="dropdown-item"
@@ -152,12 +139,6 @@ class CategoryDropDown extends Component {
 class RatingDropDown extends Component {
     constructor(props) {
         super(props);
-
-        this.handleRatingClick = this.handleRatingClick.bind(this);
-    }
-
-    handleRatingClick(rating) {
-        this.props.setFilterState("rating", rating);
     }
 
     render() {
@@ -169,13 +150,13 @@ class RatingDropDown extends Component {
                 </button>
                 <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <button className="dropdown-item"
-                            type="button" onClick={() => this.handleRatingClick(null)}>Очистить</button>
+                            type="button" onClick={() => this.props.setFilterState("rating", rating)}>Очистить</button>
                     <button className="dropdown-item"
                             type="button"
-                            onClick={() => this.handleRatingClick({name: "4+", value: 4})}>4+</button>
+                            onClick={() => this.props.setFilterState("rating", {name: "4+", value: 4})}>4+</button>
                     <button className="dropdown-item"
                             type="button"
-                            onClick={() => this.handleRatingClick({name: "3+", value: 3})}>3+</button>
+                            onClick={() => this.props.setFilterState("rating", {name: "3+", value: 3})}>3+</button>
                 </div>
             </div>
         )
@@ -328,11 +309,9 @@ export default class Home extends Component {
         this.setFilterState = this.setFilterState.bind(this);
     }
 
-
     setFilterState(key, value) {
         this.setState({[key]: value});
     }
-
 
     render() {
         console.log(this.state);
