@@ -23,8 +23,8 @@ public class EventController {
     private EventRepository eventRepository;
 
     @GetMapping("/events")
-    public List<Event> getAllEvents() {
-        return this.eventRepository.findAll();
+    public Page<Event> getAllEvents(Pageable page) {
+        return this.eventRepository.findAll(page);
     }
 
     @GetMapping("/event/{id}")

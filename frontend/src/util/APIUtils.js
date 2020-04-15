@@ -84,6 +84,17 @@ export function deleteCity(cityId) {
     });
 }
 
+export function deleteEvent(eventId) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request2({
+        url: `${API_BASE_URL}/api/event/${eventId}`,
+        method: 'DELETE'
+    });
+}
+
 export function deleteCategory(categoryId) {
     if(!localStorage.getItem(ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
@@ -154,6 +165,20 @@ export function getCities(citiesRequest) {
 
     return request({
         url: `${API_BASE_URL}/api/cities/?page=${page}&size=${size}`,
+        method: 'GET'
+    });
+}
+
+export function getEvents(citiesRequest) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    const page = citiesRequest.page;
+    const size = citiesRequest.size;
+
+    return request({
+        url: `${API_BASE_URL}/api/events/?page=${page}&size=${size}`,
         method: 'GET'
     });
 }
