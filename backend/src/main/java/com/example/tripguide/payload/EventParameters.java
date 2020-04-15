@@ -10,7 +10,7 @@ public class EventParameters {
     private String dayOfWeek;
     private Long categoryId;
     private Float rating;
-    private Boolean isFree;
+    private Boolean free;
     private Integer minPrice;
     private Integer maxPrice;
 }
