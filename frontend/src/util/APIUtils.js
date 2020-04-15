@@ -13,10 +13,8 @@ const request = (options) => {
     options = Object.assign({}, defaults, options);
 
     return fetch(options.url, options)
-    .then(response => 
-        response.json().then(json => {
+        .then(response => response.json().then(json => {
             if(!response.ok) {
-                alert("rejected");
                 return Promise.reject(json);
             }
             return json;
@@ -118,10 +116,12 @@ export function editCities(cityId,cityRequest) {
     });
 }
 
-export function editCategories(categoryId,categoryRequest) {
+export function editCategories(categoryRequest) {
     if(!localStorage.getItem(ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
     }
+
+    const categoryId = categoryRequest.id;
 
     return request({
         url: `${API_BASE_URL}/api/category/${categoryId}`,
@@ -194,6 +194,20 @@ export function getCategories(categoriesRequest) {
 
     return request({
         url: `${API_BASE_URL}/api/categories/?page=${page}&size=${size}`,
+        method: 'GET'
+    });
+}
+export function getCategoriesByName(categoriesRequest) {
+
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    const name = categoriesRequest.name;
+
+    console.log(`${API_BASE_URL}/api/category/?name=${name}`);
+    return request({
+        url: `${API_BASE_URL}/api/category/?name=${name}`,
         method: 'GET'
     });
 }

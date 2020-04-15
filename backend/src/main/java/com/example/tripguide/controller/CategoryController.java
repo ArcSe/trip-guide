@@ -26,6 +26,13 @@ public class CategoryController {
         return this.categoryRepository.findAll(pageable);
     }
 
+    @GetMapping("/category/")
+    public ResponseEntity<?> getCategory(String name) {
+        Optional<Category> category = this.categoryRepository.findByName(name);
+        return category.map(response -> ResponseEntity.ok().body(response))
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @GetMapping("/category/{id}")
     public ResponseEntity<?> getCategory(@PathVariable Long id) {
         Optional<Category> category = this.categoryRepository.findById(id);
