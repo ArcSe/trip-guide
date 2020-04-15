@@ -1,8 +1,12 @@
 package com.example.tripguide.controller;
 
+import com.example.tripguide.exception.BadRequestException;
+import com.example.tripguide.model.City;
 import com.example.tripguide.model.Event;
 import com.example.tripguide.repository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,6 +36,10 @@ public class EventController {
 
     @PostMapping("/event")
     public ResponseEntity<Event> createEvent( @RequestBody Event event) throws URISyntaxException {
+        if (this.eventRepository.existsByName(event.getName())
+                && this.eventRepository.existsByAddressAndCity(event.getAddress(), event.getCity())){
+            throw new BadRequestException("Такой город уже создан");
+        }
 
         Event result = this.eventRepository.save(event);
 
@@ -46,7 +54,7 @@ public class EventController {
     }
 
     @DeleteMapping("/event/{id}")
-    public ResponseEntity<?> deleteCategory(@PathVariable Long id) {
+    public ResponseEntity<?> deleteEvent(@PathVariable Long id) {
         this.eventRepository.deleteById(id);
         return ResponseEntity.ok().build();
     }
