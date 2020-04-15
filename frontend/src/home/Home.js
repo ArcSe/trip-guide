@@ -77,8 +77,6 @@ class DateSelector extends Component {
                     </div>
                 </div>
 
-                <DatePicker  selected={this.props.date}
-                             onChange={date => this.props.setFilterState("date", date)}/>
             </form>
         )
 
@@ -124,11 +122,11 @@ class CategoryDropDown extends Component {
                 <div className="dropdown-menu" aria-labelledby="dropdownCategoryManu">
 
                     <button className="dropdown-item"
-                            type="button" onClick={() => this.props.setFilterState("category", category)}>Очистить</button>
+                            type="button" onClick={() => this.props.setFilterState("category", null)}>Очистить</button>
                     {
                         this.state.categories.map(category =>
                             <button className="dropdown-item"
-                                    type="button" onClick={() => this.handleCategoryClick(category)}>
+                                    type="button" onClick={() => this.props.setFilterState("category", category)}>
                                 {category.name}</button>)
                     }
                 </div>
@@ -150,7 +148,7 @@ class RatingDropDown extends Component {
                 </button>
                 <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <button className="dropdown-item"
-                            type="button" onClick={() => this.props.setFilterState("rating", rating)}>Очистить</button>
+                            type="button" onClick={() => this.props.setFilterState("rating", null)}>Очистить</button>
                     <button className="dropdown-item"
                             type="button"
                             onClick={() => this.props.setFilterState("rating", {name: "4+", value: 4})}>4+</button>
