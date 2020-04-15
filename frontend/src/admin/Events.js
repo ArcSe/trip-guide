@@ -16,9 +16,15 @@ export class Events extends React.Component {
                 name: '',
                 rating: '',
                 address: '',
-                city: '',
+                city: {
+                    id: '',
+                    name: '',
+                },
                 price: '',
-                category: '',
+                category: {
+                    id: '',
+                    name: '',
+                },
             },
             search: '',
             activePage: 0,
@@ -116,6 +122,10 @@ export class Events extends React.Component {
                             <div>
                                 <li className="mb-1 list-group-item d-flex justify-content-between">
                                     <p className="mt-2 flex-grow-1">{event.name}</p>
+                                    <p className="mt-2 flex-grow-1">{event.address}</p>
+                                    <p className="mt-2 flex-grow-1">{event.rating}</p>
+                                    <p className="mt-2 flex-grow-1">{event.price}</p>
+                                    <p className="mt-2 flex-grow-1">{event.city.name}</p>
                                     <div className="btn-group" >
                                         <button type="button" className="mr-1 btn btn-outline-success">Изменить</button>
                                         <button type="button" className="mr-1 btn btn-outline-danger"
