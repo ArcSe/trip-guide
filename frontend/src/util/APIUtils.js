@@ -169,20 +169,6 @@ export function getCities(citiesRequest) {
     });
 }
 
-export function getEvents(citiesRequest) {
-    if(!localStorage.getItem(ACCESS_TOKEN)) {
-        return Promise.reject("No access token set.");
-    }
-
-    const page = citiesRequest.page;
-    const size = citiesRequest.size;
-
-    return request({
-        url: `${API_BASE_URL}/api/events/?page=${page}&size=${size}`,
-        method: 'GET'
-    });
-}
-
 export function getCategories(categoriesRequest) {
 
     if(!localStorage.getItem(ACCESS_TOKEN)) {
@@ -197,6 +183,7 @@ export function getCategories(categoriesRequest) {
         method: 'GET'
     });
 }
+
 export function getCategoriesByName(categoriesRequest) {
 
     if(!localStorage.getItem(ACCESS_TOKEN)) {
@@ -208,6 +195,28 @@ export function getCategoriesByName(categoriesRequest) {
     console.log(`${API_BASE_URL}/api/category/?name=${name}`);
     return request({
         url: `${API_BASE_URL}/api/category/?name=${name}`,
+        method: 'GET'
+    });
+}
+
+export function getEvents(eventsRequest) {
+
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    const pageable = eventsRequest.pageable;
+    const filters = eventsRequest.filters;
+
+    const pageableParams = Object.keys(pageable).map(key =>
+        key + '=' + (pageable[key] ? pageable[key] : "")).join('&');
+    const filtersParams = Object.keys(filters).map(key =>
+        key + '=' + (filters[key] ? filters[key] : "")).join('&');
+
+    console.log("Запрос: " + `${API_BASE_URL}/api/event/?${pageableParams}&${filtersParams}`);
+
+    return request({
+        url: `${API_BASE_URL}/api/event/?${pageableParams}&${filtersParams}`,
         method: 'GET'
     });
 }

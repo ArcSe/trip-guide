@@ -2,6 +2,7 @@ package com.example.tripguide.controller;
 
 import com.example.tripguide.exception.BadRequestException;
 import com.example.tripguide.model.Event;
+import com.example.tripguide.payload.EventCriteria;
 import com.example.tripguide.repository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -32,15 +33,13 @@ public class EventController {
     EntityManager entityManager;
 
     @GetMapping("/events")
-    public Page<Event> getAllEvents(Pageable page ) {
-        return eventRepository.findAll(page);
+    public Page<Event> getAllEvents(Pageable pageable) {
+        return eventRepository.findAll(pageable);
     }
 
-
     @GetMapping("/event")
-    public Page<Event> getEvents(@RequestParam(required = false) String name,
-                                 Integer rating, Integer price, Long cityId, Long categoryId) {
-        return filter(name, rating, price, cityId, categoryId);
+    public Page<Event> getEvents(Pageable pageable, EventCriteria eventCriteria) {
+        return filter(pageable, eventCriteria);
     }
 
     @GetMapping("/event/{id}")
@@ -75,36 +74,59 @@ public class EventController {
         return ResponseEntity.ok().build();
     }
 
-    public Page<Event> filter(String name, Integer rating, Integer price, Long cityId, Long categoryId) {
+    public Page<Event> filter(Pageable pageable, EventCriteria eventCriteria) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Event> criteriaQuery = criteriaBuilder.createQuery(Event.class);
 
         Root<Event> event = criteriaQuery.from(Event.class);
         List<Predicate> predicates = new ArrayList<>();
 
-        if (rating != null) {
-            predicates.add(criteriaBuilder.ge(event.get("rating"), rating));
+        if (eventCriteria.getRating() != null) {
+            predicates.add(criteriaBuilder.ge(event.get("rating"), eventCriteria.getRating()));
         }
 
-        if (price != null) {
-            predicates.add(criteriaBuilder.gt(event.get("rating"), price));
+        if (eventCriteria.getMinPrice() != null) {
+            predicates.add(criteriaBuilder.ge(event.get("price"), eventCriteria.getMinPrice()));
         }
 
-        if (name != null) {
-            predicates.add(criteriaBuilder.like(event.get("name"), "%" +name + "%"));
+        if (eventCriteria.getMaxPrice() != null) {
+            predicates.add(criteriaBuilder.le(event.get("price"), eventCriteria.getMaxPrice()));
         }
 
-        if (cityId != null) {
-            predicates.add(criteriaBuilder.equal(event.get("city").<Long> get("id"), cityId));
+        if (eventCriteria.getCityId() != null) {
+            predicates.add(criteriaBuilder.equal(event.get("city").<Long> get("id"), eventCriteria.getCityId()));
         }
 
-        if (categoryId != null) {
-            predicates.add(criteriaBuilder.equal(event.get("category").<Long> get("id"), categoryId));
+        if (eventCriteria.getCategoryId() != null) {
+            predicates.add(criteriaBuilder.equal(event.get("category").<Long> get("id"), eventCriteria.getCategoryId()));
+        }
+
+        if (eventCriteria.getFree() != null) {
+            predicates.add(criteriaBuilder.equal(event.get("price"), eventCriteria.getFree()));
+        }
+
+        if (eventCriteria.getDayOfWeek() != null) {
+            String dayOfWeek = eventCriteria.getDayOfWeek();
+            switch (dayOfWeek) {
+                case "today":
+                    // Заглушка, добавить предикат на сегодняшний день.
+                    break;
+                case "tomorrow":
+                    // Заглушка, добавить предикат на завтрашний день.
+                    break;
+                case "weekend":
+                    // Заглушка, добавить предикат на выходные.
+                    break;
+                default:
+                    break;
+            }
         }
 
         criteriaQuery.where(predicates.toArray(new Predicate[0]));
 
-        return new PageImpl<>(entityManager.createQuery(criteriaQuery).getResultList());
+        List<Event> resultList = entityManager.createQuery(criteriaQuery).getResultList();
+        int total = resultList.size();
+        return new PageImpl<>(resultList, pageable, total);
     }
 
 }

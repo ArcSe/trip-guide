@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class EventParameters {
+public class EventCriteria {
     private Long cityId;
     private String dayOfWeek;
     private Long categoryId;

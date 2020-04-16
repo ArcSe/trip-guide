@@ -3,7 +3,7 @@ import DatePicker from "react-datepicker";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "react-datepicker/dist/react-datepicker.css";
 import './Home.css';
-import {getCategories, getCities} from "../util/APIUtils";
+import {getCategories, getCities, getEvents} from "../util/APIUtils";
 
 class CityDropDown extends Component {
     constructor(props) {
@@ -27,6 +27,7 @@ class CityDropDown extends Component {
                 const cities = response.content;
                 this.setState({cities: cities});
                 this.props.setFilterState("city", cities[0]);
+                this.props.setFilterState("loadingCity", false);
                 this.setState({loading: false});
             });
     }
@@ -105,6 +106,7 @@ class CategoryDropDown extends Component {
             .then(response => {
                 this.setState({categories: response.content});
                 this.setState({loading: false});
+                this.props.setFilterState("loadingCategory", false);
             });
     }
 
@@ -257,35 +259,68 @@ class Content extends Component {
         super(props);
 
         this.state = {
-            cities: null,
+            events: [],
         };
 
-        this.getCities = this.getCities.bind(this);
+        this.getEvents = this.getEvents.bind(this);
     }
 
-    getCities() {
+    componentDidMount() {
+        this.getEvents();
+    }
 
+    getEvents() {
+        console.log("Get events started");
+        let eventsRequest = {};
+        let cityId = this.props.st.filters.city ? this.props.st.filters.city.id : null;
+        let categoryId = this.props.st.filters.category ? this.props.st.filters.category.id : null;
+        let rating = this.props.st.filters.rating ? this.props.st.filters.rating.value : null;
+        eventsRequest.pageable = this.props.st.pageable;
+        eventsRequest.filters = {
+            cityId: cityId,
+            categoryId: categoryId,
+            rating: rating,
+            dayOfWeek: this.props.st.dayOfWeek,
+            minPrice: this.props.st.maxPrice,
+            maxPrice: this.props.st.minPrice,
+            free: this.props.st.free,
+            notvisited: this.props.st.notvisited,
+        };
+
+        getEvents(eventsRequest)
+            .then(response => {
+            this.props.setPageState("totalPages", response.totalPages);
+            this.setState({events: response.content});
+            console.log("Events response");
+            console.log(response.content);
+        }).catch(error => console.log(error));
     }
 
     render() {
         return (
-            <div className="card mb-1">
-                <div className="row mb-1 mt-1">
-                    <div className="col-md-4">
-                        <img alt="Здесь должна быть картинка"
-                             src="https://www.jotform.com/resources/assets/icon/min/jotform-icon-dark-400x400.png"
-                             className="w-100" />
-                    </div>
-                    <div className="col-md-8 px-3">
-                        <div className="card-block px-3">
-                            <h4 className="card-title">Lorem ipsum dolor sit amet</h4>
-                            <p className="card-text">Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
-                            <p className="card-text">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                            <a href="#" className="btn btn-primary">Посмотреть</a>
+            <div>
+                <button onClick={this.getEvents}>Фильтровать</button>
+                {this.state.events.map(event =>
+                    <div className="card mb-1">
+                        <div className="row mb-1 mt-1">
+                            <div className="col-md-4">
+                                <img alt="Здесь должна быть картинка"
+                                     src="https://www.jotform.com/resources/assets/icon/min/jotform-icon-dark-400x400.png"
+                                     className="w-100" />
+                            </div>
+                            <div className="col-md-8 px-3">
+                                <div className="card-block px-3">
+                                    <h4 className="card-title">{event.name}</h4>
+                                    <p className="card-text">Рейтинг: {event.rating}</p>
+                                    <p className="card-text">Адрес: {event.address}</p>
+                                    <p className="card-text">Цена: {event.price}</p>
+                                    <a href="#" className="btn btn-primary">Посмотреть</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
-
-                </div>
+                )
+                }
             </div>
         )
     }
@@ -295,32 +330,61 @@ export default class Home extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            city: null,
-            category: null,
-            rating: null,
-            preset: null,
-            date: null,
-            free: false,
-            notvisited: false,
+            filters: {
+                city: null,
+                category: null,
+                rating: null,
+                dayOfWeek: null,
+                minPrice: null,
+                maxPrice: null,
+                free: false,
+                notvisited: false,
+                loadingCategory: true,
+                loadingCity: true,
+            },
+            pageable: {
+                page: 0,
+                size: 10,
+                total: null,
+            },
         };
 
         this.setFilterState = this.setFilterState.bind(this);
+        this.setPageState = this.setPageState.bind(this);
     }
 
     setFilterState(key, value) {
-        this.setState({[key]: value});
+
+        this.setState({
+            filters: {
+                ...this.state.filters,
+                [key]: value,
+            }
+        });
+    }
+
+    setPageState(key, value) {
+        this.setState({
+            pageable: {
+                ...this.state.pageable,
+                [key]: value,
+            }
+        });
     }
 
     render() {
-        console.log(this.state);
+        console.log(`loadingCategories=${this.state.filters.loadingCategory}, loadingCities=${this.state.filters.loadingCity}`)
         return (
             <div className="container">
                 <div className="filter-bar">
-                    <FilterComponent filterState={this.state} setFilterState={this.setFilterState}/>
+                    <FilterComponent filterState={this.state.filters} setFilterState={this.setFilterState}/>
                 </div>
 
                 <div className="events">
-                    <Content filterState={this.state} />
+                    {
+                        (!this.state.filters.loadingCategory && !this.state.filters.loadingCity) ?
+                            <Content st={this.state} setPageState={this.setPageState} /> : null
+                    }
                 </div>
             </div>
         )
