@@ -303,17 +303,24 @@ class Content extends Component {
                 {this.state.events.map(event =>
                     <div className="card mb-1">
                         <div className="row mb-1 mt-1">
-                            <div className="col-md-4">
+                            <div className="col-md-2">
                                 <img alt="Здесь должна быть картинка"
-                                     src="https://www.jotform.com/resources/assets/icon/min/jotform-icon-dark-400x400.png"
-                                     className="w-100" />
+                                     src="https://evonexus.org/wp-content/uploads/2013/12/dummy-200x200.png"
+                                     />
                             </div>
-                            <div className="col-md-8 px-3">
+                            <div className="col-md-10 px-3">
                                 <div className="card-block px-3">
                                     <h4 className="card-title">{event.name}</h4>
-                                    <p className="card-text">Рейтинг: {event.rating}</p>
-                                    <p className="card-text">Адрес: {event.address}</p>
+                                    <p className="card-text m-0">Рейтинг: {event.rating} (количество оценок)</p>
+                                    <p className="card-text m-0">Адрес: {event.address}</p>
+                                    <p className="card-text m-0">Дата: 22 сентября, вторник, 20:00</p>
                                     <p className="card-text">Цена: {event.price}</p>
+
+                                    <p className="card-text">Что будет если тут есть
+                                        очень длинное описание которое мы хотим вывести раз два три как это будет
+                                        смотреться даввйте посмотрим раз два три четыре пять это нужно чтобы
+                                        правильно выставить col-md пусть текст будет очень длинный привет
+                                        меня зовут денис как дела</p>
                                     <a href="#" className="btn btn-primary">Посмотреть</a>
                                 </div>
                             </div>
