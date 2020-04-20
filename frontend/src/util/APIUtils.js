@@ -104,10 +104,12 @@ export function deleteCategory(categoryId) {
     });
 }
 
-export function editCities(cityId,cityRequest) {
+export function editCity(cityRequest) {
     if(!localStorage.getItem(ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
     }
+
+    const cityId = cityRequest.id;
 
     return request({
         url: `${API_BASE_URL}/api/city/${cityId}`,
@@ -116,7 +118,7 @@ export function editCities(cityId,cityRequest) {
     });
 }
 
-export function editCategories(categoryRequest) {
+export function editCategory(categoryRequest) {
     if(!localStorage.getItem(ACCESS_TOKEN)) {
         return Promise.reject("No access token set.");
     }
@@ -195,6 +197,21 @@ export function getCategoriesByName(categoriesRequest) {
     console.log(`${API_BASE_URL}/api/category/?name=${name}`);
     return request({
         url: `${API_BASE_URL}/api/category/?name=${name}`,
+        method: 'GET'
+    });
+}
+
+export function getCitiesByName(citiesRequest) {
+
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    const name = citiesRequest.name;
+
+    console.log(`${API_BASE_URL}/api/city/?name=${name}`);
+    return request({
+        url: `${API_BASE_URL}/api/city/?name=${name}`,
         method: 'GET'
     });
 }
