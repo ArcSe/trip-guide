@@ -1,5 +1,12 @@
 import React, {Component} from 'react';
-import {editCategories, createCategory, deleteCategory, getCategories, getCategoriesByName} from "../util/APIUtils";
+import {
+    editCategories,
+    createCategory,
+    deleteCategory,
+    getCategories,
+    getCategoriesByName,
+    editCategory
+} from "../util/APIUtils";
 import Alert from "react-s-alert";
 import Modal from "react-bootstrap/Modal";
 import {Button} from "react-bootstrap";
@@ -23,7 +30,7 @@ class EditModalDialog extends Component {
 
     handleUpdateButton(){
         const categoryRequest = { id: this.props.categoryId, name: this.state.editData};
-        editCategories(categoryRequest)
+        editCategory(categoryRequest)
             .then(() =>{
                 Alert.success("Категория успешно изменена!");
                 this.props.toggleDialog();
