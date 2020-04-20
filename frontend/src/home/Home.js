@@ -300,13 +300,60 @@ class Content extends Component {
         return (
             <div>
                 <button onClick={this.getEvents}>Фильтровать</button>
+
+                <div>
+                    <div className="row no-gutters border rounded overflow-hidden flex-md-row mb-1 shadow-sm h-md-250 position-relative">
+                        <div className="col-auto d-none d-lg-block">
+                            <svg className="bd-placeholder-img" width="250" height="200"
+                                 preserveAspectRatio="xMidYMid slice"
+                                 focusable="false" role="img" aria-label="Placeholder: Thumbnail">
+                                <title>Placeholder</title>
+                                <rect width="100%" height="100%" fill="#55595c"/>
+                                <text x="50%" y="50%" fill="#eceeef" dy=".3em">Картинка</text>
+                            </svg>
+                        </div>
+                        <div className="col p-4 d-flex flex-column position-static">
+                            <h3 className="mb-0">Концерт церковного хора</h3>
+                            <div className="mb-0 text-muted">12 Ноября, вторник, 22:00</div>
+                            <div className="text-muted">Улица Космонавтов 22, клуб "Лягушатник"</div>
+                            <p className="card-text mb-auto">Тут может быть очень длинное описание.
+                                Сейчас посмотрим, как оно будет выглядеть. Можно выводить не всё описание,
+                                а лишь ограниченное количество символов, а потом просто ставить ...
+                            </p>
+                            <a href="#" className="stretched-link">Перейти на страницу</a>
+                        </div>
+                    </div>
+
+                    <div className="row no-gutters border rounded overflow-hidden flex-md-row mb-1 shadow-sm h-md-250 position-relative">
+                        <div className="col-auto d-none d-lg-block">
+                            <svg className="bd-placeholder-img" width="250" height="200"
+                                 preserveAspectRatio="xMidYMid slice"
+                                 focusable="false" role="img" aria-label="Placeholder: Thumbnail">
+                                <title>Placeholder</title>
+                                <rect width="100%" height="100%" fill="#55595c"/>
+                                <text x="50%" y="50%" fill="#eceeef" dy=".3em">Картинка</text>
+                            </svg>
+                        </div>
+                        <div className="col p-4 d-flex flex-column position-static">
+                            <h3 className="mb-0">Концерт церковного хора</h3>
+                            <div className="mb-0 text-muted">12 Ноября, вторник, 22:00</div>
+                            <div className="text-muted">Улица Космонавтов 22, клуб "Лягушатник"</div>
+                            <p className="card-text mb-auto">Тут может быть очень длинное описание.
+                                Сейчас посмотрим, как оно будет выглядеть. Можно выводить не всё описание,
+                                а лишь ограниченное количество символов, а потом просто ставить ...
+                            </p>
+                            <a href="#" className="stretched-link">Перейти на страницу</a>
+                        </div>
+                    </div>
+                </div>
+
                 {this.state.events.map(event =>
                     <div className="card mb-1">
                         <div className="row mb-1 mt-1">
                             <div className="col-md-2">
                                 <img alt="Здесь должна быть картинка"
-                                     src="https://evonexus.org/wp-content/uploads/2013/12/dummy-200x200.png"
-                                     />
+                                     src="https://evonexus.org/wp-content/uploads/2013/12/dummy-200x200.png"/>
+                                     <button>test</button>
                             </div>
                             <div className="col-md-10 px-3">
                                 <div className="card-block px-3">
