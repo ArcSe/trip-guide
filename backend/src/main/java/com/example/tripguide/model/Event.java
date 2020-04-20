@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -21,8 +22,17 @@ public class Event {
     @Column(nullable = false)
     private Float rating;
 
+    @Column(nullable = false, columnDefinition="TEXT")
+    private String description;
+
     @Column(nullable = false)
-    private Integer price;
+    private Long votes;
+
+    @ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(name = "schedule",
+            joinColumns = { @JoinColumn(name = "id_event") },
+            inverseJoinColumns = { @JoinColumn(name = "id_data") })
+    private Set<Date> date;
 
     @Column(nullable = false)
     private String address;
