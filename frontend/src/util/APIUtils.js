@@ -199,6 +199,21 @@ export function getCategoriesByName(categoriesRequest) {
     });
 }
 
+export function getAllEvents(eventsRequest) {
+
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    const page = eventsRequest.page;
+    const size = eventsRequest.size;
+
+    return request({
+        url: `${API_BASE_URL}/api/events/?page=${page}&size=${size}`,
+        method: 'GET'
+    });
+}
+
 export function getEvents(eventsRequest) {
 
     if(!localStorage.getItem(ACCESS_TOKEN)) {

@@ -1,12 +1,10 @@
 import React, {Component} from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../admin/Admin.css'
-import {Cities} from  './Cities'
+import {Cities} from './Cities'
 import {Categories} from './Categories'
-import {Users} from  './Users'
+import {Users} from './Users'
 import {Events} from './Events'
-
-import { getCurrentUser} from "../util/APIUtils";
 import userLogo from "../img/user.jpg";
 
 class AdminInformation extends Component {
@@ -19,7 +17,7 @@ class AdminInformation extends Component {
             <div className='profile-container'>
                 <div className="media-container ">
                     <div className="media">
-                        <img src={userLogo} className="rounded img" alt="img" width="150" height="150"/>
+                        <img src="../img/user.jpg" className="rounded img" alt="img" width="150" height="150"/>
                         <div className="media-body-left">
                             <h4>{this.props.currentUser.name}</h4>
                             <p className="lead">Администратор</p>
