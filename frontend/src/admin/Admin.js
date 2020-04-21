@@ -17,7 +17,7 @@ class AdminInformation extends Component {
             <div className='profile-container'>
                 <div className="media-container ">
                     <div className="media">
-                        <img src="../img/user.jpg" className="rounded img" alt="img" width="150" height="150"/>
+                        <img src='../img/user.jpg' className="rounded img" alt="img" width="150" height="150"/>
                         <div className="media-body-left">
                             <h4>{this.props.currentUser.name}</h4>
                             <p className="lead">Администратор</p>

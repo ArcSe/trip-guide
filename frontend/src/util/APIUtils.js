@@ -1,5 +1,8 @@
 import { API_BASE_URL, ACCESS_TOKEN } from '../constants';
 
+
+
+
 const request = (options) => {
     const headers = new Headers({
         'Content-Type': 'application/json',
@@ -101,6 +104,20 @@ export function deleteCategory(categoryId) {
     return request2({
         url: `${API_BASE_URL}/api/category/${categoryId}`,
         method: 'DELETE'
+    });
+}
+
+export function editEvent(eventRequest) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    const eventId = eventRequest.id;
+
+    return request({
+        url: `${API_BASE_URL}/api/city/${eventId}`,
+        method: 'PUT',
+        body: JSON.stringify(eventRequest)
     });
 }
 
