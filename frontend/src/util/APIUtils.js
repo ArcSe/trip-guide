@@ -202,6 +202,15 @@ export function getCategories(categoriesRequest) {
         method: 'GET'
     });
 }
+export function getEventsByName(eventsRequest) {
+    const name = eventsRequest.name;
+
+    console.log(`${API_BASE_URL}/api/event/?name=${name}`);
+    return request({
+        url: `${API_BASE_URL}/api/event/?name=${name}`,
+        method: 'GET'
+    });
+}
 
 export function getCategoriesByName(categoriesRequest) {
 

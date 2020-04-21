@@ -1,13 +1,5 @@
 import React, {Component} from "react";
-import {
-    editCities,
-    createCity,
-    deleteCity,
-    getCities,
-    editCategories,
-    createCategory,
-    deleteCategory, editCity, getCitiesByName
-} from "../util/APIUtils";
+import {createCity, deleteCity, editCity, getCities, getCitiesByName} from "../util/APIUtils";
 import Alert from "react-s-alert";
 import Modal from "react-bootstrap/Modal";
 import {Button} from "react-bootstrap";

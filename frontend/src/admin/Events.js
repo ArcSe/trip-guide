@@ -7,7 +7,8 @@ import {
     editEvent,
     editCity,
     createCity,
-    deleteCity
+    deleteCity,
+    getEventsByName
 } from "../util/APIUtils";
 import Alert from "react-s-alert";
 import Modal from "react-bootstrap/Modal";
@@ -19,11 +20,34 @@ class EditModalDialog extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            editData: null,
+            editData:{
+                name: null,
+                address: null,
+                price: null,
+                city:{
+                    id: null,
+                    name: null,
+                },
+                category: {
+                    id: null,
+                    name: null,
+                }
+            },
         };
 
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleUpdateButton = this.handleUpdateButton.bind(this);
+        this.setEditState = this.setEditState.bind(this);
+    }
+
+    setEditState(key, value) {
+
+        this.setState({
+            editData: {
+                ...this.state.editData,
+                [key]: value,
+            }
+        });
     }
 
     handleInputChange(event) {
@@ -33,12 +57,12 @@ class EditModalDialog extends Component {
     }
 
     handleUpdateButton(){
-        const cityRequest = { id: this.props.eventId, name: this.state.editData};
-        editEvent(eventRequest)
+        const eventRequest = { id: this.props.cityId, name: this.state.editData};
+        editCity(eventRequest)
             .then(() =>{
-                Alert.success("Город успешно изменен!");
+                Alert.success("Событие успешно изменен!");
                 this.props.toggleDialog();
-                this.props.getCities();
+                this.props.getEvents();
             }).catch(error => {
             Alert.error((error && error.message) || "Упс! Что-то пошло не так. Пожалуйста, попробуйте снова!");
         })
@@ -47,7 +71,7 @@ class EditModalDialog extends Component {
 
     render() {
         return(
-            <Modal show={this.state.showEditModal} onHide={this.changeEditModal}>
+            <Modal show={this.props.show} onHide={this.props.toggleDialog}>
                 <Modal.Header closeButton>
                     <Modal.Title>Изменение события</Modal.Title>
                 </Modal.Header>
@@ -56,24 +80,27 @@ class EditModalDialog extends Component {
                         <div className="form-group">
                             <label htmlFor="exampleInputEmail1">Название события</label>
                             <input type="text" className="form-control" id="textInput"
-                                   value={this.state.editEventData.name}/>
+                                   value={this.state.editData.name}
+                                   onChange={this.handleInputChange}/>
                             <label htmlFor="exampleInputEmail1">Адрес</label>
                             <input type="text" className="form-control" id="textInput"
-                                   value={this.state.editEventData.address}/>
+                                   value={this.state.editData.address}
+                                   onChange={this.handleInputChange}/>
                             <label htmlFor="exampleInputEmail1">Цена</label>
                             <input type="text" className="form-control" id="textInput"
-                                   value={this.state.editEventData.price}/>
+                                   value={this.state.editData.price}
+                                   onChange={this.handleInputChange}/>
                             <div className="filter-bar">
-                                <EditComponent editState={this.state.editEventData} setEditState={this.setEditState}/>
+                                <EditComponent editState={this.state.editData} setEditState={this.setEditState}/>
                             </div>
                         </div>
                     </form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={this.changeEditModal}>
+                    <Button variant="secondary" onClick={this.props.toggleDialog}>
                         Закрыть
                     </Button>
-                    <Button variant="primary" onClick={this.updateEvent}>
+                    <Button variant="primary" onClick={this.handleUpdateButton}>
                         Изменить
                     </Button>
                 </Modal.Footer>
@@ -184,7 +211,7 @@ class CategoryDropDown extends Component {
 
         return (
             <div className="dropdown">
-                <button className="btn btn-primary dropdown-toggle" type="button" id="categoryDropDownButton"
+                <button className="btn btn-outline-dark dropdown-toggle" type="button" id="categoryDropDownButton"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     {this.props.category ? this.props.category.name : "Категория"}
                 </button>
@@ -237,7 +264,7 @@ class CityDropDown extends Component {
 
         return (
             <div className="dropdown">
-                <button className="btn btn-primary dropdown-toggle" type="button" id="cityDropDownButton"
+                <button className="btn btn-outline-dark dropdown-toggle" type="button" id="cityDropDownButton"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     {this.props.city ? this.props.city.name : "Город"}
                 </button>
@@ -389,7 +416,7 @@ class Pagination extends Component  {
         const activePage = this.props.activePage;
 
         if (activePage !== 0) {
-            this.props.setCitiesState("activePage", activePage - 1);
+            this.props.setEventsState("activePage", activePage - 1);
         }
 
         this.props.getEvents();
@@ -446,11 +473,11 @@ export class Events extends React.Component {
     }
 
     componentDidMount() {
-        this.getCities();
+        this.getEvents();
     }
 
     getEvents() {
-        getAllEvents({page: this.state.eventactivePage, size: this.state.pageSize})
+        getAllEvents({page: this.state.activePage, size: this.state.pageSize})
             .then(response => {
                 this.setState({totalPages: response.totalPages})
                 this.setState({events: response.content});
@@ -480,129 +507,42 @@ export class Events extends React.Component {
         this.setState({showEditModal: !this.state.showEditModal});
     }
 
-    updateEvent(){
-        const eventRequest = { id: this.state.editEventData.id, name: this.state.editEventData.name,
-            address : this.state.editEventData.address, rating: this.state.editEventData.rating,
-            price: this.state.editEventData.price, city: this.state.editEventData.city, category:this.state.editEventData.category};
-        editEvent(eventRequest)
-            .then(() =>{
-                Alert.success("Событие успешно изменено!");
-
-            }).catch(error => {
-            Alert.error((error && error.message) || "Упс! Что-то пошло не так. Пожалуйста, попробуйте снова!");
-        })
-    }
-
-    setEditState(key, value) {
-
-        this.setState({
-            editEventData: {
-                ...this.state.editEventData,
-                [key]: value,
-            }
-        });
-    }
-
-
-    deleteEvent(eventId) {
-        deleteEvent(eventId)
-            .then(() => {
-                Alert.success("Событие успешно удалено!");
-                let {events} = this.state;
-                let filteredEvents = events.filter(event => event.id !== eventId);
-                this.setState({events: filteredEvents});
-                this.getEvents();
-            }).catch(error => {
-            Alert.error((error && error.message) || "Упс! Что-то пошло не так. Пожалуйста, попробуйте снова!");
-        });
-    }
-
-    handleSearchChange(event) {
-        event.preventDefault();
-        this.setState({search: event.target.value});
-    }
-
-    handleBackButton() {
-        console.log(this.state.activePage);
-        if (this.state.activePage !== 0) {
-            this.setState({activePage: this.state.activePage - 1});
-        }
-
-        this.getEvents();
-    }
-
-    handleNextButton() {
-        if (this.state.activePage !== this.state.totalPages - 1) {
-            this.setState({activePage: this.state.activePage + 1});
-        }
-
-        this.getEvents();
-    }
 
     render() {
         if (!this.state.events){
             return null;
         }
 
-        let filteredEvents = this.state.events.filter(event => {
-            return event.name.indexOf(this.state.search) !== -1;
-        });
-
         return (
             <div className="container">
+                <CreateModalDialog show={this.state.showCreateModal}
+                                   toggleDialog={this.toggleCreateModal}
+                                   getEvents={this.getEvents}/>
+
+                <EditModalDialog show={this.state.showEditModal}
+                                 toggleDialog={this.toggleEditModal}
+                                 getEvents={this.getEvents}
+                                 eventId={this.state.editEventId}/>
+
                 <div className="btn-toolbar justify-content-between" role="toolbar"
                      aria-label="Toolbar with button groups">
-                    <button type="button" className="mb-1 btn btn-outline-dark"
-                            onClick={this.changeShowModal}>Добавить</button>
-                    <div>
-                        <input className="form-control mr-sm-1" type="search" placeholder="Поиск"
-                               aria-label="Search" value={this.state.search} onChange={this.handleSearchChange}/>
-                    </div>
+                    <CreateButton toggleDialog={this.toggleCreateModal}/>
+                    <SearchComponent search={this.state.search}
+                                     getEvents={this.getEvents}
+                                     getEventsByName={this.getEventsByName}
+                                     setEventsState={this.setNewState}/>
                 </div>
 
+                <Content toggleDialog={this.toggleEditModal}
+                         setEventsState={this.setNewState}
+                         getEvents={this.getEvents}
+                         events={this.state.events}/>
 
-
-
-
-
-                <div className="list-group">
-                    {
-                        filteredEvents.map(event =>
-                            <div>
-                                <li className="mb-1 list-group-item d-flex justify-content-between">
-                                    <p className="mt-2 flex-grow-1">{event.name}</p>
-                                    <p className="mt-2 flex-grow-1">{event.address}</p>
-                                    <p className="mt-2 flex-grow-1">{event.rating}</p>
-                                    <p className="mt-2 flex-grow-1">{event.price}</p>
-                                    <p className="mt-2 flex-grow-1">{event.city.name}</p>
-                                    <div className="btn-group" >
-                                        <button type="button" className="mr-1 btn btn-outline-success"
-                                                onClick={() => this.editEvent(event.id, event.name, event.address,
-                                                    event.rating, event.price, event.city, event.category)}
-                                        >Изменить</button>
-                                        <button type="button" className="mr-1 btn btn-outline-danger"
-                                                onClick={() => this.deleteEvent(event.id)}>Удалить</button>
-                                    </div>
-                                </li>
-                            </div>)
-                    }
-                </div>
-
-                <nav aria-label="Page navigation example">
-                    <ul className="pagination justify-content-center">
-                        <li className="page-item disabled">
-                            <button type="button" className="btn btn-light"
-                                    onClick={this.handleBackButton}>Предыдущая</button>
-                        </li>
-                        <li className="page-item">
-                            <button type="button" className="btn btn-light"
-                                    onClick={this.handleNextButton}>Следующая</button>
-                        </li>
-                    </ul>
-                </nav>
-
+                <Pagination totalPages={this.state.totalPages}
+                            activePage={this.state.activePage}
+                            setEventsState={this.setNewState}
+                            getEvents={this.getEvents}/>
             </div>
-
         )
     }
 };
