@@ -271,3 +271,18 @@ export function getEvents(eventsRequest) {
         method: 'GET'
     });
 }
+
+export function updateUserEvent(eventRequest) {
+    const id = eventRequest.userId;
+    const eventId = eventRequest.eventId;
+    const type = eventRequest.type;
+
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: `${API_BASE_URL}/user/${id}/?eventId=${eventId}&type=${type}`,
+        method: 'PUT'
+    });
+}

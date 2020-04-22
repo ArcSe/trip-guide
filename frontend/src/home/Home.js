@@ -3,7 +3,7 @@ import DatePicker from "react-datepicker";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "react-datepicker/dist/react-datepicker.css";
 import './Home.css';
-import {getCategories, getCities, getEvents} from "../util/APIUtils";
+import {getCategories, getCities, getEvents, updateUserEvent} from "../util/APIUtils";
 
 class CityDropDown extends Component {
     constructor(props) {
@@ -255,15 +255,64 @@ class FilterComponent extends Component {
     }
 }
 
+class Pagination extends Component  {
+    constructor(props) {
+        super(props);
+
+        this.handleBackButton = this.handleBackButton.bind(this);
+        this.handleNextButton = this.handleNextButton.bind(this);
+    }
+
+    handleBackButton() {
+        const activePage = this.props.activePage;
+        console.log(`Back button ${activePage}`)
+
+        if (activePage !== 0) {
+            this.props.setPageState("activePage", activePage - 1);
+            this.props.getEvents();
+        }
+    }
+
+    handleNextButton() {
+        const activePage = this.props.activePage;
+        const totalPages = this.props.totalPages;
+
+        console.log(`Next button ${activePage}`);
+        if (activePage !== totalPages - 1) {
+            this.props.setPageState("activePage", activePage + 1);
+            this.props.getEvents();
+        }
+    }
+
+    render() {
+        return(
+            <nav aria-label="Page navigation example">
+                <ul className="pagination justify-content-center">
+                    <li className="page-item disabled">
+                        <button type="button" className="btn btn-light"
+                                onClick={this.handleBackButton}>Предыдущая</button>
+                    </li>
+                    <li className="page-item">
+                        <button type="button" className="btn btn-light"
+                                onClick={this.handleNextButton}>Следующая</button>
+                    </li>
+                </ul>
+            </nav>
+        )
+    }
+}
+
 class Content extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
+            userEvents: new Set(this.props.userEvents.map(event => event.id)),
             events: [],
         };
 
         this.getEvents = this.getEvents.bind(this);
+        this.handleCheckBoxChange = this.handleCheckBoxChange.bind(this);
     }
 
     componentDidMount() {
@@ -290,9 +339,32 @@ class Content extends Component {
             .then(response => {
             this.props.setPageState("totalPages", response.totalPages);
             this.setState({events: response.content});
-            console.log("Events response");
-            console.log(response.content);
-        }).catch(error => console.log(error));
+            console.log("SETSTATE");
+            this.state.events.map(event => console.log(`EventId ${event.id}: ${this.state.userEvents.has(event.id)}`));
+            }).catch(error => console.log(error));
+    }
+
+    handleCheckBoxChange(event, id) {
+        /*
+         Записываем в посещенные или удаляем из посещенных через несколько минут
+        */
+
+        const checked = event.target.checked;
+        const userEvents = this.state.userEvents;
+        const type = checked ? "add" : "delete";
+        const eventRequest = {userId: this.props.userId, eventId: id, type: [type]};
+
+        // updateUserEvents(eventRequest) ...
+        updateUserEvent(eventRequest)
+        if (checked) {
+            userEvents.add(id);
+        } else {
+            userEvents.delete(id);
+
+        }
+        this.setState({userEvents: userEvents});
+        console.log(this.state.userEvents);
+        console.log(eventRequest);
     }
 
     render() {
@@ -321,7 +393,9 @@ class Content extends Component {
                                     `${event.description.substring(0, 200)}...` : event.description}</p>
 
                             <div className="form-check">
-                                <input className="form-check-input" type="checkbox" value="" id="defaultCheck1"/>
+                                <input className="form-check-input"
+                                       type="checkbox" value="" id="defaultCheck1"
+                                       checked={this.state.userEvents.has(event.id)} onChange={e => this.handleCheckBoxChange(e, event.id)}/>
                                 <label className="form-check-label" htmlFor="defaultCheck1">
                                     Посетил
                                 </label>
@@ -332,6 +406,13 @@ class Content extends Component {
                     </div>
                 )
                 }
+
+                <Pagination totalPages={this.props.st.pageable.totalPages}
+                            activePage={this.props.st.pageable.activePage}
+                            setPageState={this.props.setPageState}
+                            getEvents={this.getEvents}/>
+
+
             </div>
         )
     }
@@ -354,9 +435,9 @@ export default class Home extends Component {
                 loadingCity: true,
             },
             pageable: {
-                page: 0,
+                activePage: 0,
                 size: 10,
-                total: null,
+                totalPages: null,
             },
         };
 
@@ -394,7 +475,9 @@ export default class Home extends Component {
                 <div className="events">
                     {
                         (!this.state.filters.loadingCategory && !this.state.filters.loadingCity) ?
-                            <Content st={this.state} setPageState={this.setPageState} /> : null
+                            <Content st={this.state}
+                                     setPageState={this.setPageState} userId={this.props.currentUser.id}
+                                     userEvents={this.props.currentUser.events}/> : null
                     }
                 </div>
             </div>
