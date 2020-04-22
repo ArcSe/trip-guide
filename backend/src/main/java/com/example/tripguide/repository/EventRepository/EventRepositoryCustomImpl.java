@@ -28,6 +28,7 @@ public class EventRepositoryCustomImpl implements EventRepositoryCustom {
         CriteriaQuery<Event> criteriaQuery = criteriaBuilder.createQuery(Event.class);
 
         Root<Event> event = criteriaQuery.from(Event.class);
+        criteriaQuery.distinct(true);
         List<Predicate> predicates = new ArrayList<>();
 
         if (eventCriteria.getRating() != null) {
