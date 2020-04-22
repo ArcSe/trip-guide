@@ -39,7 +39,7 @@ public class EventController {
     }
 
     @PostMapping("/event")
-    public ResponseEntity<Event> createEvent( @RequestBody Event event) throws URISyntaxException {
+    public ResponseEntity<Event> createEvent(@RequestBody Event event) throws URISyntaxException {
         if (this.eventRepository.existsByName(event.getName())
                 && this.eventRepository.existsByAddressAndCity(event.getAddress(), event.getCity())){
             throw new BadRequestException("Такой город уже создан");

@@ -315,7 +315,7 @@ class Content extends Component {
                                 Рейтинг: {event.rating} ({event.votes})
                                 Моя оценка: аа
                             </div>
-                            <div className="text-muted">{event.address}, ближайшая дата {event.date[0]}</div>
+                            <div className="text-muted">{event.address}, ближайшая дата {event.schedules[0]}</div>
                             <p className="card-text mb-auto">
                                 {event.description.length > 200 ?
                                     `${event.description.substring(0, 200)}...` : event.description}</p>

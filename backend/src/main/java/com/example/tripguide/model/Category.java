@@ -17,7 +17,4 @@ public class Category {
 
     @Column(nullable = false)
     private String name;
-
-    @OneToMany
-    private Set<Event> events;
 }
