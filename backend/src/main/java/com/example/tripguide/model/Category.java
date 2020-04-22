@@ -20,5 +20,4 @@ public class Category {
 
     @OneToMany
     private Set<Event> events;
-
 }

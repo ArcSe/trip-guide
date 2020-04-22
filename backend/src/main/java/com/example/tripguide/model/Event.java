@@ -46,4 +46,7 @@ public class Event {
     @JoinColumn(name = "category_id")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Category category;
+
+    @ManyToMany(mappedBy = "events")
+    private Set<User> users;
 }

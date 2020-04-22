@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -31,9 +32,6 @@ public class User {
 
     private String imageUrl;
 
-    @Column(nullable = false)
-    private Boolean emailVerified = false;
-
     @JsonIgnore
     private String password;
 
@@ -42,4 +40,12 @@ public class User {
     private AuthProvider provider;
 
     private String providerId;
+
+    @ManyToMany(cascade = {CascadeType.ALL})
+    @JoinTable(
+            name = "users_events",
+            joinColumns = {@JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "event_id")}
+    )
+    private Set<Event> events;
 }

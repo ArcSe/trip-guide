@@ -16,7 +16,6 @@ public class Date {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     @ManyToMany(mappedBy="date")
     private Set<Event> event;
 
@@ -24,6 +23,4 @@ public class Date {
 
     @Temporal(TemporalType.TIMESTAMP)
     private java.util.Date date;
-
-
 }
