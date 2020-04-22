@@ -259,6 +259,8 @@ export function getEvents(eventsRequest) {
     const pageable = eventsRequest.pageable;
     const filters = eventsRequest.filters;
 
+    console.log(`Get evenct api`);
+    console.log(pageable);
     const pageableParams = Object.keys(pageable).map(key =>
         key + '=' + (pageable[key] ? pageable[key] : "")).join('&');
     const filtersParams = Object.keys(filters).map(key =>

@@ -265,22 +265,22 @@ class Pagination extends Component  {
     }
 
     handleBackButton() {
-        const activePage = this.props.activePage;
-        console.log(`Back button ${activePage}`)
+        const page = this.props.page;
+        console.log(`Back button ${page}`)
 
-        if (activePage !== 0) {
-            this.props.setPageState("activePage", activePage - 1);
+        if (page !== 0) {
+            this.props.setPageState("page", page - 1);
             this.props.getEvents();
         }
     }
 
     handleNextButton() {
-        const activePage = this.props.activePage;
+        const page = this.props.page;
         const totalPages = this.props.totalPages;
 
-        console.log(`Next button ${activePage}`);
-        if (activePage !== totalPages - 1) {
-            this.props.setPageState("activePage", activePage + 1);
+        console.log(`Next button ${page}`);
+        if (page !== totalPages - 1) {
+            this.props.setPageState("page", page + 1);
             this.props.getEvents();
         }
     }
@@ -325,6 +325,7 @@ class Content extends Component {
         let eventsRequest = {};
 
         eventsRequest.pageable = this.props.st.pageable;
+        console.log(eventsRequest.pageable);
         eventsRequest.filters = {
             cityId: this.props.st.filters.city.id,
             categoryId: this.props.st.filters.category.id,
@@ -405,7 +406,7 @@ class Content extends Component {
                 }
 
                 <Pagination totalPages={this.props.st.pageable.totalPages}
-                            activePage={this.props.st.pageable.activePage}
+                            page={this.props.st.pageable.page}
                             setPageState={this.props.setPageState}
                             getEvents={this.getEvents}/>
 
@@ -432,8 +433,8 @@ export default class Home extends Component {
                 loadingCity: true,
             },
             pageable: {
-                activePage: 0,
-                size: 10,
+                page: 1,
+                size: 2,
                 totalPages: null,
             },
         };
