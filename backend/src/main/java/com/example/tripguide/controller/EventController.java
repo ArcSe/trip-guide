@@ -1,8 +1,12 @@
 package com.example.tripguide.controller;
 
 import com.example.tripguide.exception.BadRequestException;
+import com.example.tripguide.model.Category;
+import com.example.tripguide.model.City;
 import com.example.tripguide.model.Event;
 import com.example.tripguide.payload.EventCriteria;
+import com.example.tripguide.repository.CategoryRepository;
+import com.example.tripguide.repository.CityRepository;
 import com.example.tripguide.repository.EventRepository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,6 +24,12 @@ public class EventController {
 
     @Autowired
     private EventRepository eventRepository;
+
+    @Autowired
+    private CityRepository cityRepository;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @GetMapping("/events")
     public Page<Event> getAllEvents(Pageable pageable) {
@@ -39,12 +49,16 @@ public class EventController {
     }
 
     @PostMapping("/event")
-    public ResponseEntity<Event> createEvent( @RequestBody Event event) throws URISyntaxException {
+    public ResponseEntity<Event> createEvent(@RequestBody Event event) throws URISyntaxException {
         if (this.eventRepository.existsByName(event.getName())
                 && this.eventRepository.existsByAddressAndCity(event.getAddress(), event.getCity())){
             throw new BadRequestException("Такой город уже создан");
         }
 
+        City city = this.cityRepository.getOne(event.getCity().getId());
+        Category category = this.categoryRepository.getOne(event.getCategory().getId());
+        event.setCity(city);
+        event.setCategory(category);
         Event result = this.eventRepository.save(event);
 
         return ResponseEntity.created(new URI("/api/event/" + result.getId()))
