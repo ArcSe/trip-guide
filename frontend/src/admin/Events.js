@@ -1,13 +1,11 @@
 import React, {Component} from "react";
 import {
-    getAllEvents,
-    deleteEvent,
-    getCities,
-    getCategories,
-    editEvent,
-    editCity,
     createCity,
     deleteCity,
+    editCity,
+    getAllEvents,
+    getCategories,
+    getCities,
     getEventsByName
 } from "../util/APIUtils";
 import Alert from "react-s-alert";
@@ -20,44 +18,36 @@ class EditModalDialog extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            editData:{
-                name: null,
-                address: null,
-                price: null,
-                city:{
-                    id: null,
-                    name: null,
-                },
-                category: {
-                    id: null,
-                    name: null,
-                }
-            },
+            editData: null,
         };
 
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleUpdateButton = this.handleUpdateButton.bind(this);
-        this.setEditState = this.setEditState.bind(this);
-    }
-
-    setEditState(key, value) {
-
-        this.setState({
-            editData: {
-                ...this.state.editData,
-                [key]: value,
-            }
-        });
     }
 
     handleInputChange(event) {
         event.preventDefault();
         const data = event.target.value;
-        this.setState({editData: data});
+        this.props.setEditState("editData", data);
     }
 
     handleUpdateButton(){
-        const eventRequest = { id: this.props.cityId, name: this.state.editData};
+        alert(this.props.editData.name);
+        const eventRequest = {
+            id: this.props.cityId,
+            name: this.props.editData.name,
+            address: this.props.editData.address,
+            price: this.props.editData.price,
+            city:{
+                id: this.props.editData.city.id,
+                name: this.props.editData.city.name,
+            },
+            category: {
+                id: this.props.editData.category.id,
+                name: this.props.editData.name,
+            }
+        };
+
         editCity(eventRequest)
             .then(() =>{
                 Alert.success("Событие успешно изменен!");
@@ -80,18 +70,18 @@ class EditModalDialog extends Component {
                         <div className="form-group">
                             <label htmlFor="exampleInputEmail1">Название события</label>
                             <input type="text" className="form-control" id="textInput"
-                                   value={this.state.editData.name}
+                                   value={this.props.editData.name}
                                    onChange={this.handleInputChange}/>
                             <label htmlFor="exampleInputEmail1">Адрес</label>
                             <input type="text" className="form-control" id="textInput"
-                                   value={this.state.editData.address}
+                                   value={this.props.editData.address}
                                    onChange={this.handleInputChange}/>
                             <label htmlFor="exampleInputEmail1">Цена</label>
                             <input type="text" className="form-control" id="textInput"
-                                   value={this.state.editData.price}
+                                   value={this.props.editData.price}
                                    onChange={this.handleInputChange}/>
                             <div className="filter-bar">
-                                <EditComponent editState={this.state.editData} setEditState={this.setEditState}/>
+                                <EditComponent editState={this.props.editData} setEditState={this.props.setEditState}/>
                             </div>
                         </div>
                     </form>
@@ -141,7 +131,7 @@ class CreateModalDialog extends Component {
 
     render() {
         return(
-            <Modal show={this.state.showModal} onHide={this.changeShowModal}>
+            <Modal show={this.props.show} onHide={this.props.toggleDialog}>
                 <Modal.Header closeButton>
                     <Modal.Title>Создание события</Modal.Title>
                 </Modal.Header>
@@ -168,10 +158,10 @@ class CreateModalDialog extends Component {
                     </form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={this.changeShowModal}>
+                    <Button variant="secondary" onClick={this.props.toggleDialog}>
                         Закрыть
                     </Button>
-                    <Button variant="primary"  >
+                    <Button variant="primary" onClick={this.handleCreateButton} >
                         Изменить
                     </Button>
                 </Modal.Footer>
@@ -392,7 +382,8 @@ class Content extends Component {
                                 <p className="mt-2 flex-grow-1">{event.name}</p>
                                 <div className="btn-group" >
                                     <button type="button" className="mr-1 btn btn-outline-success"
-                                            onClick={() => this.handleEditButton(event.id)}>Изменить</button>
+                                            onClick={() => this.handleEditButton(event.id,
+                                                event.name, event.address, event.price)}>Изменить</button>
                                     <button type="button" className="mr-1 btn btn-outline-danger"
                                             onClick={() => this.handleDeleteButton(event.id)}>Удалить</button>
                                 </div>
@@ -463,13 +454,37 @@ export class Events extends React.Component {
             activePage: 0,
             totalPages: 0,
             pageSize: 5,
+            editData:{
+                name: null,
+                address: null,
+                price: null,
+                city:{
+                    id: null,
+                    name: null,
+                },
+                category: {
+                    id: null,
+                    name: null,
+                }
+            },
         };
 
+        this.setEditState = this.setEditState.bind(this);
         this.getEventsByName = this.getEventsByName.bind(this);
         this.getEvents = this.getEvents.bind(this);
         this.setNewState = this.setNewState.bind(this);
         this.toggleCreateModal = this.toggleCreateModal.bind(this);
         this.toggleEditModal = this.toggleEditModal.bind(this);
+    }
+
+    setEditState(key, value) {
+
+        this.setState({
+            editData: {
+                ...this.state.editData,
+                [key]: value,
+            }
+        });
     }
 
     componentDidMount() {
@@ -491,10 +506,6 @@ export class Events extends React.Component {
             });
     }
 
-    editEvent(id,name,address,rating, price, city, category){
-        this.setState({editEventData: {id, name,address,rating, price, city, category},
-            showEditModal: !this.state.showEditModal});
-    }
     setNewState(key, value) {
         this.setState({[key]: value});
     }
@@ -517,12 +528,17 @@ export class Events extends React.Component {
             <div className="container">
                 <CreateModalDialog show={this.state.showCreateModal}
                                    toggleDialog={this.toggleCreateModal}
-                                   getEvents={this.getEvents}/>
+                                   getEvents={this.getEvents}
+                                   getEvents={this.getEvents}
+                />
 
                 <EditModalDialog show={this.state.showEditModal}
                                  toggleDialog={this.toggleEditModal}
                                  getEvents={this.getEvents}
-                                 eventId={this.state.editEventId}/>
+                                 eventId={this.state.editEventId}
+                                 editData={this.state.editData}
+                                 setEditState={this.setEditState}
+                />
 
                 <div className="btn-toolbar justify-content-between" role="toolbar"
                      aria-label="Toolbar with button groups">

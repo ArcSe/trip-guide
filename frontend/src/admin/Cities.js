@@ -337,7 +337,9 @@ export class Cities extends Component {
                 <EditModalDialog show={this.state.showEditModal}
                                  toggleDialog={this.toggleEditModal}
                                  getCities={this.getCities}
-                                 cityId={this.state.editCityId}/>
+                                 cityId={this.state.editCityId}
+                                 editCity={this.state.editData}
+                />
 
                 <div className="btn-toolbar justify-content-between" role="toolbar"
                      aria-label="Toolbar with button groups">
