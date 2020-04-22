@@ -41,7 +41,7 @@ class CityDropDown extends Component {
             <div className="dropdown">
                 <button className="btn btn-primary dropdown-toggle" type="button" id="cityDropDownButton"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    {this.props.city ? this.props.city.name : "Город"}
+                    {this.props.city.name ? this.props.city.name : "Город"}
                 </button>
                 <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     {
@@ -67,15 +67,16 @@ class DateSelector extends Component {
                 <div className="btn-toolbar justify-content-between" role="toolbar"
                      aria-label="Toolbar with button groups">
                     <div className="btn-group" role="group" aria-label="First group">
-                        <button type="button" className="mr-2 btn btn-outline-dark"
-                                onClick={() => this.props.setFilterState("preset", null)}>Все</button>
-                        <button type="button" className="mr-2 btn btn-outline-dark"
-                                onClick={() => this.props.setFilterState("preset", "today")}>Сегодня</button>
-                        <button type="button" className="mr-2 btn btn-outline-dark"
-                                onClick={() => this.props.setFilterState("preset", "tomorrow")}>Завтра</button>
-                        <button type="button" className="mr-2 btn btn-outline-dark"
-                                onClick={() => this.props.setFilterState("preset", "weekend")}>На выходных</button>
+                        <button type="button" className="mr-1 btn btn-outline-dark"
+                                onClick={() => this.props.setFilterState("dayOfWeek", null)}>Все</button>
+                        <button type="button" className="mr-1 btn btn-outline-dark"
+                                onClick={() => this.props.setFilterState("dayOfWeek", "today")}>Сегодня</button>
+                        <button type="button" className="mr-1 btn btn-outline-dark"
+                                onClick={() => this.props.setFilterState("dayOfWeek", "tomorrow")}>Завтра</button>
+                        <button type="button" className="btn btn-outline-dark"
+                                onClick={() => this.props.setFilterState("dayOfWeek", "weekend")}>На выходных</button>
                     </div>
+
                 </div>
 
             </form>
@@ -119,12 +120,12 @@ class CategoryDropDown extends Component {
             <div className="dropdown">
                 <button className="btn btn-primary dropdown-toggle" type="button" id="categoryDropDownButton"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    {this.props.category ? this.props.category.name : "Категория"}
+                    {this.props.category.name ? this.props.category.name : "Категория"}
                 </button>
                 <div className="dropdown-menu" aria-labelledby="dropdownCategoryManu">
 
                     <button className="dropdown-item"
-                            type="button" onClick={() => this.props.setFilterState("category", null)}>Очистить</button>
+                            type="button" onClick={() => this.props.setFilterState("category", {id: null, value: null})}>Очистить</button>
                     {
                         this.state.categories.map(category =>
                             <button className="dropdown-item"
@@ -146,11 +147,11 @@ class RatingDropDown extends Component {
             <div className="dropdown ml-2">
                 <button className="btn btn-primary dropdown-toggle" type="button" id="cityDropDownButton"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    {this.props.rating ? this.props.rating.name : "Рейтинг"}
+                    {this.props.rating.name ? this.props.rating.name : "Рейтинг"}
                 </button>
                 <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <button className="dropdown-item"
-                            type="button" onClick={() => this.props.setFilterState("rating", null)}>Очистить</button>
+                            type="button" onClick={() => this.props.setFilterState("rating", {name: null, value: null})}>Очистить</button>
                     <button className="dropdown-item"
                             type="button"
                             onClick={() => this.props.setFilterState("rating", {name: "4+", value: 4})}>4+</button>
@@ -230,19 +231,19 @@ class FilterComponent extends Component {
 
     render() {
         return (
-            <div>
+            <div className="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
 
-                <div className="city-bar mb-2 ml-1 row align-items-center">
+                <div className="btn-group mr-2" role="group" aria-label="First group">
                     <CityDropDown city={this.props.filterState.city}
                                   setFilterState={this.props.setFilterState} />
                 </div>
 
-                <div className="date-bar mb-2 ml-1 row align-items-center">
+                <div className="btn-group mr-2" role="group" aria-label="Second group">
                     <DateSelector setFilterState={this.props.setFilterState}
                                   date={this.props.date} preset={this.props.preset}/>
                 </div>
 
-                <div className="filter-bar row ml-1 mb-2 align-items-center">
+                <div className="btn-group mr-2" role="group" aria-label="Third group">
                     <FilterSelector category={this.props.filterState.category}
                                     rating={this.props.filterState.rating}
                                     free={this.props.filterState.free}
@@ -272,19 +273,17 @@ class Content extends Component {
     getEvents() {
         console.log("Get events started");
         let eventsRequest = {};
-        let cityId = this.props.st.filters.city ? this.props.st.filters.city.id : null;
-        let categoryId = this.props.st.filters.category ? this.props.st.filters.category.id : null;
-        let rating = this.props.st.filters.rating ? this.props.st.filters.rating.value : null;
+
         eventsRequest.pageable = this.props.st.pageable;
         eventsRequest.filters = {
-            cityId: cityId,
-            categoryId: categoryId,
-            rating: rating,
-            dayOfWeek: this.props.st.dayOfWeek,
-            minPrice: this.props.st.maxPrice,
-            maxPrice: this.props.st.minPrice,
-            free: this.props.st.free,
-            notvisited: this.props.st.notvisited,
+            cityId: this.props.st.filters.city.id,
+            categoryId: this.props.st.filters.category.id,
+            rating: this.props.st.filters.value,
+            dayOfWeek: this.props.st.filters.dayOfWeek,
+            minPrice: this.props.st.filters.maxPrice,
+            maxPrice: this.props.st.filters.minPrice,
+            free: this.props.st.filters.free,
+            notvisited: this.props.st.filters.notvisited,
         };
 
         getEvents(eventsRequest)
@@ -299,78 +298,36 @@ class Content extends Component {
     render() {
         return (
             <div>
-                <button onClick={this.getEvents}>Фильтровать</button>
-
-                <div>
-                    <div className="row no-gutters border rounded overflow-hidden flex-md-row mb-1 shadow-sm h-md-250 position-relative">
-                        <div className="col-auto d-none d-lg-block">
-                            <svg className="bd-placeholder-img" width="250" height="200"
-                                 preserveAspectRatio="xMidYMid slice"
-                                 focusable="false" role="img" aria-label="Placeholder: Thumbnail">
-                                <title>Placeholder</title>
-                                <rect width="100%" height="100%" fill="#55595c"/>
-                                <text x="50%" y="50%" fill="#eceeef" dy=".3em">Картинка</text>
-                            </svg>
-                        </div>
-                        <div className="col p-4 d-flex flex-column position-static">
-                            <h3 className="mb-0">Концерт церковного хора</h3>
-                            <div className="mb-0 text-muted">12 Ноября, вторник, 22:00</div>
-                            <div className="text-muted">Улица Космонавтов 22, клуб "Лягушатник"</div>
-                            <p className="card-text mb-auto">Тут может быть очень длинное описание.
-                                Сейчас посмотрим, как оно будет выглядеть. Можно выводить не всё описание,
-                                а лишь ограниченное количество символов, а потом просто ставить ...
-                            </p>
-                            <a href="#" className="stretched-link">Перейти на страницу</a>
-                        </div>
-                    </div>
-
-                    <div className="row no-gutters border rounded overflow-hidden flex-md-row mb-1 shadow-sm h-md-250 position-relative">
-                        <div className="col-auto d-none d-lg-block">
-                            <svg className="bd-placeholder-img" width="250" height="200"
-                                 preserveAspectRatio="xMidYMid slice"
-                                 focusable="false" role="img" aria-label="Placeholder: Thumbnail">
-                                <title>Placeholder</title>
-                                <rect width="100%" height="100%" fill="#55595c"/>
-                                <text x="50%" y="50%" fill="#eceeef" dy=".3em">Картинка</text>
-                            </svg>
-                        </div>
-                        <div className="col p-4 d-flex flex-column position-static">
-                            <h3 className="mb-0">Концерт церковного хора</h3>
-                            <div className="mb-0 text-muted">12 Ноября, вторник, 22:00</div>
-                            <div className="text-muted">Улица Космонавтов 22, клуб "Лягушатник"</div>
-                            <p className="card-text mb-auto">Тут может быть очень длинное описание.
-                                Сейчас посмотрим, как оно будет выглядеть. Можно выводить не всё описание,
-                                а лишь ограниченное количество символов, а потом просто ставить ...
-                            </p>
-                            <a href="#" className="stretched-link">Перейти на страницу</a>
-                        </div>
-                    </div>
-                </div>
-
+                <button type="button" className="btn btn-primary mt-1 mb-1" onClick={this.getEvents}>Фильтровать</button>
                 {this.state.events.map(event =>
-                    <div className="card mb-1">
-                        <div className="row mb-1 mt-1">
-                            <div className="col-md-2">
-                                <img alt="Здесь должна быть картинка"
-                                     src="https://evonexus.org/wp-content/uploads/2013/12/dummy-200x200.png"/>
-                                     <button>test</button>
+                    <div className="row no-gutters border rounded overflow-hidden flex-md-row shadow-sm h-md-250 position-relative">
+                        <div className="col-auto d-lg-block my-auto">
+                            <svg className="bd-placeholder-img" width="250" height="200"
+                                 preserveAspectRatio="xMidYMid slice"
+                                 focusable="false" role="img" aria-label="Placeholder: Thumbnail">
+                                <rect width="100%" height="100%" fill="#55595c"/>
+                                <text x="50%" y="50%" fill="#eceeef" dy=".3em">Картинка</text>
+                            </svg>
+                        </div>
+                        <div className="col p-4  position-static">
+                            <h3 className="mb-0">{event.name}</h3>
+                            <div className="mb-0 text-muted">
+                                Рейтинг: {event.rating} ({event.votes})
+                                Моя оценка: аа
                             </div>
-                            <div className="col-md-10 px-3">
-                                <div className="card-block px-3">
-                                    <h4 className="card-title">{event.name}</h4>
-                                    <p className="card-text m-0">Рейтинг: {event.rating} (количество оценок)</p>
-                                    <p className="card-text m-0">Адрес: {event.address}</p>
-                                    <p className="card-text m-0">Дата: 22 сентября, вторник, 20:00</p>
-                                    <p className="card-text">Цена: {event.price}</p>
+                            <div className="text-muted">{event.address}, ближайшая дата {event.date[0]}</div>
+                            <p className="card-text mb-auto">
+                                {event.description.length > 200 ?
+                                    `${event.description.substring(0, 200)}...` : event.description}</p>
 
-                                    <p className="card-text">Что будет если тут есть
-                                        очень длинное описание которое мы хотим вывести раз два три как это будет
-                                        смотреться даввйте посмотрим раз два три четыре пять это нужно чтобы
-                                        правильно выставить col-md пусть текст будет очень длинный привет
-                                        меня зовут денис как дела</p>
-                                    <a href="#" className="btn btn-primary">Посмотреть</a>
-                                </div>
+                            <div className="form-check">
+                                <input className="form-check-input" type="checkbox" value="" id="defaultCheck1"/>
+                                <label className="form-check-label" htmlFor="defaultCheck1">
+                                    Посетил
+                                </label>
                             </div>
+
+                            <a href="#" className="card-link">Перейти</a>
                         </div>
                     </div>
                 )
@@ -385,9 +342,9 @@ export default class Home extends Component {
         super(props);
         this.state = {
             filters: {
-                city: null,
-                category: null,
-                rating: null,
+                city: {id: null, name: null},
+                category: {id: null, name: null},
+                rating: {name: null, value: null},
                 dayOfWeek: null,
                 minPrice: null,
                 maxPrice: null,

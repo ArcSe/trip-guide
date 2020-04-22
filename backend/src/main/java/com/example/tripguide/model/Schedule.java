@@ -16,15 +16,15 @@ public class Schedule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "event_id")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Event event;
 
+
     private Integer price;
 
     @Temporal(TemporalType.TIMESTAMP)
     private java.util.Date date;
-
-
 }

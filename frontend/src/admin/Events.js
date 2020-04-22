@@ -18,7 +18,7 @@ class EditModalDialog extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            editData: null,
+            name: null,
         };
 
         this.handleInputChange = this.handleInputChange.bind(this);
@@ -28,7 +28,7 @@ class EditModalDialog extends Component {
     handleInputChange(event) {
         event.preventDefault();
         const data = event.target.value;
-        this.props.setEditState("editData", data);
+        this.props.setEditState("editData", {name: data,});
     }
 
     handleUpdateButton(){
@@ -103,7 +103,10 @@ class CreateModalDialog extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            createData: null,
+            createData: {
+                city: null,
+                category: null,
+            },
         };
 
         this.handleInputChange = this.handleInputChange.bind(this);
