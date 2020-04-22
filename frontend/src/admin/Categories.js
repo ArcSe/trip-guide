@@ -312,8 +312,6 @@ export class Categories extends Component {
         getCategoriesByName({name: this.state.search})
             .then(response => {
                 this.setState({categories: [response]});
-                console.log(response.name);
-                console.log(response.id);
             });
     }
 
@@ -322,7 +320,6 @@ export class Categories extends Component {
     }
 
     setNewState(key, value) {
-        console.log(`Set new state key=${key} value=${value}`);
         this.setState({[key]: value});
     }
 

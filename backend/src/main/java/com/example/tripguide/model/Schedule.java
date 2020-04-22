@@ -5,6 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Set;
 
 @Data
@@ -23,6 +26,9 @@ public class Schedule {
 
     private Integer price;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private java.util.Date date;
+    @Temporal(TemporalType.DATE)
+    private LocalDate date;
+
+    @Temporal(TemporalType.TIME)
+    private LocalTime time;
 }

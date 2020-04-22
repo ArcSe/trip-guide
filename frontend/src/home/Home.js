@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import "react-datepicker/dist/react-datepicker.css";
 import './Home.css';
 import {getCategories, getCities, getEvents, updateUserEvent} from "../util/APIUtils";
+import Alert from "react-s-alert";
 
 class CityDropDown extends Component {
     constructor(props) {
@@ -339,8 +340,6 @@ class Content extends Component {
             .then(response => {
             this.props.setPageState("totalPages", response.totalPages);
             this.setState({events: response.content});
-            console.log("SETSTATE");
-            this.state.events.map(event => console.log(`EventId ${event.id}: ${this.state.userEvents.has(event.id)}`));
             }).catch(error => console.log(error));
     }
 
@@ -354,17 +353,15 @@ class Content extends Component {
         const type = checked ? "add" : "delete";
         const eventRequest = {userId: this.props.userId, eventId: id, type: [type]};
 
-        // updateUserEvents(eventRequest) ...
         updateUserEvent(eventRequest)
-        if (checked) {
-            userEvents.add(id);
-        } else {
-            userEvents.delete(id);
-
-        }
-        this.setState({userEvents: userEvents});
-        console.log(this.state.userEvents);
-        console.log(eventRequest);
+            .then(response => {
+                console.log(response);
+                checked ? userEvents.add(id) : userEvents.delete(id);
+                this.setState({userEvents: userEvents});
+            })
+            .catch(error => {
+                Alert.error((error && error.message) || "Ошибка при обновлении события! Пожалуйста, попробуйте ещё раз.");
+            });
     }
 
     render() {
@@ -385,7 +382,7 @@ class Content extends Component {
                             <h3 className="mb-0">{event.name}</h3>
                             <div className="mb-0 text-muted">
                                 Рейтинг: {event.rating} ({event.votes})
-                                Моя оценка: аа
+                                Моя оценка: ЗДЕСЬ ИНПУТ С МОЕЙ ОЦЕНКОЙ
                             </div>
                             <div className="text-muted">{event.address}, ближайшая дата {event.schedules[0]}</div>
                             <p className="card-text mb-auto">

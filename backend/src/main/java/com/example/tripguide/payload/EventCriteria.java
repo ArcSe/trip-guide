@@ -11,6 +11,7 @@ public class EventCriteria {
     private Long categoryId;
     private Float rating;
     private Boolean free;
+    private Boolean notvisited;
     private Integer minPrice;
     private Integer maxPrice;
 }
