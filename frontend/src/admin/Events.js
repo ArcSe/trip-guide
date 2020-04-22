@@ -354,14 +354,25 @@ class CreateButton extends Component {
 class Content extends Component {
     constructor(props) {
         super(props);
+        this.state={
+            editData:{
+                name:null,
+                address:null,
+                price: null,
+            }
+        }
 
         this.handleEditButton = this.handleEditButton.bind(this);
         this.handleDeleteButton = this.handleDeleteButton.bind(this);
     }
 
-    handleEditButton(eventId){
+    handleEditButton(eventId,eventName, eventAddress, eventPrice){
+        alert(eventName);
+        this.setState({editData:{eventId,eventName, eventAddress, eventPrice}})
+        const editEvent = {id:eventId,name:eventName,address:eventAddress, price:eventPrice}
+        alert(editEvent.price);
         this.props.toggleDialog();
-        this.props.setEventsState("editEventId", eventId);
+        this.props.setEventsState("editData", editEvent);
     }
 
     handleDeleteButton(eventId) {
@@ -458,18 +469,18 @@ export class Events extends React.Component {
             totalPages: 0,
             pageSize: 5,
             editData:{
-                name: null,
-                address: null,
+                name:null,
+                address:null,
                 price: null,
                 city:{
-                    id: null,
-                    name: null,
+                    id:null,
+                    name:null,
                 },
-                category: {
-                    id: null,
-                    name: null,
+                category:{
+                    id:null,
+                    name:null,
                 }
-            },
+            }
         };
 
         this.setEditState = this.setEditState.bind(this);
@@ -539,8 +550,8 @@ export class Events extends React.Component {
                                  toggleDialog={this.toggleEditModal}
                                  getEvents={this.getEvents}
                                  eventId={this.state.editEventId}
-                                 editData={this.state.editData}
                                  setEditState={this.setEditState}
+                                 editData={this.state.editData}
                 />
 
                 <div className="btn-toolbar justify-content-between" role="toolbar"
