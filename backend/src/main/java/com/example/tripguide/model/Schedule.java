@@ -26,9 +26,7 @@ public class Schedule {
 
     private Integer price;
 
-    @Temporal(TemporalType.DATE)
     private LocalDate date;
 
-    @Temporal(TemporalType.TIME)
     private LocalTime time;
 }
