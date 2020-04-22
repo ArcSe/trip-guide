@@ -10,15 +10,16 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @Entity
-public class Date {
+public class Schedule {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
-    @ManyToMany(mappedBy="date")
-    private Set<Event> event;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "event_id")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private Event event;
 
     private Integer price;
 

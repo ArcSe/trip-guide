@@ -28,11 +28,8 @@ public class Event {
     @Column(nullable = false)
     private Long votes;
 
-    @ManyToMany(cascade = { CascadeType.ALL })
-    @JoinTable(name = "schedule",
-            joinColumns = { @JoinColumn(name = "id_event") },
-            inverseJoinColumns = { @JoinColumn(name = "id_data") })
-    private Set<Date> date;
+    @OneToMany
+    private Set<Schedule> schedules;
 
     @Column(nullable = false)
     private String address;
