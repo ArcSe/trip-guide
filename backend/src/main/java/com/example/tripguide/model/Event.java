@@ -28,7 +28,7 @@ public class Event {
     @Column(nullable = false)
     private Long votes;
 
-    @OneToMany
+    @OneToMany(mappedBy = "event")
     private Set<Schedule> schedules;
 
     @Column(nullable = false)

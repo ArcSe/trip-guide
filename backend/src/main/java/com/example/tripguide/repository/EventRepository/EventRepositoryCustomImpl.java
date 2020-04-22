@@ -28,7 +28,7 @@ public class EventRepositoryCustomImpl implements EventRepositoryCustom {
         CriteriaQuery<Event> criteriaQuery = criteriaBuilder.createQuery(Event.class);
 
         Root<Event> event = criteriaQuery.from(Event.class);
-        criteriaQuery.distinct(true);
+        //criteriaQuery.distinct(true);
         List<Predicate> predicates = new ArrayList<>();
 
         if (eventCriteria.getRating() != null) {
@@ -52,12 +52,14 @@ public class EventRepositoryCustomImpl implements EventRepositoryCustom {
         }
 
         if (eventCriteria.getFree() != null) {
-            predicates.add(criteriaBuilder.equal(event.get("price"), eventCriteria.getFree()));
+            Join<Event, Schedule> schedules = event.join("schedules", JoinType.INNER);
+            predicates.add(criteriaBuilder.equal(event.get("id"), schedules.get("id")));
+            predicates.add(criteriaBuilder.equal(schedules.get("price"), 0));
         }
 
-        if (eventCriteria.getDayOfWeek() != null) {
+        if (eventCriteria.getDayOfWeek() != null && !eventCriteria.getDayOfWeek().equals("")) {
             Join<Event, Schedule> schedules = event.join("schedules", JoinType.INNER);
-            predicates.add(criteriaBuilder.equal(event.get("id"), schedules.get("event_id")));
+            predicates.add(criteriaBuilder.equal(event.get("id"), schedules.get("id")));
 
             String dayOfWeek = eventCriteria.getDayOfWeek();
             DateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
