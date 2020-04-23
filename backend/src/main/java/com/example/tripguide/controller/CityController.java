@@ -1,7 +1,6 @@
 package com.example.tripguide.controller;
 
 import com.example.tripguide.exception.BadRequestException;
-import com.example.tripguide.model.Category;
 import com.example.tripguide.model.City;
 import com.example.tripguide.repository.CityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.List;
 import java.util.Optional;
 
 @RestController

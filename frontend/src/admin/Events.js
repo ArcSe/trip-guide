@@ -22,6 +22,7 @@ class EditModalDialog extends Component {
                 name:null,
                 address:null,
                 description: null,
+                rating:'3',
                 city:{
                     id: null,
                 },
@@ -41,17 +42,18 @@ class EditModalDialog extends Component {
     }
 
     handleUpdateButton(){
-        alert(this.props.eventId);
+        alert(this.props.eventData.city.id);
         const eventRequest = {
-            id: this.state.editData.id,
+            id: this.props.eventId,
             name: this.state.editData.name,
             address: this.state.editData.address,
             description: this.state.editData.description,
+            rating: this.state.editData.rating,
             city:{
-                id: this.state.editData.city.id,
+                id: this.props.eventData.city.id,
             },
             category: {
-                id: this.state.editData.category.id,
+                id: this.props.eventData.category.id,
             }
         };
         editEvent( eventRequest)
@@ -84,7 +86,9 @@ class EditModalDialog extends Component {
                             <label htmlFor="exampleInputEmail1">Адрес</label>
                             <input type="text" className="form-control" id="textInput"
                                    value={this.state.editData.address}
-                                   onChange={this.handleInputChange}/>
+                                   onChange={e => {let {editData} = this.state;
+                                       editData.address = e.target.value;
+                                       this.setState({editData})}}/>
                             <div className="form-group">
                                 <label htmlFor="exampleFormControlTextarea2">Описание</label>
                                 <textarea className="form-control rounded-0" id="exampleFormControlTextarea2"
@@ -379,7 +383,7 @@ class Content extends Component {
 
     handleEditButton(eventId){
         this.props.toggleDialog();
-        this.props.setEventsState("eventId", eventId);
+        this.props.setEventsState("editEventId", eventId);
     }
 
     handleDeleteButton(eventId) {
@@ -481,9 +485,6 @@ export class Events extends React.Component {
             loadingCategory: true,
             loadingCity: true,
             eventData:{
-                name:null,
-                address:null,
-                description: null,
                 city:{
                     id:null,
                 },
