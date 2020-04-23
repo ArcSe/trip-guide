@@ -12,6 +12,7 @@ class AdminInformation extends Component {
         super(props);
     }
 
+
     render() {
         return (
             <div className='profile-container'>

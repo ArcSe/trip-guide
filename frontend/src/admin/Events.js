@@ -1,8 +1,7 @@
 import React, {Component} from "react";
 import {
-    createCity,
-    deleteCity,
-    editCity,
+    deleteEvent,
+    editEvent,
     getAllEvents,
     getCategories,
     getCities,
@@ -18,7 +17,19 @@ class EditModalDialog extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            name: null,
+            editData:{
+                id: null,
+                name:null,
+                address:null,
+                description: null,
+                city:{
+                    id: null,
+                },
+                category:{
+                    id: null,
+                }
+
+            }
         };
 
         this.handleInputChange = this.handleInputChange.bind(this);
@@ -26,36 +37,32 @@ class EditModalDialog extends Component {
     }
 
     handleInputChange(event) {
-        event.preventDefault();
-        const data = event.target.value;
-        this.props.setEditState("editData", {name: data,});
+
     }
 
     handleUpdateButton(){
-        alert(this.props.editData.name);
+        alert(this.props.eventId);
         const eventRequest = {
-            id: this.props.cityId,
-            name: this.props.editData.name,
-            address: this.props.editData.address,
-            price: this.props.editData.price,
+            id: this.state.editData.id,
+            name: this.state.editData.name,
+            address: this.state.editData.address,
+            description: this.state.editData.description,
             city:{
-                id: this.props.editData.city.id,
-                name: this.props.editData.city.name,
+                id: this.state.editData.city.id,
             },
             category: {
-                id: this.props.editData.category.id,
-                name: this.props.editData.name,
+                id: this.state.editData.category.id,
             }
         };
-
-        editCity(eventRequest)
+        editEvent( eventRequest)
             .then(() =>{
-                Alert.success("Событие успешно изменен!");
-                this.props.toggleDialog();
-                this.props.getEvents();
+                Alert.success("Done!");
+
             }).catch(error => {
-            Alert.error((error && error.message) || "Упс! Что-то пошло не так. Пожалуйста, попробуйте снова!");
-        })
+                Alert.error((error && error.message) || 'Что-то пошло не так');
+            })
+
+
     }
 
 
@@ -70,18 +77,24 @@ class EditModalDialog extends Component {
                         <div className="form-group">
                             <label htmlFor="exampleInputEmail1">Название события</label>
                             <input type="text" className="form-control" id="textInput"
-                                   value={this.props.editData.name}
-                                   onChange={this.handleInputChange}/>
+                                   value={this.state.editData.name}
+                                   onChange={e => {let {editData} = this.state;
+                                   editData.name = e.target.value;
+                                   this.setState({editData})}}/>
                             <label htmlFor="exampleInputEmail1">Адрес</label>
                             <input type="text" className="form-control" id="textInput"
-                                   value={this.props.editData.address}
+                                   value={this.state.editData.address}
                                    onChange={this.handleInputChange}/>
-                            <label htmlFor="exampleInputEmail1">Цена</label>
-                            <input type="text" className="form-control" id="textInput"
-                                   value={this.props.editData.price}
-                                   onChange={this.handleInputChange}/>
+                            <div className="form-group">
+                                <label htmlFor="exampleFormControlTextarea2">Описание</label>
+                                <textarea className="form-control rounded-0" id="exampleFormControlTextarea2"
+                                          rows="3" value={this.state.editData.description}
+                                          onChange={e => {let {editData} = this.state;
+                                              editData.description = e.target.value;
+                                              this.setState({editData})}}/>
+                            </div>
                             <div className="filter-bar">
-                                <EditComponent editState={this.props.editData} setEditState={this.props.setEditState}/>
+                                <EditComponent eventState={this.props.eventData} setDataState={this.props.setDataState}/>
                             </div>
                         </div>
                     </form>
@@ -104,14 +117,18 @@ class CreateModalDialog extends Component {
         super(props);
         this.state = {
             createData: {
-                city: null,
-                category: null,
-            },
+                name: null,
+                address: null,
+                description: null,
+                cityId: null,
+                categoryId: null,
+            }
         };
 
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleCreateButton = this.handleCreateButton.bind(this);
     }
+
 
     handleInputChange(event) {
         event.preventDefault();
@@ -120,16 +137,9 @@ class CreateModalDialog extends Component {
     }
 
     handleCreateButton() {
+        alert(this.state.createData.name)
         const cityRequest = {name: this.state.createData};
 
-        createCity(cityRequest)
-            .then(response => {
-                Alert.success("Город успешно добавлен!");
-                this.props.toggleDialog();
-                this.props.getCities();
-            }).catch(error => {
-            Alert.error((error && error.message) || "Упс! Что-то пошло не так. Пожалуйста, попробуйте снова!");
-        });
     }
 
     render() {
@@ -142,19 +152,26 @@ class CreateModalDialog extends Component {
                     <form>
                         <div className="form-group">
                             <label htmlFor="exampleInputEmail1">Название события</label>
-                            <input type="text" className="form-control" id="textInput"/>
+                            <input type="text" className="form-control" id="textInput"
+                                   onChange={e =>{let {createData} = this.state;
+                                       createData.name = e.target.value;
+                                       this.setState({createData})} }
+                                   placeholder="Введите название события"/>
                             <label htmlFor="exampleInputEmail1">Адрес</label>
-                            <input type="text" className="form-control" id="textInput"/>
-                            <label htmlFor="exampleInputEmail1">Цена</label>
-                            <input type="text" className="form-control" id="textInput"/>
-                            <label htmlFor="exampleInputEmail1">Город</label>
-                            <label htmlFor="exampleInputEmail1">Категория</label>
-                            <button className="btn btn-light dropdown-toggle" type="button" id="cityDropDownButton"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                { "Категории"}
-                            </button>
+                            <input type="text" className="form-control" id="textInput"
+                                   onChange={e =>{let {createData} = this.state;
+                                       createData.address = e.target.value;
+                                       this.setState({createData})} }
+                                   placeholder="Введите адрес события"/>
+                                   <label htmlFor="exampleFormControlTextarea2">Описание</label>
+                            <textarea className="form-control rounded-0" id="exampleFormControlTextarea2"
+                                      rows="3"
+                                      onChange={e => {let {createData} = this.state;
+                                          createData.description = e.target.value;
+                                          this.setState({createData})}}
+                                      placeholder="Введите описание события"/>
                             <div className="filter-bar">
-                                <EditComponent editState={this.state.editEventData} setEditState={this.setEditState}/>
+                                <EditComponent eventState={this.props.eventData} setDataState={this.props.setDataState}/>
                             </div>
 
                         </div>
@@ -193,7 +210,7 @@ class CategoryDropDown extends Component {
             .then(response => {
                 this.setState({categories: response.content});
                 this.setState({loading: false});
-                this.props.setEditState("loadingCategory", false);
+                this.props.setDataState("loadingCategory", false);
             });
     }
 
@@ -211,11 +228,11 @@ class CategoryDropDown extends Component {
                 <div className="dropdown-menu" aria-labelledby="dropdownCategoryManu">
 
                     <button className="dropdown-item"
-                            type="button" onClick={() => this.props.setEditState("category", null)}>Очистить</button>
+                            type="button" onClick={() => this.props.setDataState("category", null)}>Очистить</button>
                     {
                         this.state.categories.map(category =>
                             <button className="dropdown-item"
-                                    type="button" onClick={() => this.props.setEditState("category", category)}>
+                                    type="button" onClick={() => this.props.setDataState("category", category)}>
                                 {category.name}</button>)
                     }
                 </div>
@@ -244,8 +261,8 @@ class CityDropDown extends Component {
             .then(response => {
                 const cities = response.content;
                 this.setState({cities: cities});
-                this.props.setEditState("city", cities[0]);
-                this.props.setEditState("loadingCity", false);
+                this.props.setDataState("city", cities[0]);
+                this.props.setDataState("loadingCity", false);
                 this.setState({loading: false});
             });
     }
@@ -266,7 +283,7 @@ class CityDropDown extends Component {
                         this.state.cities.map(city =>
                             <button className="dropdown-item"
                                     type="button"
-                                    onClick={() => this.props.setEditState("city", city)}>{city.name}</button>)
+                                    onClick={() => this.props.setDataState("city", city)}>{city.name}</button>)
                     }
                 </div>
             </div>
@@ -322,13 +339,13 @@ class EditComponent extends Component {
 
                 <label htmlFor="exampleInputEmail1">Город</label>
                 <div className="city-bar mb-2 ml-1 row align-items-center">
-                    <CityDropDown city={this.props.editState.city}
-                                  setEditState={this.props.setEditState} />
+                    <CityDropDown city={this.props.eventState.city}
+                                  setDataState={this.props.setDataState} />
                 </div>
                 <label htmlFor="exampleInputEmail1">Категория</label>
                 <div className="city-bar mb-2 ml-1 row align-items-center">
-                    <CategoryDropDown category={this.props.editState.category}
-                                  setEditState={this.props.setEditState}/>
+                    <CategoryDropDown category={this.props.eventState.category}
+                                  setDataState={this.props.setDataState}/>
                 </div>
 
             </div>
@@ -354,29 +371,19 @@ class CreateButton extends Component {
 class Content extends Component {
     constructor(props) {
         super(props);
-        this.state={
-            editData:{
-                name:null,
-                address:null,
-                price: null,
-            }
-        }
+
 
         this.handleEditButton = this.handleEditButton.bind(this);
         this.handleDeleteButton = this.handleDeleteButton.bind(this);
     }
 
-    handleEditButton(eventId,eventName, eventAddress, eventPrice){
-        alert(eventName);
-        this.setState({editData:{eventId,eventName, eventAddress, eventPrice}})
-        const editEvent = {id:eventId,name:eventName,address:eventAddress, price:eventPrice}
-        alert(editEvent.price);
+    handleEditButton(eventId){
         this.props.toggleDialog();
-        this.props.setEventsState("editData", editEvent);
+        this.props.setEventsState("eventId", eventId);
     }
 
     handleDeleteButton(eventId) {
-        deleteCity(eventId)
+        deleteEvent(eventId)
             .then(() => {
                 Alert.success("Событие успешно удалено!");
                 this.props.getEvents();
@@ -394,10 +401,13 @@ class Content extends Component {
                         <div>
                             <li className="mb-1 list-group-item d-flex justify-content-between">
                                 <p className="mt-2 flex-grow-1">{event.name}</p>
+                                <p className="mt-2 flex-grow-1">{event.address}</p>
+                                <p className="mt-2 flex-grow-1">{event.rating}</p>
+                                <p className="mt-2 flex-grow-1">{event.description}</p>
+                                <p className="mt-2 flex-grow-1">{event.votes}</p>
                                 <div className="btn-group" >
                                     <button type="button" className="mr-1 btn btn-outline-success"
-                                            onClick={() => this.handleEditButton(event.id,
-                                                event.name, event.address, event.price)}>Изменить</button>
+                                            onClick={() => this.handleEditButton(event.id)}>Изменить</button>
                                     <button type="button" className="mr-1 btn btn-outline-danger"
                                             onClick={() => this.handleDeleteButton(event.id)}>Удалить</button>
                                 </div>
@@ -468,22 +478,22 @@ export class Events extends React.Component {
             activePage: 0,
             totalPages: 0,
             pageSize: 5,
-            editData:{
+            loadingCategory: true,
+            loadingCity: true,
+            eventData:{
                 name:null,
                 address:null,
-                price: null,
+                description: null,
                 city:{
                     id:null,
-                    name:null,
                 },
                 category:{
                     id:null,
-                    name:null,
                 }
             }
         };
 
-        this.setEditState = this.setEditState.bind(this);
+        this.setDataState = this.setDataState.bind(this);
         this.getEventsByName = this.getEventsByName.bind(this);
         this.getEvents = this.getEvents.bind(this);
         this.setNewState = this.setNewState.bind(this);
@@ -491,11 +501,11 @@ export class Events extends React.Component {
         this.toggleEditModal = this.toggleEditModal.bind(this);
     }
 
-    setEditState(key, value) {
+    setDataState(key, value) {
 
         this.setState({
-            editData: {
-                ...this.state.editData,
+            eventData: {
+                ...this.state.eventData,
                 [key]: value,
             }
         });
@@ -543,15 +553,16 @@ export class Events extends React.Component {
                 <CreateModalDialog show={this.state.showCreateModal}
                                    toggleDialog={this.toggleCreateModal}
                                    getEvents={this.getEvents}
-                                   getEvents={this.getEvents}
+                                   setDataState={this.setDataState}
+                                   eventData={this.state.eventData}
                 />
 
                 <EditModalDialog show={this.state.showEditModal}
                                  toggleDialog={this.toggleEditModal}
                                  getEvents={this.getEvents}
                                  eventId={this.state.editEventId}
-                                 setEditState={this.setEditState}
-                                 editData={this.state.editData}
+                                 setDataState={this.setDataState}
+                                 eventData={this.state.eventData}
                 />
 
                 <div className="btn-toolbar justify-content-between" role="toolbar"
