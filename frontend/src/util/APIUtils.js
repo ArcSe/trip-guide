@@ -259,6 +259,8 @@ export function getEvents(eventsRequest) {
     const pageable = eventsRequest.pageable;
     const filters = eventsRequest.filters;
 
+    console.log(`Get evenct api`);
+    console.log(pageable);
     const pageableParams = Object.keys(pageable).map(key =>
         key + '=' + (pageable[key] ? pageable[key] : "")).join('&');
     const filtersParams = Object.keys(filters).map(key =>
@@ -269,5 +271,20 @@ export function getEvents(eventsRequest) {
     return request({
         url: `${API_BASE_URL}/api/event/?${pageableParams}&${filtersParams}`,
         method: 'GET'
+    });
+}
+
+export function updateUserEvent(eventRequest) {
+    const id = eventRequest.userId;
+    const eventId = eventRequest.eventId;
+    const type = eventRequest.type;
+
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: `${API_BASE_URL}/user/${id}/?eventId=${eventId}&type=${type}`,
+        method: 'PUT'
     });
 }

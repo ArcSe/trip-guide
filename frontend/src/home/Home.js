@@ -3,7 +3,8 @@ import DatePicker from "react-datepicker";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "react-datepicker/dist/react-datepicker.css";
 import './Home.css';
-import {getCategories, getCities, getEvents} from "../util/APIUtils";
+import {getCategories, getCities, getEvents, updateUserEvent} from "../util/APIUtils";
+import Alert from "react-s-alert";
 
 class CityDropDown extends Component {
     constructor(props) {
@@ -255,15 +256,64 @@ class FilterComponent extends Component {
     }
 }
 
+class Pagination extends Component  {
+    constructor(props) {
+        super(props);
+
+        this.handleBackButton = this.handleBackButton.bind(this);
+        this.handleNextButton = this.handleNextButton.bind(this);
+    }
+
+    handleBackButton() {
+        const page = this.props.page;
+        console.log(`Back button ${page}`)
+
+        if (page !== 0) {
+            this.props.setPageState("page", page - 1);
+            this.props.getEvents();
+        }
+    }
+
+    handleNextButton() {
+        const page = this.props.page;
+        const totalPages = this.props.totalPages;
+
+        console.log(`Next button ${page}`);
+        if (page !== totalPages - 1) {
+            this.props.setPageState("page", page + 1);
+            this.props.getEvents();
+        }
+    }
+
+    render() {
+        return(
+            <nav aria-label="Page navigation example">
+                <ul className="pagination justify-content-center">
+                    <li className="page-item disabled">
+                        <button type="button" className="btn btn-light"
+                                onClick={this.handleBackButton}>Предыдущая</button>
+                    </li>
+                    <li className="page-item">
+                        <button type="button" className="btn btn-light"
+                                onClick={this.handleNextButton}>Следующая</button>
+                    </li>
+                </ul>
+            </nav>
+        )
+    }
+}
+
 class Content extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
+            userEvents: new Set(this.props.userEvents.map(event => event.id)),
             events: [],
         };
 
         this.getEvents = this.getEvents.bind(this);
+        this.handleCheckBoxChange = this.handleCheckBoxChange.bind(this);
     }
 
     componentDidMount() {
@@ -275,6 +325,7 @@ class Content extends Component {
         let eventsRequest = {};
 
         eventsRequest.pageable = this.props.st.pageable;
+        console.log(eventsRequest.pageable);
         eventsRequest.filters = {
             cityId: this.props.st.filters.city.id,
             categoryId: this.props.st.filters.category.id,
@@ -290,9 +341,28 @@ class Content extends Component {
             .then(response => {
             this.props.setPageState("totalPages", response.totalPages);
             this.setState({events: response.content});
-            console.log("Events response");
-            console.log(response.content);
-        }).catch(error => console.log(error));
+            }).catch(error => console.log(error));
+    }
+
+    handleCheckBoxChange(event, id) {
+        /*
+         Записываем в посещенные или удаляем из посещенных через несколько минут
+        */
+
+        const checked = event.target.checked;
+        const userEvents = this.state.userEvents;
+        const type = checked ? "add" : "delete";
+        const eventRequest = {userId: this.props.userId, eventId: id, type: [type]};
+
+        updateUserEvent(eventRequest)
+            .then(response => {
+                console.log(response);
+                checked ? userEvents.add(id) : userEvents.delete(id);
+                this.setState({userEvents: userEvents});
+            })
+            .catch(error => {
+                Alert.error((error && error.message) || "Ошибка при обновлении события! Пожалуйста, попробуйте ещё раз.");
+            });
     }
 
     render() {
@@ -313,7 +383,7 @@ class Content extends Component {
                             <h3 className="mb-0">{event.name}</h3>
                             <div className="mb-0 text-muted">
                                 Рейтинг: {event.rating} ({event.votes})
-                                Моя оценка: аа
+                                Моя оценка: ЗДЕСЬ ИНПУТ С МОЕЙ ОЦЕНКОЙ
                             </div>
 
                             <div className="text-muted">{event.address}, ближайшая дата {event.schedules[0]}</div>
@@ -322,7 +392,9 @@ class Content extends Component {
                                     `${event.description.substring(0, 200)}...` : event.description}</p>
 
                             <div className="form-check">
-                                <input className="form-check-input" type="checkbox" value="" id="defaultCheck1"/>
+                                <input className="form-check-input"
+                                       type="checkbox" value="" id="defaultCheck1"
+                                       checked={this.state.userEvents.has(event.id)} onChange={e => this.handleCheckBoxChange(e, event.id)}/>
                                 <label className="form-check-label" htmlFor="defaultCheck1">
                                     Посетил
                                 </label>
@@ -333,6 +405,13 @@ class Content extends Component {
                     </div>
                 )
                 }
+
+                <Pagination totalPages={this.props.st.pageable.totalPages}
+                            page={this.props.st.pageable.page}
+                            setPageState={this.props.setPageState}
+                            getEvents={this.getEvents}/>
+
+
             </div>
         )
     }
@@ -355,9 +434,9 @@ export default class Home extends Component {
                 loadingCity: true,
             },
             pageable: {
-                page: 0,
-                size: 10,
-                total: null,
+                page: 1,
+                size: 2,
+                totalPages: null,
             },
         };
 
@@ -395,7 +474,9 @@ export default class Home extends Component {
                 <div className="events">
                     {
                         (!this.state.filters.loadingCategory && !this.state.filters.loadingCity) ?
-                            <Content st={this.state} setPageState={this.setPageState} /> : null
+                            <Content st={this.state}
+                                     setPageState={this.setPageState} userId={this.props.currentUser.id}
+                                     userEvents={this.props.currentUser.events}/> : null
                     }
                 </div>
             </div>

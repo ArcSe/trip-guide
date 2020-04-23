@@ -1,6 +1,7 @@
 package com.example.tripguide.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -50,5 +51,6 @@ public class User {
             joinColumns = {@JoinColumn(name = "user_id")},
             inverseJoinColumns = {@JoinColumn(name = "event_id")}
     )
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Set<Event> events;
 }
