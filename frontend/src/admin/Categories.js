@@ -188,7 +188,7 @@ class Content extends Component {
     }
 
     handleDeleteButton(categoryId) {
-        deleteCategory(categoryId)
+        CategoryAPI.deleteCategory(categoryId)
             .then(() => {
                 Alert.success("Категория успешно удалена!");
                 this.props.getCategories();
@@ -302,7 +302,7 @@ export class Categories extends Component {
     }
 
     getCategoriesByName() {
-        getCategoriesByName({name: this.state.search})
+        CategoryAPI.getCategoriesByName({name: this.state.search})
             .then(response => {
                 this.setState({categories: [response]});
             });

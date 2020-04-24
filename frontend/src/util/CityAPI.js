@@ -37,7 +37,7 @@ class CityAPI  {
         this.checkAccessToken();
         const cityId = cityRequest.id;
 
-        return request({
+        return APIUtils.request({
             url: `${API_BASE_URL}/api/city/${cityId}`,
             method: 'PUT',
             body: JSON.stringify(cityRequest)
@@ -47,7 +47,7 @@ class CityAPI  {
     deleteCity(cityId) {
         this.checkAccessToken();
 
-        return request2({
+        return APIUtils.request2({
             url: `${API_BASE_URL}/api/city/${cityId}`,
             method: 'DELETE'
         });

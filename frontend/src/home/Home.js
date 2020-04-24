@@ -27,7 +27,7 @@ class CityDropDown extends Component {
 
     getCities() {
         const citiesRequest = {page: null, size: null};
-        getCities(citiesRequest)
+        CityAPI.getCities(citiesRequest)
             .then(response => {
                 const cities = response.content;
                 this.setState({cities: cities});
@@ -108,7 +108,7 @@ class CategoryDropDown extends Component {
 
     getCategories() {
         const categoriesRequest = {page: null, size: null,};
-        getCategories(categoriesRequest)
+        CategoryAPI.getCategories(categoriesRequest)
             .then(response => {
                 this.setState({categories: response.content});
                 this.setState({loading: false});
@@ -195,12 +195,16 @@ class FilterCheckBox extends Component {
                     <label className="form-check-label" htmlFor="notVisitedCheck">Не посетил</label>
                 </div>
 
-                <div className="form-check ml-2">
-                    <input type="checkbox" className="form-check-input"
-                           id="freeCheck"
-                           onChange={this.handleFreeChange} checked={this.props.free}/>
-                    <label className="form-check-label" htmlFor="freeCheck">Бесплатные</label>
-                </div>
+                {
+                    this.props.currentUser &&
+                    <div className="form-check ml-2">
+                        <input type="checkbox" className="form-check-input"
+                               id="freeCheck"
+                               onChange={this.handleFreeChange} checked={this.props.free}/>
+                        <label className="form-check-label" htmlFor="freeCheck">Бесплатные</label>
+                    </div>
+                }
+
             </form>
         )
     }
@@ -222,6 +226,7 @@ class FilterSelector extends Component {
                     setFilterState={this.props.setFilterState}/>
 
                 <FilterCheckBox free={this.props.free}
+                                currentUser={this.props.currentUser}
                                 notvisited={this.props.notvisited}
                     setFilterState={this.props.setFilterState}/>
             </form>
@@ -250,6 +255,7 @@ class FilterComponent extends Component {
 
                 <div className="btn-group mr-2" role="group" aria-label="Third group">
                     <FilterSelector category={this.props.filterState.category}
+                                    currentUset={this.props.currentUser}
                                     rating={this.props.filterState.rating}
                                     free={this.props.filterState.free}
                                     notvisited={this.props.filterState.notvisited}
@@ -312,16 +318,26 @@ class Content extends Component {
         super(props);
 
         this.state = {
-            userEvents: new Set(this.props.userEvents.map(event => event.id)),
+            userEvents: new Set(),
             events: [],
         };
 
         this.getEvents = this.getEvents.bind(this);
+        this.getUserEvents = this.getUserEvents.bind(this);
         this.handleCheckBoxChange = this.handleCheckBoxChange.bind(this);
     }
 
     componentDidMount() {
         this.getEvents();
+        this.getUserEvents();
+    }
+
+    getUserEvents() {
+        if (this.props.currentUser) {
+            this.setState({userEvents: new Set(this.props.currentUser.events.map(event => event.id))});
+        } else {
+            this.setState({userEvents: new Set()});
+        }
     }
 
     getEvents() {
@@ -341,10 +357,10 @@ class Content extends Component {
             notvisited: this.props.st.filters.notvisited,
         };
 
-        getEvents(eventsRequest)
+        EventAPI.getEvents(eventsRequest)
             .then(response => {
-            this.props.setPageState("totalPages", response.totalPages);
-            this.setState({events: response.content});
+                this.props.setPageState("totalPages", response.totalPages);
+                this.setState({events: response.content});
             }).catch(error => console.log(error));
     }
 
@@ -358,7 +374,7 @@ class Content extends Component {
         const type = checked ? "add" : "delete";
         const eventRequest = {userId: this.props.userId, eventId: id, type: [type]};
 
-        updateUserEvent(eventRequest)
+        UserAPI.updateUserEvent(eventRequest)
             .then(response => {
                 console.log(response);
                 checked ? userEvents.add(id) : userEvents.delete(id);
@@ -392,8 +408,10 @@ class Content extends Component {
                             <div className="text-muted">{event.address}, ближайшая дата</div>
                             <p className="card-text mb-auto">
                                 {event.description.length > 200 ?
-                                    `${event.description.substring(0, 200)}...` : event.description}</p>
+                                    `${event.description.substring(0, 200)}...` : event.description}
+                            </p>
 
+                            {this.props.currentUser &&
                             <div className="form-check">
                                 <input className="form-check-input"
                                        type="checkbox" value="" id="defaultCheck1"
@@ -402,6 +420,7 @@ class Content extends Component {
                                     Посетил
                                 </label>
                             </div>
+                            }
 
                             <a href="#" className="card-link">Перейти</a>
                         </div>
@@ -424,6 +443,7 @@ export default class Home extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            currentUser: null,
             filters: {
                 city: {id: null, name: null},
                 category: {id: null, name: null},
@@ -445,6 +465,22 @@ export default class Home extends Component {
 
         this.setFilterState = this.setFilterState.bind(this);
         this.setPageState = this.setPageState.bind(this);
+        this.getCurrentUser = this.getCurrentUser.bind(this);
+    }
+
+    componentDidMount() {
+        this.getCurrentUser();
+    }
+
+    getCurrentUser() {
+        UserAPI.getCurrentUser()
+            .then(response => {
+                this.setState({currentUser: response});
+                console.log(`Then GetCurrentUser из Home ${response}`);
+            }).catch(error => {
+                console.log(`Catch GetCurrentUser из Home ${error}`);
+                this.setState({currentUser: null});
+        });
     }
 
     setFilterState(key, value) {
@@ -471,15 +507,17 @@ export default class Home extends Component {
         return (
             <div className="container">
                 <div className="filter-bar">
-                    <FilterComponent filterState={this.state.filters} setFilterState={this.setFilterState}/>
+                    <FilterComponent filterState={this.state.filters}
+                                     currentUser={this.state.currentUser}
+                                     setFilterState={this.setFilterState}/>
                 </div>
 
                 <div className="events">
                     {
                         (!this.state.filters.loadingCategory && !this.state.filters.loadingCity) ?
                             <Content st={this.state}
-                                     setPageState={this.setPageState} userId={this.props.currentUser.id}
-                                     userEvents={this.props.currentUser.events}/> : null
+                                     setPageState={this.setPageState}
+                                     currentUser={this.state.currentUser}/> : null
                     }
                 </div>
             </div>

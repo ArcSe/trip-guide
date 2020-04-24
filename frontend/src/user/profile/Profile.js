@@ -5,10 +5,15 @@ import UserAPI from "../../util/UserAPI";
 class Profile extends Component {
     constructor(props) {
         super(props);
-        console.log(props);
+
+        this.getCurrentUser = this.getCurrentUser.bind(this);
     }
 
     componentDidMount() {
+        this.getCurrentUser();
+    }
+
+    getCurrentUser() {
         UserAPI.getCurrentUser()
             .then(response => {
                 this.setState({

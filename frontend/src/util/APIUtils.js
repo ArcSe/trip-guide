@@ -26,7 +26,7 @@ class APIUtils {
     request2(options) {
         const headers = new Headers({
             'Content-Type': 'application/json',
-        })
+        });
 
         if(localStorage.getItem(ACCESS_TOKEN)) {
             headers.append('Authorization', 'Bearer ' + localStorage.getItem(ACCESS_TOKEN))
@@ -38,7 +38,7 @@ class APIUtils {
         return fetch(options.url, options)
             .then(response => {
                 if (!response.ok) {
-                    return Promise.reject(request);
+                    return Promise.reject(response);
                 }
                 return response;
             });
