@@ -1,8 +1,8 @@
-package com.example.tripguide.repository.EventRepository;
+package com.example.tripguide.repository.eventrepository;
 
 import com.example.tripguide.model.Event;
 import com.example.tripguide.model.Schedule;
-import com.example.tripguide.payload.EventCriteria;
+import com.example.tripguide.payload.request.EventCriteriaRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -23,7 +23,7 @@ public class EventRepositoryCustomImpl implements EventRepositoryCustom {
     private EntityManager entityManager;
 
     @Override
-    public Page<Event> findAllByCriteria(EventCriteria eventCriteria, Pageable pageable) {
+    public Page<Event> findAllByCriteria(EventCriteriaRequest eventCriteriaRequest, Pageable pageable) {
         CriteriaBuilder criteriaBuilder = this.entityManager.getCriteriaBuilder();
         CriteriaQuery<Event> criteriaQuery = criteriaBuilder.createQuery(Event.class);
 
@@ -31,37 +31,37 @@ public class EventRepositoryCustomImpl implements EventRepositoryCustom {
         //criteriaQuery.distinct(true);
         List<Predicate> predicates = new ArrayList<>();
 
-        if (eventCriteria.getRating() != null) {
-            predicates.add(criteriaBuilder.ge(event.get("rating"), eventCriteria.getRating()));
+        if (eventCriteriaRequest.getRating() != null) {
+            predicates.add(criteriaBuilder.ge(event.get("rating"), eventCriteriaRequest.getRating()));
         }
 
-        if (eventCriteria.getMinPrice() != null) {
-            predicates.add(criteriaBuilder.ge(event.get("price"), eventCriteria.getMinPrice()));
+        if (eventCriteriaRequest.getMinPrice() != null) {
+            predicates.add(criteriaBuilder.ge(event.get("price"), eventCriteriaRequest.getMinPrice()));
         }
 
-        if (eventCriteria.getMaxPrice() != null) {
-            predicates.add(criteriaBuilder.le(event.get("price"), eventCriteria.getMaxPrice()));
+        if (eventCriteriaRequest.getMaxPrice() != null) {
+            predicates.add(criteriaBuilder.le(event.get("price"), eventCriteriaRequest.getMaxPrice()));
         }
 
-        if (eventCriteria.getCityId() != null) {
-            predicates.add(criteriaBuilder.equal(event.get("city").<Long> get("id"), eventCriteria.getCityId()));
+        if (eventCriteriaRequest.getCityId() != null) {
+            predicates.add(criteriaBuilder.equal(event.get("city").<Long> get("id"), eventCriteriaRequest.getCityId()));
         }
 
-        if (eventCriteria.getCategoryId() != null) {
-            predicates.add(criteriaBuilder.equal(event.get("category").<Long> get("id"), eventCriteria.getCategoryId()));
+        if (eventCriteriaRequest.getCategoryId() != null) {
+            predicates.add(criteriaBuilder.equal(event.get("category").<Long> get("id"), eventCriteriaRequest.getCategoryId()));
         }
 
-        if (eventCriteria.getFree() != null) {
+        if (eventCriteriaRequest.getFree() != null) {
             Join<Event, Schedule> schedules = event.join("schedules", JoinType.INNER);
             predicates.add(criteriaBuilder.equal(event.get("id"), schedules.get("id")));
             predicates.add(criteriaBuilder.equal(schedules.get("price"), 0));
         }
 
-        if (eventCriteria.getDayOfWeek() != null && !eventCriteria.getDayOfWeek().equals("")) {
+        if (eventCriteriaRequest.getDayOfWeek() != null && !eventCriteriaRequest.getDayOfWeek().equals("")) {
             Join<Event, Schedule> schedules = event.join("schedules", JoinType.INNER);
             predicates.add(criteriaBuilder.equal(event.get("id"), schedules.get("id")));
 
-            String dayOfWeek = eventCriteria.getDayOfWeek();
+            String dayOfWeek = eventCriteriaRequest.getDayOfWeek();
             DateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             LocalDate localDate;
             switch (dayOfWeek) {

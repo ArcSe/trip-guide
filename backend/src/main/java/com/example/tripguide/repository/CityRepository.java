@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -16,13 +15,13 @@ public interface CityRepository extends JpaRepository<City, Long> {
 
     Optional<City> findById(Long id);
 
+    Optional<City> findByName(String name);
+
     Page<City> findAll(Pageable page);
 
-    void deleteByName(String name);
+    void deleteById(Long id);
 
-    @Modifying
-    @Query("update City c set c.name = ?1 where c.id = ?2")
-    void setNameById(String name, Long id);
+    City save(City city);
 
     boolean existsByName(String name);
 }

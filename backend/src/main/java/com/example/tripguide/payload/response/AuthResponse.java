@@ -1,4 +1,4 @@
-package com.example.tripguide.payload;
+package com.example.tripguide.payload.response;
 
 import lombok.Data;
 

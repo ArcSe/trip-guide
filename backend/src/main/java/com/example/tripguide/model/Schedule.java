@@ -1,6 +1,8 @@
 package com.example.tripguide.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -21,12 +23,10 @@ public class Schedule {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "event_id")
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @JsonManagedReference
     private Event event;
 
     private Integer price;
 
-    private LocalDate date;
-
-    private LocalTime time;
+    private LocalDateTime dateTime;
 }

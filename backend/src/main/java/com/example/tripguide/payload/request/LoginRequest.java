@@ -1,4 +1,4 @@
-package com.example.tripguide.payload;
+package com.example.tripguide.payload.request;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -1,4 +1,4 @@
-package com.example.tripguide.repository.EventRepository;
+package com.example.tripguide.repository.eventrepository;
 
 import com.example.tripguide.model.City;
 import com.example.tripguide.model.Event;

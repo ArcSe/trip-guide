@@ -1,5 +1,6 @@
 package com.example.tripguide.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,6 +30,7 @@ public class Event {
     private Long votes;
 
     @OneToMany(mappedBy = "event")
+    @JsonBackReference
     private Set<Schedule> schedules;
 
     @Column(nullable = false)

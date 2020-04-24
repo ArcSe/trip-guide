@@ -1,11 +1,11 @@
-package com.example.tripguide.payload;
+package com.example.tripguide.payload.request;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class EventCriteria {
+public class EventCriteriaRequest {
     private Long cityId;
     private String dayOfWeek;
     private Long categoryId;

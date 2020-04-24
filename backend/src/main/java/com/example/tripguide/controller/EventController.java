@@ -4,10 +4,10 @@ import com.example.tripguide.exception.BadRequestException;
 import com.example.tripguide.model.Category;
 import com.example.tripguide.model.City;
 import com.example.tripguide.model.Event;
-import com.example.tripguide.payload.EventCriteria;
+import com.example.tripguide.payload.request.EventCriteriaRequest;
 import com.example.tripguide.repository.CategoryRepository;
 import com.example.tripguide.repository.CityRepository;
-import com.example.tripguide.repository.EventRepository.EventRepository;
+import com.example.tripguide.repository.eventrepository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -37,8 +37,8 @@ public class EventController {
     }
 
     @GetMapping("/event")
-    public Page<Event> getEvents(Pageable pageable, EventCriteria eventCriteria) {
-        return this.eventRepository.findAllByCriteria(eventCriteria, pageable);
+    public Page<Event> getEvents(Pageable pageable, EventCriteriaRequest eventCriteriaRequest) {
+        return this.eventRepository.findAllByCriteria(eventCriteriaRequest, pageable);
     }
 
     @GetMapping("/event/{id}")

@@ -4,7 +4,7 @@ import com.example.tripguide.exception.BadRequestException;
 import com.example.tripguide.exception.ResourceNotFoundException;
 import com.example.tripguide.model.Event;
 import com.example.tripguide.model.User;
-import com.example.tripguide.repository.EventRepository.EventRepository;
+import com.example.tripguide.repository.eventrepository.EventRepository;
 import com.example.tripguide.repository.UserRepository;
 import com.example.tripguide.security.CurrentUser;
 import com.example.tripguide.security.UserPrincipal;

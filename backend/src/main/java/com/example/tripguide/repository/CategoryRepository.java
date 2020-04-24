@@ -24,9 +24,5 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     Category save(Category category);
 
-    @Modifying
-    @Query("update Category c set c.name = ?1 where c.id = ?2")
-    void setNameById(String name, Long id);
-
     boolean existsByName(String name);
 }

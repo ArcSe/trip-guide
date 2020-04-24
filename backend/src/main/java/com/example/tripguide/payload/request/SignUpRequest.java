@@ -1,4 +1,4 @@
-package com.example.tripguide.payload;
+package com.example.tripguide.payload.request;
 
 import lombok.Data;
 
@@ -9,6 +9,7 @@ import javax.validation.constraints.Size;
 
 @Data
 public class SignUpRequest {
+
     @NotBlank(message = "Имя не может быть пустым")
     private String name;
 

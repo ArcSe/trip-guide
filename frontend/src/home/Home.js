@@ -329,7 +329,7 @@ class Content extends Component {
         eventsRequest.filters = {
             cityId: this.props.st.filters.city.id,
             categoryId: this.props.st.filters.category.id,
-            rating: this.props.st.filters.value,
+            rating: this.props.st.filters.rating.value,
             dayOfWeek: this.props.st.filters.dayOfWeek,
             minPrice: this.props.st.filters.maxPrice,
             maxPrice: this.props.st.filters.minPrice,
@@ -385,7 +385,7 @@ class Content extends Component {
                                 Рейтинг: {event.rating} ({event.votes})
                                 Моя оценка: ЗДЕСЬ ИНПУТ С МОЕЙ ОЦЕНКОЙ
                             </div>
-                            <div className="text-muted">{event.address}, ближайшая дата {event.schedules[0]}</div>
+                            <div className="text-muted">{event.address}, ближайшая дата</div>
                             <p className="card-text mb-auto">
                                 {event.description.length > 200 ?
                                     `${event.description.substring(0, 200)}...` : event.description}</p>
