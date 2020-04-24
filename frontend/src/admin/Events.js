@@ -513,7 +513,7 @@ export class Events extends React.Component {
     }
 
     getEvents() {
-        EventAPI.getEvents({page: this.state.activePage, size: this.state.pageSize})
+        EventAPI.getEvent({page: this.state.activePage, size: this.state.pageSize})
             .then(response => {
                 this.setState({totalPages: response.totalPages})
                 this.setState({events: response.content});

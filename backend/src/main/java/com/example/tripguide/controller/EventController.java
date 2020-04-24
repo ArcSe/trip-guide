@@ -1,10 +1,12 @@
 package com.example.tripguide.controller;
 
+import com.example.tripguide.controller.mapper.EventMapper;
 import com.example.tripguide.exception.BadRequestException;
 import com.example.tripguide.model.Category;
 import com.example.tripguide.model.City;
 import com.example.tripguide.model.Event;
 import com.example.tripguide.payload.request.EventCriteriaRequest;
+import com.example.tripguide.payload.response.EventBasicResponse;
 import com.example.tripguide.repository.CategoryRepository;
 import com.example.tripguide.repository.CityRepository;
 import com.example.tripguide.repository.eventrepository.EventRepository;
@@ -25,11 +27,19 @@ public class EventController {
     @Autowired
     private EventRepository eventRepository;
 
+    private EventMapper eventMapper = new EventMapper();
+
     @Autowired
     private CityRepository cityRepository;
 
     @Autowired
     private CategoryRepository categoryRepository;
+
+    @GetMapping("/event")
+    public Page<EventBasicResponse> getAllEvents(Pageable pageable) {
+        Page<Event> pageEvent = this.eventRepository.findAll(pageable);
+        return pageEvent.map(this.eventMapper::entityToBasicResponse);
+    }
 
     @GetMapping("/events")
     public Page<Event> getEvents(Pageable pageable, EventCriteriaRequest eventCriteriaRequest) {

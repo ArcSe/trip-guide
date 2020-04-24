@@ -5,6 +5,8 @@ import com.example.tripguide.model.Event;
 import com.example.tripguide.payload.request.CityBasicRequest;
 import com.example.tripguide.payload.request.EventBasicRequest;
 import com.example.tripguide.payload.response.CityBasicResponse;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class CityMapper {
 

@@ -3,6 +3,16 @@ import APIUtils from "./APIUtils";
 
 class EventAPI  {
 
+    getEvent(eventsRequest) {
+        const page = eventsRequest.page;
+        const size = eventsRequest.size;
+
+        return APIUtils.request({
+            url: `${API_BASE_URL}/api/event/?page=${page}&size=${size}`,
+            method: 'GET'
+        });
+    }
+
     getEvents(eventsRequest) {
         const pageable = eventsRequest.pageable;
         const filters = eventsRequest.filters;
