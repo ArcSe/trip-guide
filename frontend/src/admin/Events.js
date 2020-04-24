@@ -22,7 +22,6 @@ class EditModalDialog extends Component {
                 name:null,
                 address:null,
                 description: null,
-                rating:'3',
                 city:{
                     id: null,
                 },
@@ -407,8 +406,8 @@ class Content extends Component {
                                 <p className="mt-2 flex-grow-1">{event.name}</p>
                                 <p className="mt-2 flex-grow-1">{event.address}</p>
                                 <p className="mt-2 flex-grow-1">{event.rating}</p>
-                                <p className="mt-2 flex-grow-1">{event.description}</p>
-                                <p className="mt-2 flex-grow-1">{event.votes}</p>
+                                <p className="mt-2 flex-grow-1">{event.city.name}</p>
+
                                 <div className="btn-group" >
                                     <button type="button" className="mr-1 btn btn-outline-success"
                                             onClick={() => this.handleEditButton(event.id)}>Изменить</button>
@@ -487,9 +486,11 @@ export class Events extends React.Component {
             eventData:{
                 city:{
                     id:null,
+                    name: null,
                 },
                 category:{
                     id:null,
+                    name: null,
                 }
             }
         };
