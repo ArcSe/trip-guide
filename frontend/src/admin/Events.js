@@ -1,17 +1,12 @@
 import React, {Component} from "react";
-import {
-    deleteEvent,
-    editEvent,
-    getAllEvents,
-    getCategories,
-    getCities,
-    getEventsByName
-} from "../util/APIUtils";
 import Alert from "react-s-alert";
 import Modal from "react-bootstrap/Modal";
 import {Button} from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "react-datepicker/dist/react-datepicker.css";
+import EventAPI from "../util/EventAPI";
+import CategoryAPI from "../util/CategoryAPI";
+import CityAPI from "../util/CityAPI";
 
 class EditModalDialog extends Component {
     constructor(props) {
@@ -55,7 +50,7 @@ class EditModalDialog extends Component {
                 id: this.props.eventData.category.id,
             }
         };
-        editEvent( eventRequest)
+        EventAPI.editEvent( eventRequest)
             .then(() =>{
                 Alert.success("Done!");
 
@@ -209,7 +204,7 @@ class CategoryDropDown extends Component {
 
     getCategories() {
         const categoriesRequest = {page: null, size: null,};
-        getCategories(categoriesRequest)
+        CategoryAPI.getCategories(categoriesRequest)
             .then(response => {
                 this.setState({categories: response.content});
                 this.setState({loading: false});
@@ -260,7 +255,7 @@ class CityDropDown extends Component {
 
     getCities() {
         const citiesRequest = {page: null, size: null};
-        getCities(citiesRequest)
+        CityAPI.getCities(citiesRequest)
             .then(response => {
                 const cities = response.content;
                 this.setState({cities: cities});
@@ -386,7 +381,7 @@ class Content extends Component {
     }
 
     handleDeleteButton(eventId) {
-        deleteEvent(eventId)
+        EventAPI.deleteEvent(eventId)
             .then(() => {
                 Alert.success("Событие успешно удалено!");
                 this.props.getEvents();
@@ -518,7 +513,7 @@ export class Events extends React.Component {
     }
 
     getEvents() {
-        getAllEvents({page: this.state.activePage, size: this.state.pageSize})
+        EventAPI.getEvents({page: this.state.activePage, size: this.state.pageSize})
             .then(response => {
                 this.setState({totalPages: response.totalPages})
                 this.setState({events: response.content});
@@ -526,7 +521,7 @@ export class Events extends React.Component {
     }
 
     getEventsByName() {
-        getEventsByName({name: this.state.search})
+        EventAPI.getEventsByName({name: this.state.search})
             .then(response => {
                 this.setState({events: [response]});
             });

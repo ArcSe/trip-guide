@@ -1,12 +1,5 @@
 import React, {Component} from 'react';
-import {
-    editCategories,
-    createCategory,
-    deleteCategory,
-    getCategories,
-    getCategoriesByName,
-    editCategory
-} from "../util/APIUtils";
+import CategoryAPI from "../util/CategoryAPI";
 import Alert from "react-s-alert";
 import Modal from "react-bootstrap/Modal";
 import {Button} from "react-bootstrap";
@@ -30,7 +23,7 @@ class EditModalDialog extends Component {
 
     handleUpdateButton(){
         const categoryRequest = { id: this.props.categoryId, name: this.state.editData};
-        editCategory(categoryRequest)
+        CategoryAPI.editCategory(categoryRequest)
             .then(() =>{
                 Alert.success("Категория успешно изменена!");
                 this.props.toggleDialog();
@@ -90,7 +83,7 @@ class CreateModalDialog extends Component {
     handleCreateButton() {
         const categoryRequest = {name: this.state.createData};
 
-        createCategory(categoryRequest)
+        CategoryAPI.createCategory(categoryRequest)
             .then(response => {
                 Alert.success("Категория успешно добавлена!");
                 this.props.toggleDialog();
@@ -195,7 +188,7 @@ class Content extends Component {
     }
 
     handleDeleteButton(categoryId) {
-        deleteCategory(categoryId)
+        CategoryAPI.deleteCategory(categoryId)
             .then(() => {
                 Alert.success("Категория успешно удалена!");
                 this.props.getCategories();
@@ -301,7 +294,7 @@ export class Categories extends Component {
     }
 
     getCategories() {
-        getCategories({page: this.state.activePage, size: this.state.pageSize})
+        CategoryAPI.getCategories({page: this.state.activePage, size: this.state.pageSize})
             .then(response => {
                 this.setState({totalPages: response.totalPages});
                 this.setState({categories: response.content});
@@ -309,7 +302,7 @@ export class Categories extends Component {
     }
 
     getCategoriesByName() {
-        getCategoriesByName({name: this.state.search})
+        CategoryAPI.getCategoriesByName({name: this.state.search})
             .then(response => {
                 this.setState({categories: [response]});
             });

@@ -32,11 +32,6 @@ public class EventController {
     private CategoryRepository categoryRepository;
 
     @GetMapping("/events")
-    public Page<Event> getAllEvents(Pageable pageable) {
-        return this.eventRepository.findAll(pageable);
-    }
-
-    @GetMapping("/event")
     public Page<Event> getEvents(Pageable pageable, EventCriteriaRequest eventCriteriaRequest) {
         return this.eventRepository.findAllByCriteria(eventCriteriaRequest, pageable);
     }

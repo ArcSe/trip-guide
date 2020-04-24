@@ -9,7 +9,7 @@ import Admin from '../admin/Admin';
 import OAuth2RedirectHandler from '../user/oauth2/OAuth2RedirectHandler';
 import NotFound from '../common/NotFound';
 import LoadingIndicator from '../common/LoadingIndicator';
-import { getCurrentUser } from '../util/APIUtils';
+import UserAPI from "../util/UserAPI";
 import { ACCESS_TOKEN } from '../constants';
 import PrivateRoute from '../common/PrivateRoute';
 import Alert from 'react-s-alert';
@@ -35,7 +35,7 @@ class App extends Component {
       loading: true
     });
 
-    getCurrentUser()
+    UserAPI.getCurrentUser()
         .then(response => {
           this.setState({
             currentUser: response,
@@ -75,7 +75,8 @@ class App extends Component {
           </div>
           <div className="app-body">
             <Switch>
-              <Route exact path="/" render={() => <Home currentUser={this.state.currentUser} />} />
+              <Route exact path="/"
+                     render={() => <Home authenticated={this.state.authenticated} currentUser={this.state.currentUser} />} />
               <Route path="/login"
                      render={(props) => <Login authenticated={this.state.authenticated} {...props} />} />
               <Route path="/signup"
