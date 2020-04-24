@@ -3,6 +3,10 @@ import DatePicker from "react-datepicker";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "react-datepicker/dist/react-datepicker.css";
 import './Home.css';
+import CategoryAPI from "../util/CategoryAPI";
+import CityAPI from "../util/CityAPI";
+import UserAPI from "../util/UserAPI";
+import EventAPI from "../util/EventAPI";
 import {getCategories, getCities, getEvents, updateUserEvent} from "../util/APIUtils";
 import Alert from "react-s-alert";
 

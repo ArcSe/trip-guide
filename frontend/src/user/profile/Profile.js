@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './Profile.css';
-import {getCurrentUser} from "../../util/APIUtils";
+import UserAPI from "../../util/UserAPI";
 
 class Profile extends Component {
     constructor(props) {
@@ -9,7 +9,7 @@ class Profile extends Component {
     }
 
     componentDidMount() {
-        getCurrentUser()
+        UserAPI.getCurrentUser()
             .then(response => {
                 this.setState({
                     currentUser: response,

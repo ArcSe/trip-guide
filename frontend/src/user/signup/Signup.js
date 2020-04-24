@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './Signup.css';
 import { Link, Redirect } from 'react-router-dom'
 import { GOOGLE_AUTH_URL, FACEBOOK_AUTH_URL, GITHUB_AUTH_URL } from '../../constants';
-import { signup } from '../../util/APIUtils';
+import UserAPI from "../../util/UserAPI";
 import fbLogo from '../../img/fb-logo.png';
 import googleLogo from '../../img/google-logo.png';
 import githubLogo from '../../img/github-logo.png';
@@ -74,7 +74,7 @@ class SignupForm extends Component {
 
         const signUpRequest = Object.assign({}, this.state);
 
-        signup(signUpRequest)
+        UserAPI.signup(signUpRequest)
         .then(response => {
             Alert.success("Вы успешно зарегестрированы. Пожалуйста, войдите, чтобы продолжить!");
             this.props.history.push("/login");
