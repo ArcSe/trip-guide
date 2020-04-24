@@ -34,7 +34,7 @@ public class CategoryController {
     @GetMapping("/category")
     public Page<CategoryBasicResponse> getCategoryByName(@RequestParam String name, Pageable pageable) {
         Page<Category> pageCategory = this.categoryRepository.findByNameContaining(name, pageable);
-        return  pageCategory.map(this.categoryMapper::entityToBasicResponse)
+        return pageCategory.map(this.categoryMapper::entityToBasicResponse);
     }
 
     @GetMapping("/category/{id}")
