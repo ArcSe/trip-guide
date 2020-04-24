@@ -14,7 +14,7 @@ class CityDropDown extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            cities: null,
+            cities: [],
             loading: true,
         };
 
@@ -34,7 +34,8 @@ class CityDropDown extends Component {
                 this.props.setFilterState("city", cities[0]);
                 this.props.setFilterState("loadingCity", false);
                 this.setState({loading: false});
-            });
+            })
+            .catch(error => console.log(`${error.message}`));
     }
 
     render() {
@@ -188,22 +189,22 @@ class FilterCheckBox extends Component {
     render() {
         return (
             <form className="form-inline">
-                <div className="form-check ml-2">
-                    <input type="checkbox" className="form-check-input"
-                           id="notVisitedCheck"
-                           onChange={this.handleNotVisitedChange} checked={this.props.notvisited}/>
-                    <label className="form-check-label" htmlFor="notVisitedCheck">Не посетил</label>
-                </div>
-
                 {
                     this.props.currentUser &&
                     <div className="form-check ml-2">
+                        <input type="checkbox" className="form-check-input"
+                               id="notVisitedCheck"
+                               onChange={this.handleNotVisitedChange} checked={this.props.notvisited}/>
+                        <label className="form-check-label" htmlFor="notVisitedCheck">Не посетил</label>
+                    </div>
+                }
+
+                <div className="form-check ml-2">
                         <input type="checkbox" className="form-check-input"
                                id="freeCheck"
                                onChange={this.handleFreeChange} checked={this.props.free}/>
                         <label className="form-check-label" htmlFor="freeCheck">Бесплатные</label>
                     </div>
-                }
 
             </form>
         )
@@ -443,7 +444,6 @@ export default class Home extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            currentUser: null,
             filters: {
                 city: {id: null, name: null},
                 category: {id: null, name: null},
@@ -469,7 +469,7 @@ export default class Home extends Component {
     }
 
     componentDidMount() {
-        this.getCurrentUser();
+       // console.log(`Home component mount with current user ${this.props.currentUser === null}`);
     }
 
     getCurrentUser() {
@@ -508,7 +508,7 @@ export default class Home extends Component {
             <div className="container">
                 <div className="filter-bar">
                     <FilterComponent filterState={this.state.filters}
-                                     currentUser={this.state.currentUser}
+                                     currentUser={this.props.currentUser}
                                      setFilterState={this.setFilterState}/>
                 </div>
 
@@ -517,7 +517,7 @@ export default class Home extends Component {
                         (!this.state.filters.loadingCategory && !this.state.filters.loadingCity) ?
                             <Content st={this.state}
                                      setPageState={this.setPageState}
-                                     currentUser={this.state.currentUser}/> : null
+                                     currentUser={this.props.currentUser}/> : null
                     }
                 </div>
             </div>

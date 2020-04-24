@@ -24,6 +24,10 @@ public class EventRepositoryCustomImpl implements EventRepositoryCustom {
 
     @Override
     public Page<Event> findAllByCriteria(EventCriteriaRequest eventCriteriaRequest, Pageable pageable) {
+        if (eventCriteriaRequest == null) {
+            eventCriteriaRequest = new EventCriteriaRequest();
+        }
+
         CriteriaBuilder criteriaBuilder = this.entityManager.getCriteriaBuilder();
         CriteriaQuery<Event> criteriaQuery = criteriaBuilder.createQuery(Event.class);
 

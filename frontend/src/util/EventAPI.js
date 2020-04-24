@@ -12,10 +12,10 @@ class EventAPI  {
             key + '=' + (filters[key] ? filters[key] : "")).join('&');
 
         console.log("Запрос EventAPI.getEvents: "
-            + `${API_BASE_URL}/api/event/?${pageableParams}&${filtersParams}`);
+            + `${API_BASE_URL}/api/events/?${pageableParams}&${filtersParams}`);
 
         return APIUtils.request({
-            url: `${API_BASE_URL}/api/event/?${pageableParams}&${filtersParams}`,
+            url: `${API_BASE_URL}/api/events/?${pageableParams}&${filtersParams}`,
             method: 'GET'
         });
     }
