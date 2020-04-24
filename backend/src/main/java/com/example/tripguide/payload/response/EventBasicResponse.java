@@ -4,12 +4,8 @@ import com.example.tripguide.model.Category;
 import com.example.tripguide.model.City;
 import com.example.tripguide.model.Schedule;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import java.util.Set;
 
 @Data
-//@NoArgsConstructor
 public class EventBasicResponse {
 
     private Long id;
