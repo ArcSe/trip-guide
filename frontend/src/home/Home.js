@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import DatePicker from "react-datepicker";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.js';
 import "react-datepicker/dist/react-datepicker.css";
 import './Home.css';
 import CategoryAPI from "../util/CategoryAPI";
@@ -30,6 +31,7 @@ class CityDropDown extends Component {
             .then(response => {
                 const cities = response.content;
                 this.setState({cities: cities});
+                console.log(cities);
                 this.props.setFilterState("city", cities[0]);
                 this.props.setFilterState("loadingCity", false);
                 this.setState({loading: false});
@@ -369,7 +371,7 @@ class Content extends Component {
         const checked = event.target.checked;
         const userEvents = this.state.userEvents;
         const type = checked ? "add" : "delete";
-        const eventRequest = {userId: this.props.userId, eventId: id, type: [type]};
+        const eventRequest = {userId: this.props.currentUser.id, eventId: id, type: [type]};
 
         UserAPI.updateUserEvent(eventRequest)
             .then(response => {
