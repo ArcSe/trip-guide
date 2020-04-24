@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import {createCity, deleteCity, editCity, getCities, getCitiesByName} from "../util/APIUtils";
+import CityAPI from "../util/CityAPI";
 import Alert from "react-s-alert";
 import Modal from "react-bootstrap/Modal";
 import {Button} from "react-bootstrap";
@@ -23,7 +24,7 @@ class EditModalDialog extends Component {
 
     handleUpdateButton(){
         const cityRequest = { id: this.props.cityId, name: this.state.editData};
-        editCity(cityRequest)
+        CityAPI.editCity(cityRequest)
             .then(() =>{
                 Alert.success("Город успешно изменен!");
                 this.props.toggleDialog();
@@ -83,7 +84,7 @@ class CreateModalDialog extends Component {
     handleCreateButton() {
         const cityRequest = {name: this.state.createData};
 
-        createCity(cityRequest)
+        CityAPI.createCity(cityRequest)
             .then(response => {
                 Alert.success("Город успешно добавлен!");
                 this.props.toggleDialog();
@@ -188,7 +189,7 @@ class Content extends Component {
     }
 
     handleDeleteButton(cityId) {
-        deleteCity(cityId)
+        CityAPI.deleteCity(cityId)
             .then(() => {
                 Alert.success("Город успешно удален!");
                 this.props.getCities();
@@ -293,7 +294,7 @@ export class Cities extends Component {
     }
 
     getCities() {
-        getCities({page: this.state.activePage, size: this.state.pageSize})
+        CityAPI.getCities({page: this.state.activePage, size: this.state.pageSize})
             .then(response => {
                 this.setState({totalPages: response.totalPages});
                 this.setState({cities: response.content});
@@ -301,7 +302,7 @@ export class Cities extends Component {
     }
 
     getCitiesByName() {
-        getCitiesByName({name: this.state.search})
+        CityAPI.getCitiesByName({name: this.state.search})
             .then(response => {
                 this.setState({cities: [response]});
             });
