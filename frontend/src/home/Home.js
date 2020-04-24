@@ -329,7 +329,7 @@ class Content extends Component {
         eventsRequest.filters = {
             cityId: this.props.st.filters.city.id,
             categoryId: this.props.st.filters.category.id,
-            rating: this.props.st.filters.rating.value,
+            rating: this.props.st.filters.value,
             dayOfWeek: this.props.st.filters.dayOfWeek,
             minPrice: this.props.st.filters.maxPrice,
             maxPrice: this.props.st.filters.minPrice,

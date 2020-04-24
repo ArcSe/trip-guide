@@ -115,7 +115,7 @@ export function editEvent(eventRequest) {
     const eventId = eventRequest.id;
 
     return request({
-        url: `${API_BASE_URL}/api/city/${eventId}`,
+        url: `${API_BASE_URL}/api/event/${eventId}`,
         method: 'PUT',
         body: JSON.stringify(eventRequest)
     });

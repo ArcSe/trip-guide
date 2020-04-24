@@ -2,7 +2,6 @@ package com.example.tripguide.controller;
 
 import com.example.tripguide.controller.mapper.CityMapper;
 import com.example.tripguide.exception.BadRequestException;
-import com.example.tripguide.model.Category;
 import com.example.tripguide.model.City;
 import com.example.tripguide.payload.request.CategoryBasicRequest;
 import com.example.tripguide.payload.request.CityBasicRequest;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.List;
 import java.util.Optional;
 
 @RestController

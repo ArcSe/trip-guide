@@ -20,7 +20,7 @@ public class Event {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
+
     private Float rating;
 
     @Column(nullable = false, columnDefinition="TEXT")

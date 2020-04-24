@@ -67,8 +67,17 @@ public class EventController {
 
     @PutMapping("/event/{id}")
     public ResponseEntity<Event> updateEvent(@RequestBody Event event) {
-        Event result = this.eventRepository.save(event);
-        return ResponseEntity.ok().body(result);
+        Event result = this.eventRepository.getOne(event.getId());
+        result.setName(event.getName());
+        result.setAddress(event.getAddress());
+        result.setDescription(event.getDescription());
+        result.setCity(this.cityRepository.getOne(event.getCity().getId()));
+        result.setCategory(this.categoryRepository.getOne(event.getCategory().getId()));
+        System.out.println(result.getRating());
+        Event resultEdit = this.eventRepository.save(result);
+        return ResponseEntity.ok().body(resultEdit);
+
+
     }
 
     @DeleteMapping("/event/{id}")
