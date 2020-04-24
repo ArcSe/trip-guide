@@ -31,12 +31,10 @@ public class CategoryController {
         return pageCategory.map(this.categoryMapper::entityToBasicResponse);
     }
 
-    // Доделать, чтобы возвращал не одну категорию, а список
     @GetMapping("/category")
-    public ResponseEntity<?> getCategoryByName(@RequestParam String name) {
-        Optional<Category> category = this.categoryRepository.findByName(name);
-        return category.map(response -> ResponseEntity.ok().body(this.categoryMapper.entityToBasicResponse(response)))
-                .orElse(ResponseEntity.notFound().build());
+    public Page<CategoryBasicResponse> getCategoryByName(@RequestParam String name, Pageable pageable) {
+        Page<Category> pageCategory = this.categoryRepository.findByNameContaining(name, pageable);
+        return  pageCategory.map(this.categoryMapper::entityToBasicResponse)
     }
 
     @GetMapping("/category/{id}")

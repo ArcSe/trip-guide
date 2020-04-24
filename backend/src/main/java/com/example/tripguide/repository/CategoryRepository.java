@@ -16,9 +16,9 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     Optional<Category> findById(Long id);
 
-    Optional<Category> findByName(String name);
-
     Page<Category> findAll(Pageable pageable);
+
+    Page<Category> findByNameContaining(String name, Pageable page);
 
     void deleteById(Long id);
 

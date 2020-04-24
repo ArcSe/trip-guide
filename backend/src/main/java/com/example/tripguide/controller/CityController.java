@@ -31,12 +31,10 @@ public class CityController {
         return pageCity.map(this.cityMapper::entityToBasicResponse);
     }
 
-    // Доделать, чтобы возвращал не один город, а список
     @GetMapping("/city")
-    public ResponseEntity<?> getCityByName(@RequestParam String name) {
-        Optional<City> city = this.cityRepository.findByName(name);
-        return city.map(response -> ResponseEntity.ok().body(this.cityMapper.entityToBasicResponse(response)))
-                .orElse(ResponseEntity.notFound().build());
+    public Page<CityBasicResponse> getCityByName(@RequestParam String name, Pageable pageable) {
+        Page<City> pageCity = this.cityRepository.findByNameContaining(name, pageable);
+        return pageCity.map(this.cityMapper::entityToBasicResponse);
     }
 
     @GetMapping("/city/{id}")

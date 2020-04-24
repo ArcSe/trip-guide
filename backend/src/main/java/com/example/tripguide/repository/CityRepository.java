@@ -15,9 +15,9 @@ public interface CityRepository extends JpaRepository<City, Long> {
 
     Optional<City> findById(Long id);
 
-    Optional<City> findByName(String name);
-
     Page<City> findAll(Pageable page);
+
+    Page<City> findByNameContaining(String name, Pageable page);
 
     void deleteById(Long id);
 
