@@ -7,7 +7,6 @@ import CategoryAPI from "../util/CategoryAPI";
 import CityAPI from "../util/CityAPI";
 import UserAPI from "../util/UserAPI";
 import EventAPI from "../util/EventAPI";
-import {getCategories, getCities, getEvents, updateUserEvent} from "../util/APIUtils";
 import Alert from "react-s-alert";
 
 class CityDropDown extends Component {
@@ -187,6 +186,7 @@ class FilterCheckBox extends Component {
     }
 
     render() {
+
         return (
             <form className="form-inline">
                 {
@@ -256,7 +256,7 @@ class FilterComponent extends Component {
 
                 <div className="btn-group mr-2" role="group" aria-label="Third group">
                     <FilterSelector category={this.props.filterState.category}
-                                    currentUset={this.props.currentUser}
+                                    currentUser={this.props.currentUser}
                                     rating={this.props.filterState.rating}
                                     free={this.props.filterState.free}
                                     notvisited={this.props.filterState.notvisited}
@@ -277,7 +277,6 @@ class Pagination extends Component  {
 
     handleBackButton() {
         const page = this.props.page;
-        console.log(`Back button ${page}`)
 
         if (page !== 0) {
             this.props.setPageState("page", page - 1);
@@ -289,7 +288,6 @@ class Pagination extends Component  {
         const page = this.props.page;
         const totalPages = this.props.totalPages;
 
-        console.log(`Next button ${page}`);
         if (page !== totalPages - 1) {
             this.props.setPageState("page", page + 1);
             this.props.getEvents();
@@ -342,11 +340,9 @@ class Content extends Component {
     }
 
     getEvents() {
-        console.log("Get events started");
         let eventsRequest = {};
 
         eventsRequest.pageable = this.props.st.pageable;
-        console.log(eventsRequest.pageable);
         eventsRequest.filters = {
             cityId: this.props.st.filters.city.id,
             categoryId: this.props.st.filters.category.id,
@@ -377,7 +373,6 @@ class Content extends Component {
 
         UserAPI.updateUserEvent(eventRequest)
             .then(response => {
-                console.log(response);
                 checked ? userEvents.add(id) : userEvents.delete(id);
                 this.setState({userEvents: userEvents});
             })
@@ -476,9 +471,7 @@ export default class Home extends Component {
         UserAPI.getCurrentUser()
             .then(response => {
                 this.setState({currentUser: response});
-                console.log(`Then GetCurrentUser из Home ${response}`);
             }).catch(error => {
-                console.log(`Catch GetCurrentUser из Home ${error}`);
                 this.setState({currentUser: null});
         });
     }
@@ -503,7 +496,6 @@ export default class Home extends Component {
     }
 
     render() {
-        console.log(`loadingCategories=${this.state.filters.loadingCategory}, loadingCities=${this.state.filters.loadingCity}`)
         return (
             <div className="container">
                 <div className="filter-bar">
