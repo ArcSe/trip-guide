@@ -36,11 +36,10 @@ public class UserController {
             throw new BadRequestException("Событие отсутсвует!");
         }
 
-        System.out.println("Type = " + type);
+        System.out.println("!!!!!!!!!!-----------!!!!");
+
         Event event = this.eventRepository.getOne(eventId);
         User user = this.userRepository.getOne(id);
-        System.out.println(event);
-        System.out.println(user);
 
         if (type.equals("add")) {
             user.getEvents().add(event);

@@ -34,6 +34,7 @@ class UserAPI {
         const eventId = eventRequest.eventId;
         const type = eventRequest.type;
 
+        console.log(`${API_BASE_URL}/user/${id}/?eventId=${eventId}&type=${type}`);
         return APIUtils.request({
             url: `${API_BASE_URL}/user/${id}/?eventId=${eventId}&type=${type}`,
             method: 'PUT'
