@@ -3,9 +3,7 @@ package com.example.tripguide.controller;
 import com.example.tripguide.controller.mapper.CityMapper;
 import com.example.tripguide.exception.BadRequestException;
 import com.example.tripguide.model.City;
-import com.example.tripguide.payload.request.CategoryBasicRequest;
 import com.example.tripguide.payload.request.CityBasicRequest;
-import com.example.tripguide.payload.response.CategoryBasicResponse;
 import com.example.tripguide.payload.response.CityBasicResponse;
 import com.example.tripguide.repository.CityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +32,7 @@ public class CityController {
     }
 
     // Доделать, чтобы возвращал не один город, а список
-    @GetMapping("/city/{id}")
+    @GetMapping("/city")
     public ResponseEntity<?> getCityByName(@RequestParam String name) {
         Optional<City> city = this.cityRepository.findByName(name);
         return city.map(response -> ResponseEntity.ok().body(this.cityMapper.entityToBasicResponse(response)))

@@ -32,7 +32,7 @@ public class CategoryController {
     }
 
     // Доделать, чтобы возвращал не одну категорию, а список
-    @GetMapping("/category/")
+    @GetMapping("/category")
     public ResponseEntity<?> getCategoryByName(@RequestParam String name) {
         Optional<Category> category = this.categoryRepository.findByName(name);
         return category.map(response -> ResponseEntity.ok().body(this.categoryMapper.entityToBasicResponse(response)))
