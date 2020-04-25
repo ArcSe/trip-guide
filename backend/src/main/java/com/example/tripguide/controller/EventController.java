@@ -2,9 +2,8 @@ package com.example.tripguide.controller;
 
 import com.example.tripguide.controller.mapper.EventMapper;
 import com.example.tripguide.exception.BadRequestException;
-import com.example.tripguide.model.Category;
-import com.example.tripguide.model.City;
 import com.example.tripguide.model.Event;
+import com.example.tripguide.payload.request.EventBasicRequest;
 import com.example.tripguide.payload.request.EventCriteriaRequest;
 import com.example.tripguide.payload.response.EventBasicResponse;
 import com.example.tripguide.repository.CategoryRepository;
@@ -41,52 +40,62 @@ public class EventController {
         return pageEvent.map(this.eventMapper::entityToBasicResponse);
     }
 
+    //Добавить в критерий поиск ближайшей даты
     @GetMapping("/events")
     public Page<Event> getEvents(Pageable pageable, EventCriteriaRequest eventCriteriaRequest) {
         return this.eventRepository.findAllByCriteria(eventCriteriaRequest, pageable);
     }
 
     @GetMapping("/event/{id}")
-    public ResponseEntity<?> getEvent(@PathVariable Long id) {
+    public ResponseEntity<EventBasicResponse> getEventById(@PathVariable Long id) {
         Optional<Event> event = this.eventRepository.findById(id);
-        return event.map(response -> ResponseEntity.ok().body(response))
+        return  event.map(response -> ResponseEntity.ok().body(this.eventMapper.entityToBasicResponse(response)))
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping("/event")
-    public ResponseEntity<Event> createEvent(@RequestBody Event event) throws URISyntaxException {
-        if (this.eventRepository.existsByName(event.getName())
-                && this.eventRepository.existsByAddressAndCity(event.getAddress(), event.getCity())){
+    public ResponseEntity<EventBasicResponse> createEvent(@RequestBody EventBasicRequest eventRequest) throws URISyntaxException {
+        //Переделать проверку на более тщательную
+        if (this.eventRepository.existsByName(eventRequest.getName())
+                && this.eventRepository.existsByAddressAndCity_Id(eventRequest.getAddress(), eventRequest.getCityId())){
             throw new BadRequestException("Такой город уже создан");
         }
 
-        City city = this.cityRepository.getOne(event.getCity().getId());
-        Category category = this.categoryRepository.getOne(event.getCategory().getId());
-        event.setCity(city);
-        event.setCategory(category);
+        Event event = this.eventMapper.basicRequestToEntity(eventRequest);
+        //Изменить на дефолтные значения в БД при создании
+        event.setRating(0);
+        event.setVotes(0);
+        //
+        event.setCity(this.cityRepository.getOne(request.getCityId()));
+        event.setCategory(this.categoryRepository.getOne(request.getCategoryId()));
         Event result = this.eventRepository.save(event);
+        EventBasicResponse response = this.eventMapper.entityToBasicResponse(result);
 
         return ResponseEntity.created(new URI("/api/event/" + result.getId()))
-                .body(result);
+                .body(response);
     }
 
     @PutMapping("/event/{id}")
-    public ResponseEntity<Event> updateEvent(@RequestBody Event event) {
-        Event result = this.eventRepository.getOne(event.getId());
-        result.setName(event.getName());
-        result.setAddress(event.getAddress());
-        result.setDescription(event.getDescription());
-        result.setCity(this.cityRepository.getOne(event.getCity().getId()));
-        result.setCategory(this.categoryRepository.getOne(event.getCategory().getId()));
-        System.out.println(result.getRating());
+    public ResponseEntity<EventBasicResponse> updateEvent(@PathVariable Long id, @RequestBody EventBasicRequest request) {
+        Event result = this.eventRepository.findById(id).get();
+        result.setName(request.getName());
+        result.setAddress(request.getAddress());
+        result.setDescription(request.getDescription());
+        result.setCity(this.cityRepository.getOne(request.getCityId()));
+        result.setCategory(this.categoryRepository.getOne(request.getCategoryId()));
+
         Event resultEdit = this.eventRepository.save(result);
-        return ResponseEntity.ok().body(resultEdit);
+        EventBasicResponse response = this.eventMapper.entityToBasicResponse(resultEdit);
+        return ResponseEntity.ok().body(response);
 
 
     }
 
     @DeleteMapping("/event/{id}")
     public ResponseEntity<?> deleteEvent(@PathVariable Long id) {
+        if (this.eventRepository.findById(id).isEmpty()) {
+            throw new BadRequestException("Такого события не существует!");
+        }
         this.eventRepository.deleteById(id);
         return ResponseEntity.ok().build();
     }

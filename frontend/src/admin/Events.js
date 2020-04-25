@@ -43,12 +43,8 @@ class EditModalDialog extends Component {
             address: this.state.editData.address,
             description: this.state.editData.description,
             rating: this.state.editData.rating,
-            city:{
-                id: this.props.eventData.city.id,
-            },
-            category: {
-                id: this.props.eventData.category.id,
-            }
+            cityId: this.props.eventData.city.id,
+            categoryId: this.props.eventData.category.id,
         };
         EventAPI.editEvent( eventRequest)
             .then(() =>{

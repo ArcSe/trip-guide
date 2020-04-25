@@ -14,9 +14,11 @@ public interface EventRepository extends JpaRepository<Event, Long>, EventReposi
 
     boolean existsByName(String name);
 
+    boolean existsByCity_Id(Long cityId);
+
     Page<Event> findAll(Pageable page);
 
-    boolean existsByAddressAndCity(String address, City city);
+    boolean existsByAddressAndCity_Id(String address, Long cityId);
 
     Optional<Event> findById(Long id);
 }
