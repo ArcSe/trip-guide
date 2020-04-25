@@ -27,16 +27,12 @@ class EditModalDialog extends Component {
             }
         };
 
-        this.handleInputChange = this.handleInputChange.bind(this);
         this.handleUpdateButton = this.handleUpdateButton.bind(this);
     }
 
-    handleInputChange(event) {
-
-    }
 
     handleUpdateButton(){
-        alert(this.props.eventData.city.id);
+
         const eventRequest = {
             id: this.props.eventId,
             name: this.state.editData.name,
@@ -48,13 +44,12 @@ class EditModalDialog extends Component {
         };
         EventAPI.editEvent( eventRequest)
             .then(() =>{
-                Alert.success("Done!");
-
+                Alert.success("Событие изменено!");
+                this.props.toggleDialog();
+                this.props.getEvents();
             }).catch(error => {
                 Alert.error((error && error.message) || 'Что-то пошло не так');
             })
-
-
     }
 
 
@@ -119,21 +114,29 @@ class CreateModalDialog extends Component {
             }
         };
 
-        this.handleInputChange = this.handleInputChange.bind(this);
         this.handleCreateButton = this.handleCreateButton.bind(this);
     }
 
 
-    handleInputChange(event) {
-        event.preventDefault();
-        const data = event.target.value;
-        this.setState({createData: data});
-    }
 
     handleCreateButton() {
-        alert(this.state.createData.name)
-        const cityRequest = {name: this.state.createData};
 
+        const eventRequest = {
+            name: this.state.createData.name,
+            address: this.state.createData.address,
+            description: this.state.createData.description,
+            rating: this.state.createData.rating,
+            cityId: this.props.eventData.city.id,
+            categoryId: this.props.eventData.category.id,
+        };
+        EventAPI.createEvent( eventRequest)
+            .then(() =>{
+                Alert.success("Событие добавлено!");
+                this.props.toggleDialog();
+                this.props.getEvents();
+            }).catch(error => {
+            Alert.error((error && error.message) || 'Что-то пошло не так');
+        })
     }
 
     render() {
@@ -176,7 +179,7 @@ class CreateModalDialog extends Component {
                         Закрыть
                     </Button>
                     <Button variant="primary" onClick={this.handleCreateButton} >
-                        Изменить
+                        Добавить
                     </Button>
                 </Modal.Footer>
             </Modal>

@@ -63,11 +63,12 @@ public class EventController {
 
         Event event = this.eventMapper.basicRequestToEntity(eventRequest);
         //Изменить на дефолтные значения в БД при создании
-        event.setRating(0);
-        event.setVotes(0);
+        event.setRating(0.0f);
+        System.out.println(event.getRating());
+        event.setVotes(0L);
         //
-        event.setCity(this.cityRepository.getOne(request.getCityId()));
-        event.setCategory(this.categoryRepository.getOne(request.getCategoryId()));
+        event.setCity(this.cityRepository.getOne(eventRequest.getCityId()));
+        event.setCategory(this.categoryRepository.getOne(eventRequest.getCategoryId()));
         Event result = this.eventRepository.save(event);
         EventBasicResponse response = this.eventMapper.entityToBasicResponse(result);
 

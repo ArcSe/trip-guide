@@ -30,6 +30,16 @@ class EventAPI  {
         });
     }
 
+    createEvent(eventRequest) {
+        this.checkAccessToken();
+
+        return APIUtils.request({
+            url: `${API_BASE_URL}/api/event`,
+            method: 'POST',
+            body: JSON.stringify(eventRequest)
+        });
+    }
+
     getEventsByName(eventsRequest) {
         this.checkAccessToken();
         const name = eventsRequest.name;
