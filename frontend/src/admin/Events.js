@@ -380,8 +380,10 @@ class Content extends Component {
 
     }
 
-    handleScheduleButton(){
+    handleScheduleButton(eventId, eventName){
        this.props.toggleScheduleDialog();
+        this.props.setEventsState("editEventId", eventId);
+        this.props.setEventsState("editEventName", eventName);
     }
 
     handleEditButton(eventId){
@@ -415,11 +417,12 @@ class Content extends Component {
 
                                 <div className="btn-group" >
                                     <button type="button" className="mr-1 btn btn-outline-dark"
-                                            onClick={() => this.handleScheduleButton()}>
+                                            onClick={() => this.handleScheduleButton(event.id, event.name)}>
                                         {(this.props.show) && <Schedule
                                             show={this.props.show}
-                                            toggleScheduleDialog={this.props.toggleScheduleDialog}/>}
-                                        Расписание
+                                            toggleScheduleDialog={this.props.toggleScheduleDialog}
+                                            eventId={this.props.eventId}
+                                            eventName ={this.props.eventName} />} Расписание
                                     </button>
                                     <button type="button" className="mr-1 btn btn-outline-success"
                                             onClick={() => this.handleEditButton(event.id)}>Изменить</button>
@@ -490,6 +493,7 @@ export class Events extends React.Component {
             showEditModal: false,
             showScheduleModal: false,
             editEventId: null,
+            editEventName: null,
             search: null,
             activePage: 0,
             totalPages: 0,
@@ -599,6 +603,8 @@ export class Events extends React.Component {
                          events={this.state.events}
                          show={this.state.showScheduleModal}
                          toggleScheduleDialog={this.toggleScheduleModal}
+                         eventId={this.state.editEventId}
+                         eventName={this.state.editEventName}
                 />
 
                 <Pagination totalPages={this.state.totalPages}
