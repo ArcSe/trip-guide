@@ -25,70 +25,19 @@ public class EventRepositoryCustomImpl implements EventRepositoryCustom {
 
     @Override
     public Page<Event> findAllByCriteria(EventCriteriaRequest eventCriteriaRequest, Pageable pageable) {
-        if (eventCriteriaRequest == null) {
-            eventCriteriaRequest = new EventCriteriaRequest();
-            eventCriteriaRequest.setFree(false);
-        }
-
         CriteriaBuilder criteriaBuilder = this.entityManager.getCriteriaBuilder();
         CriteriaQuery<Event> criteriaQuery = criteriaBuilder.createQuery(Event.class);
-
+        criteriaQuery.distinct(true);
         Root<Event> event = criteriaQuery.from(Event.class);
-        //criteriaQuery.distinct(true);
         List<Predicate> predicates = new ArrayList<>();
 
-        if (eventCriteriaRequest.getRating() != null) {
-            predicates.add(criteriaBuilder.ge(event.get("rating"), eventCriteriaRequest.getRating()));
-        }
-
-        if (eventCriteriaRequest.getMinPrice() != null) {
-            predicates.add(criteriaBuilder.ge(event.get("price"), eventCriteriaRequest.getMinPrice()));
-        }
-
-        if (eventCriteriaRequest.getMaxPrice() != null) {
-            predicates.add(criteriaBuilder.le(event.get("price"), eventCriteriaRequest.getMaxPrice()));
-        }
-
-        if (eventCriteriaRequest.getCityId() != null) {
-            predicates.add(criteriaBuilder.equal(event.get("city").<Long> get("id"), eventCriteriaRequest.getCityId()));
-        }
-
-        if (eventCriteriaRequest.getCategoryId() != null) {
-            predicates.add(criteriaBuilder.equal(event.get("category").<Long> get("id"), eventCriteriaRequest.getCategoryId()));
-        }
-
-        if (eventCriteriaRequest.getFree() != null) {
-            Join<Event, Schedule> schedules = event.join("schedules", JoinType.INNER);
-            predicates.add(criteriaBuilder.equal(event.get("id"), schedules.get("id")));
-            predicates.add(criteriaBuilder.equal(schedules.get("price"), 0));
-        }
-
-        if (eventCriteriaRequest.getDayOfWeek() != null && !eventCriteriaRequest.getDayOfWeek().equals("")) {
-            Join<Event, Schedule> schedules = event.join("schedules", JoinType.INNER);
-            predicates.add(criteriaBuilder.equal(event.get("id"), schedules.get("id")));
-
-            String dayOfWeek = eventCriteriaRequest.getDayOfWeek();
-            DateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-            LocalDate localDate;
-            switch (dayOfWeek) {
-                case "today":
-                    localDate = LocalDate.now();
-                    predicates.add(criteriaBuilder.equal(schedules.get("date"), localDate));
-                    break;
-                case "tomorrow":
-                    localDate = LocalDate.now().plusDays(1);
-                    predicates.add(criteriaBuilder.equal(schedules.get("date"), localDate));
-                    break;
-                case "weekend":
-                    localDate = this.getUpcomingSaturday();
-                    Predicate saturdayRestriction = criteriaBuilder.equal(schedules.get("date"), localDate);
-                    Predicate sundayRestriction = criteriaBuilder.equal(schedules.get("date"), localDate.plusDays(1));
-                    predicates.add(criteriaBuilder.or(saturdayRestriction, sundayRestriction));
-                    break;
-                default:
-                    break;
-            }
-        }
+        addRatingRestriction(criteriaBuilder, event, predicates, eventCriteriaRequest.getRating());
+        addMaxPriceRestriction(criteriaBuilder, event, predicates, eventCriteriaRequest.getMaxPrice());
+        addMinPriceRestriction(criteriaBuilder, event, predicates, eventCriteriaRequest.getMinPrice());
+        addCityRestriction(criteriaBuilder, event, predicates, eventCriteriaRequest.getCityId());
+        addCategoryRestriction(criteriaBuilder, event, predicates, eventCriteriaRequest.getCategoryId());
+        addFreeRestriction(criteriaBuilder, event, predicates, eventCriteriaRequest.getFree());
+        addDayOfWeekRestriction(criteriaBuilder, event, predicates, eventCriteriaRequest.getDayOfWeek());
 
         criteriaQuery.where(predicates.toArray(new Predicate[0]));
         List<Event> resultList = entityManager.createQuery(criteriaQuery).getResultList();
@@ -96,8 +45,92 @@ public class EventRepositoryCustomImpl implements EventRepositoryCustom {
         return new PageImpl<>(resultList, pageable, total);
     }
 
-    private LocalDate getUpcomingSaturday() {
-        LocalDate result = LocalDate.now();
+
+    private void addRatingRestriction(CriteriaBuilder cb, Root<Event> eventRoot,
+                                      List<Predicate> predicates, Float rating) {
+        if (rating != null) {
+            predicates.add(cb.ge(eventRoot.get("rating"), rating));
+        }
+
+    }
+
+    private void addMaxPriceRestriction(CriteriaBuilder cb, Root<Event> eventRoot,
+                                        List<Predicate> predicates, Integer maxPrice) {
+        if (maxPrice != null) {
+            // predicates.add(criteriaBuilder.le(event.get("price"), eventCriteriaRequest.getMaxPrice()));
+        }
+
+    }
+
+    private void addMinPriceRestriction(CriteriaBuilder cb, Root<Event> eventRoot,
+                                        List<Predicate> predicates, Integer minPrice) {
+        if (minPrice != null) {
+            // predicates.add(criteriaBuilder.ge(event.get("price"), eventCriteriaRequest.getMinPrice()));
+        }
+    }
+
+    private void addCityRestriction(CriteriaBuilder cb, Root<Event> eventRoot,
+                                    List<Predicate> predicates, Long cityId) {
+        if (cityId != null) {
+            predicates.add(cb.equal(eventRoot.get("city").get("id"), cityId));
+        }
+
+    }
+
+    private void addCategoryRestriction(CriteriaBuilder cb, Root<Event> eventRoot,
+                                        List<Predicate> predicates, Long categoryId) {
+        if (categoryId != null) {
+            predicates.add(cb.equal(eventRoot.get("category").get("id"), categoryId));
+        }
+    }
+
+    private void addFreeRestriction(CriteriaBuilder cb, Root<Event> eventRoot,
+                                    List<Predicate> predicates, Boolean isFree) {
+        if (isFree != null && isFree) {
+            //Join<Event, Schedule> schedules = eventRoot.join("schedules", JoinType.INNER);
+            Join<Event, Schedule> schedules = eventRoot.join("schedules", JoinType.INNER);
+           // predicates.add(cb.equal(eventRoot.get("id"), schedules.get("evenid")));
+            predicates.add(cb.equal(schedules.get("price"), 0));
+        }
+    }
+
+    private void addDayOfWeekRestriction(CriteriaBuilder cb, Root<Event> eventRoot,
+                                         List<Predicate> predicates, String dayOfWeek) {
+        if (dayOfWeek != null && !dayOfWeek.equals("")) {
+            Join<Event, Schedule> schedules = eventRoot.join("schedules", JoinType.INNER);
+          //  predicates.add(cb.equal(eventRoot.get("id"), schedules.get("eventid")));
+
+            DateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            LocalDateTime startDate, endDate;
+            Predicate restriction;
+            switch (dayOfWeek) {
+                case "today":
+                    startDate = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0);
+                    endDate = startDate.withHour(23).withMinute(59).withSecond(59);
+                    restriction = cb.between(schedules.get("dateTime"), startDate, endDate);
+                    predicates.add(restriction);
+                    break;
+                case "tomorrow":
+                    startDate = LocalDateTime.now().plusDays(1).withHour(0).withMinute(0).withSecond(0);
+                    endDate = startDate.withHour(23).withMinute(59).withSecond(59);
+                    restriction = cb.between(schedules.get("dateTime"), startDate, endDate);
+                    predicates.add(restriction);
+                    break;
+                case "weekend":
+                    startDate = this.getUpcomingSaturday().withHour(0).withMinute(0).withSecond(0);
+                    endDate = startDate.plusDays(1).withHour(0).withMinute(0).withSecond(0);
+                    restriction = cb.between(schedules.get("dateTime"), startDate, endDate);
+                    predicates.add(restriction);
+                    break;
+                default:
+                    break;
+            }
+
+        }
+    }
+
+    private LocalDateTime getUpcomingSaturday() {
+        LocalDateTime result = LocalDateTime.now();
 
         while (result.getDayOfWeek() != DayOfWeek.SATURDAY) {
             result = result.plusDays(1);
