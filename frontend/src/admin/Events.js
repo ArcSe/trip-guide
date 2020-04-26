@@ -7,67 +7,10 @@ import "react-datepicker/dist/react-datepicker.css";
 import EventAPI from "../util/EventAPI";
 import CategoryAPI from "../util/CategoryAPI";
 import CityAPI from "../util/CityAPI";
-
-class Schedule extends Component{
-    constructor(props) {
-        super(props);
-        this.state = {
-            name:null,
-            price: null,
-            date: null,
-        }
-        this.handleEditButton = this.handleEditButton.bind(this);
-        this.handleDeleteButton = this.handleDeleteButton.bind(this);
-    }
-
-    handleEditButton(eventId){
-        this.props.toggleDialog();
-        this.props.setEventsState("editEventId", eventId);
-    }
-
-    handleDeleteButton(eventId) {
-        EventAPI.deleteEvent(eventId)
-            .then(() => {
-                Alert.success("Событие успешно удалено!");
-                this.props.getEvents();
-            }).catch(error => {
-            Alert.error((error && error.message) || "Упс! Что-то пошло не так. Пожалуйста, попробуйте снова!");
-        });
-    }
+import {Schedule} from "../admin/Schedule"
+import {Users} from "./Users";
 
 
-    render() {
-        return(
-            <Modal size="xl" show={this.props.show} onHide={this.props.toggleScheduleDialog}
-                   aria-labelledby="example-custom-modal-styling-title">
-                <Modal.Header closeButton>
-                    <Modal.Title id="example-modal-sizes-title-xl">Расписание</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <button type="button" className="mb-2 btn btn-outline-dark">Добавить</button>
-                    <div className="list-group">
-                        <div>
-                            <li className="mb-1 list-group-item d-flex justify-content-between">
-                                <p className="mt-2 flex-grow-1">Расписание</p>
-                                <div className="btn-group" >
-                                    <button type="button" className="mr-1 btn btn-outline-success"
-                                            >Изменить</button>
-                                    <button type="button" className="mr-1 btn btn-outline-danger"
-                                            >Удалить</button>
-                                </div>
-                            </li>
-                        </div>
-                    </div>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={this.props.toggleDialog}>
-                        Закрыть
-                    </Button>
-                </Modal.Footer>
-            </Modal>
-        )
-    }
-}
 
 
 class EditModalDialog extends Component {
@@ -438,7 +381,7 @@ class Content extends Component {
     }
 
     handleScheduleButton(){
-        this.props.toggleScheduleDialog();
+       this.props.toggleScheduleDialog();
     }
 
     handleEditButton(eventId){
@@ -468,10 +411,16 @@ class Content extends Component {
                                 <p className="mt-2 flex-grow-1">{event.address}</p>
                                 <p className="mt-2 flex-grow-1">{event.rating}</p>
                                 <p className="mt-2 flex-grow-1">{event.city.name}</p>
+                                <p className="mt-2 flex-grow-1">{event.category.name}</p>
 
                                 <div className="btn-group" >
                                     <button type="button" className="mr-1 btn btn-outline-dark"
-                                            onClick={() => this.handleScheduleButton() }>Расписание</button>
+                                            onClick={() => this.handleScheduleButton()}>
+                                        {(this.props.show) && <Schedule
+                                            show={this.props.show}
+                                            toggleScheduleDialog={this.props.toggleScheduleDialog}/>}
+                                        Расписание
+                                    </button>
                                     <button type="button" className="mr-1 btn btn-outline-success"
                                             onClick={() => this.handleEditButton(event.id)}>Изменить</button>
                                     <button type="button" className="mr-1 btn btn-outline-danger"
@@ -633,9 +582,6 @@ export class Events extends React.Component {
                                  eventId={this.state.editEventId}
                                  setDataState={this.setDataState}
                                  eventData={this.state.eventData}
-                />
-                <Schedule show={this.state.showScheduleModal}
-                          toggleDialog={this.toggleScheduleModal}
                 />
 
                 <div className="btn-toolbar justify-content-between" role="toolbar"
