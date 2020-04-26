@@ -303,7 +303,7 @@ export class Cities extends Component {
     getCitiesByName() {
         CityAPI.getCitiesByName({name: this.state.search})
             .then(response => {
-                this.setState({cities: [response]});
+                this.setState({cities: response.content});
             });
     }
 

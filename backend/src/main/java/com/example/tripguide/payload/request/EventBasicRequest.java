@@ -3,9 +3,12 @@ package com.example.tripguide.payload.request;
 import com.example.tripguide.model.Category;
 import com.example.tripguide.model.City;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 public class EventBasicRequest {
 

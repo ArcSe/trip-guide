@@ -26,6 +26,7 @@ class CityAPI  {
     getCitiesByName(citiesRequest) {
         this.checkAccessToken();
         const name = citiesRequest.name;
+        console.log(`${API_BASE_URL}/api/city/?name=${name}`);
 
         return APIUtils.request({
             url: `${API_BASE_URL}/api/city/?name=${name}`,
