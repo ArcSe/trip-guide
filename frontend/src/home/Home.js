@@ -9,6 +9,7 @@ import CityAPI from "../util/CityAPI";
 import UserAPI from "../util/UserAPI";
 import EventAPI from "../util/EventAPI";
 import Alert from "react-s-alert";
+import RatingAPI from "../util/RatingAPI";
 
 class CityDropDown extends Component {
     constructor(props) {
@@ -383,6 +384,21 @@ class Content extends Component {
             });
     }
 
+    handleRatingSet(evenId, rating) {
+        const ratingRequest = {
+            eventId: evenId,
+            rating: rating,
+            userId: this.props.currentUser.id};
+
+        RatingAPI.updateRating(ratingRequest)
+            .then(() => {
+                Alert.success("Рейтинг поставлен");
+            }).catch(error => {
+            Alert.error((error && error.message) || "Упс! Что-то пошло не так. Пожалуйста, попробуйте снова!");
+        });
+
+    }
+
     render() {
         return (
             <div>
@@ -398,7 +414,35 @@ class Content extends Component {
                             </svg>
                         </div>
                         <div className="col p-4  position-static">
-                            <h3 className="mb-0">{event.name}</h3>
+
+                            <div className="form-inline">
+                                <h3 className="mb-0">{event.name}</h3>
+
+                                {this.props.currentUser &&
+                                <div className="dropdown ml-2">
+
+                                    <button className="btn btn-light dropdown-toggle" type="button" id="dropdownMenu2"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Оценить
+                                    </button>
+                                    <div className="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                        <button className="dropdown-item" type="button"
+                                                onClick={() => this.handleRatingSet(event.id, 1)}>1</button>
+                                        <button className="dropdown-item" type="button"
+                                                onClick={() => this.handleRatingSet(event.id, 2)}>2</button>
+                                        <button className="dropdown-item" type="button"
+                                                    onClick={() => this.handleRatingSet(event.id, 3)}>3</button>
+                                        <button className="dropdown-item" type="button"
+                                                onClick={() => this.handleRatingSet(event.id, 4)}>4</button>
+                                        <button className="dropdown-item" type="button"
+                                                onClick={() => this.handleRatingSet(event.id, 5)}>5</button>
+                                    </div>
+                                </div>
+                                }
+                            </div>
+
+
+
                             <div className="mb-0 text-muted">
                                 Рейтинг: {event.rating} ({event.votes})
                             </div>
