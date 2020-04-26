@@ -304,7 +304,7 @@ export class Categories extends Component {
     getCategoriesByName() {
         CategoryAPI.getCategoriesByName({name: this.state.search})
             .then(response => {
-                this.setState({categories: [response]});
+                this.setState({categories: response.content});
             });
     }
 
