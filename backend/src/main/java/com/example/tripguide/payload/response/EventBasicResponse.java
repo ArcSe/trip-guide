@@ -2,8 +2,6 @@ package com.example.tripguide.payload.response;
 
 import com.example.tripguide.model.Category;
 import com.example.tripguide.model.City;
-import com.example.tripguide.model.Schedule;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -26,13 +26,14 @@ public class Event {
     @Column(nullable = false)
     private String name;
 
-    private Float rating;
+    @Column(nullable = false)
+    private Float rating = 0.0f;
 
     @Column(nullable = false, columnDefinition="TEXT")
     private String description;
 
     @Column(nullable = false)
-    private Long votes;
+    private Long votes = 0L;
 
     @OneToMany(mappedBy = "event", fetch = FetchType.EAGER)
     @JsonManagedReference

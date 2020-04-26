@@ -7,6 +7,11 @@ import "react-datepicker/dist/react-datepicker.css";
 import EventAPI from "../util/EventAPI";
 import CategoryAPI from "../util/CategoryAPI";
 import CityAPI from "../util/CityAPI";
+import {Schedule} from "../admin/Schedule"
+import {Users} from "./Users";
+
+
+
 
 class EditModalDialog extends Component {
     constructor(props) {
@@ -372,6 +377,13 @@ class Content extends Component {
 
         this.handleEditButton = this.handleEditButton.bind(this);
         this.handleDeleteButton = this.handleDeleteButton.bind(this);
+
+    }
+
+    handleScheduleButton(eventId, eventName){
+       this.props.toggleScheduleDialog();
+        this.props.setEventsState("editEventId", eventId);
+        this.props.setEventsState("editEventName", eventName);
     }
 
     handleEditButton(eventId){
@@ -401,8 +413,17 @@ class Content extends Component {
                                 <p className="mt-2 flex-grow-1">{event.address}</p>
                                 <p className="mt-2 flex-grow-1">{event.rating}</p>
                                 <p className="mt-2 flex-grow-1">{event.city.name}</p>
+                                <p className="mt-2 flex-grow-1">{event.category.name}</p>
 
                                 <div className="btn-group" >
+                                    <button type="button" className="mr-1 btn btn-outline-dark"
+                                            onClick={() => this.handleScheduleButton(event.id, event.name)}>
+                                        {(this.props.show) && <Schedule
+                                            show={this.props.show}
+                                            toggleScheduleDialog={this.props.toggleScheduleDialog}
+                                            eventId={this.props.eventId}
+                                            eventName ={this.props.eventName} />} Расписание
+                                    </button>
                                     <button type="button" className="mr-1 btn btn-outline-success"
                                             onClick={() => this.handleEditButton(event.id)}>Изменить</button>
                                     <button type="button" className="mr-1 btn btn-outline-danger"
@@ -470,7 +491,9 @@ export class Events extends React.Component {
             events: null,
             showCreateModal: false,
             showEditModal: false,
+            showScheduleModal: false,
             editEventId: null,
+            editEventName: null,
             search: null,
             activePage: 0,
             totalPages: 0,
@@ -495,6 +518,7 @@ export class Events extends React.Component {
         this.setNewState = this.setNewState.bind(this);
         this.toggleCreateModal = this.toggleCreateModal.bind(this);
         this.toggleEditModal = this.toggleEditModal.bind(this);
+        this.toggleScheduleModal = this.toggleScheduleModal.bind(this);
     }
 
     setDataState(key, value) {
@@ -532,6 +556,9 @@ export class Events extends React.Component {
 
     toggleCreateModal() {
         this.setState({showCreateModal: !this.state.showCreateModal});
+    }
+    toggleScheduleModal() {
+        this.setState({showScheduleModal: !this.state.showScheduleModal});
     }
 
     toggleEditModal() {
@@ -573,7 +600,12 @@ export class Events extends React.Component {
                 <Content toggleDialog={this.toggleEditModal}
                          setEventsState={this.setNewState}
                          getEvents={this.getEvents}
-                         events={this.state.events}/>
+                         events={this.state.events}
+                         show={this.state.showScheduleModal}
+                         toggleScheduleDialog={this.toggleScheduleModal}
+                         eventId={this.state.editEventId}
+                         eventName={this.state.editEventName}
+                />
 
                 <Pagination totalPages={this.state.totalPages}
                             activePage={this.state.activePage}
