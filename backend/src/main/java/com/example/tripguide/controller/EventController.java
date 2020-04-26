@@ -2,6 +2,7 @@ package com.example.tripguide.controller;
 
 import com.example.tripguide.controller.mapper.EventMapper;
 import com.example.tripguide.exception.BadRequestException;
+import com.example.tripguide.model.Category;
 import com.example.tripguide.model.Event;
 import com.example.tripguide.payload.request.EventBasicRequest;
 import com.example.tripguide.payload.request.EventCriteriaRequest;
@@ -23,16 +24,19 @@ import java.util.Optional;
 @RequestMapping("/api")
 public class EventController {
 
-    @Autowired
     private EventRepository eventRepository;
-
-    private EventMapper eventMapper = new EventMapper();
-
-    @Autowired
     private CityRepository cityRepository;
+    private CategoryRepository categoryRepository;
+    private EventMapper eventMapper;
 
     @Autowired
-    private CategoryRepository categoryRepository;
+    public EventController(EventRepository eventRepository, CityRepository cityRepository,
+                           CategoryRepository categoryRepository) {
+        this.eventRepository = eventRepository;
+        this.cityRepository = cityRepository;
+        this.categoryRepository = categoryRepository;
+        this.eventMapper = new EventMapper();
+    }
 
     @GetMapping("/event")
     public Page<EventBasicResponse> getAllEvents(Pageable pageable) {
@@ -73,7 +77,7 @@ public class EventController {
 
     @PutMapping("/event/{id}")
     public ResponseEntity<EventBasicResponse> updateEvent(@PathVariable Long id, @RequestBody EventBasicRequest request) {
-        Event result = this.eventRepository.findById(id).get();
+        Event result = this.eventRepository.getOne(id);
         result.setName(request.getName());
         result.setAddress(request.getAddress());
         result.setDescription(request.getDescription());
