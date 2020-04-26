@@ -16,11 +16,14 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class UserController {
 
-    @Autowired
     private UserRepository userRepository;
+    private EventRepository eventRepository;
 
     @Autowired
-    private EventRepository eventRepository;
+    public UserController(UserRepository userRepository, EventRepository eventRepository) {
+        this.userRepository = userRepository;
+        this.eventRepository = eventRepository;
+    }
 
     @GetMapping("/user/me")
     @PreAuthorize("hasRole('USER')")
@@ -35,8 +38,6 @@ public class UserController {
         if (!this.eventRepository.existsById(eventId)) {
             throw new BadRequestException("Событие отсутсвует!");
         }
-
-        System.out.println("!!!!!!!!!!-----------!!!!");
 
         Event event = this.eventRepository.getOne(eventId);
         User user = this.userRepository.getOne(id);

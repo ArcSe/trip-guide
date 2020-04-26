@@ -20,10 +20,14 @@ import java.util.Optional;
 @RequestMapping("/api")
 public class CategoryController {
 
-    @Autowired
     private CategoryRepository categoryRepository;
+    private CategoryMapper categoryMapper;
 
-    private CategoryMapper categoryMapper = new CategoryMapper();
+    @Autowired
+    public CategoryController(CategoryRepository categoryRepository) {
+        this.categoryRepository = categoryRepository;
+        this.categoryMapper = new CategoryMapper();
+    }
 
     @GetMapping("/categories")
     public Page<CategoryBasicResponse> getAllCategories(Pageable pageable){
@@ -65,7 +69,8 @@ public class CategoryController {
             throw new BadRequestException("Такой категории не существует!");
         }
 
-        Category category = this.categoryMapper.basicRequestToEntity(request);
+        Category category = this.categoryRepository.getOne(id);
+        category.setName(request.getName());
         Category result = this.categoryRepository.save(category);
         CategoryBasicResponse response = this.categoryMapper.entityToBasicResponse(result);
         return ResponseEntity.ok().body(response);

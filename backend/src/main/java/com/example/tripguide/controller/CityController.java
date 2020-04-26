@@ -20,10 +20,14 @@ import java.util.Optional;
 @RequestMapping("/api")
 public class CityController {
 
-    @Autowired
     private CityRepository cityRepository;
+    private CityMapper cityMapper;
 
-    private CityMapper cityMapper = new CityMapper();
+    @Autowired
+    public CityController(CityRepository cityRepository) {
+        this.cityRepository = cityRepository;
+        this.cityMapper = new CityMapper();
+    }
 
     @GetMapping("/cities")
     public Page<CityBasicResponse> getAllCities(Pageable pageable) {
@@ -65,7 +69,8 @@ public class CityController {
             throw new BadRequestException("Такого города не существует!");
         }
 
-        City city = this.cityMapper.basicRequestToEntity(request);
+        City city = this.cityRepository.getOne(id);
+        city.setName(request.getName());
         City result = this.cityRepository.save(city);
         CityBasicResponse response = this.cityMapper.entityToBasicResponse(result);
         return ResponseEntity.ok().body(response);

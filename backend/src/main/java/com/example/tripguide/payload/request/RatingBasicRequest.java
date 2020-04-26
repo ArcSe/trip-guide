@@ -1,6 +1,5 @@
 package com.example.tripguide.payload.request;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -8,8 +7,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class CityBasicRequest {
-
+public class RatingBasicRequest {
     private Long id;
-    private String name;
+    private Long userId;
+    private Long eventId;
+    private Integer rating;
 }

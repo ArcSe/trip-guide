@@ -401,7 +401,6 @@ class Content extends Component {
                             <h3 className="mb-0">{event.name}</h3>
                             <div className="mb-0 text-muted">
                                 Рейтинг: {event.rating} ({event.votes})
-                                Моя оценка: ЗДЕСЬ ИНПУТ С МОЕЙ ОЦЕНКОЙ
                             </div>
                             <div className="text-muted">{event.address}, ближайшая дата</div>
                             <p className="card-text mb-auto">
