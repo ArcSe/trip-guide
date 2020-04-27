@@ -3,7 +3,9 @@ package com.example.tripguide.controller;
 import com.example.tripguide.controller.mapper.EventMapper;
 import com.example.tripguide.exception.BadRequestException;
 import com.example.tripguide.model.Category;
+import com.example.tripguide.model.City;
 import com.example.tripguide.model.Event;
+import com.example.tripguide.model.Schedule;
 import com.example.tripguide.payload.request.EventBasicRequest;
 import com.example.tripguide.payload.request.EventCriteriaRequest;
 import com.example.tripguide.payload.response.EventBasicResponse;
@@ -12,12 +14,19 @@ import com.example.tripguide.repository.CityRepository;
 import com.example.tripguide.repository.eventrepository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.*;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -28,6 +37,8 @@ public class EventController {
     private CityRepository cityRepository;
     private CategoryRepository categoryRepository;
     private EventMapper eventMapper;
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Autowired
     public EventController(EventRepository eventRepository, CityRepository cityRepository,
@@ -43,6 +54,7 @@ public class EventController {
         Page<Event> pageEvent = this.eventRepository.findAll(pageable);
         return pageEvent.map(this.eventMapper::entityToBasicResponse);
     }
+
 
     //Добавить в критерий поиск ближайшей даты
     @GetMapping("/events")

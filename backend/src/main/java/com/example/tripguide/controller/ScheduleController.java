@@ -1,6 +1,5 @@
 package com.example.tripguide.controller;
 
-
 import com.example.tripguide.controller.mapper.ScheduleMapper;
 import com.example.tripguide.model.Event;
 import com.example.tripguide.model.Schedule;
@@ -48,8 +47,8 @@ public class ScheduleController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/event")
-    public ResponseEntity<ScheduleBasicRequest> createEvent(@RequestBody ScheduleBasicRequest scheduleBasicRequest)
+    @PostMapping("/schedule")
+    public ResponseEntity<ScheduleBasicResponse> createSchedule(@RequestBody ScheduleBasicRequest scheduleBasicRequest)
             throws URISyntaxException {
 
         Schedule schedule = this.scheduleMapper.basicRequestToEntity(scheduleBasicRequest);
@@ -60,4 +59,6 @@ public class ScheduleController {
         return ResponseEntity.created(new URI("/api/schedule/" + result.getId()))
                 .body(response);
     }
+
+
 }
