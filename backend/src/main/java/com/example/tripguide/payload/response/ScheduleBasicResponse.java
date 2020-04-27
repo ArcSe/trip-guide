@@ -1,15 +1,18 @@
 package com.example.tripguide.payload.response;
 
-import lombok.Data;
+import com.example.tripguide.model.Event;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 public class ScheduleBasicResponse {
     private Long id;
-    private Long eventId;
+    private Event event;
     private Integer price;
     private LocalDateTime dateTime;
 }

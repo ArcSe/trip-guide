@@ -417,12 +417,7 @@ class Content extends Component {
 
                                 <div className="btn-group" >
                                     <button type="button" className="mr-1 btn btn-outline-dark"
-                                            onClick={() => this.handleScheduleButton(event.id, event.name)}>
-                                        {(this.props.show) && <Schedule
-                                            show={this.props.show}
-                                            toggleScheduleDialog={this.props.toggleScheduleDialog}
-                                            eventId={this.props.eventId}
-                                            eventName ={this.props.eventName} />} Расписание
+                                            onClick={() => this.handleScheduleButton(event.id, event.name)}>Расписание
                                     </button>
                                     <button type="button" className="mr-1 btn btn-outline-success"
                                             onClick={() => this.handleEditButton(event.id)}>Изменить</button>
@@ -587,6 +582,12 @@ export class Events extends React.Component {
                                  setDataState={this.setDataState}
                                  eventData={this.state.eventData}
                 />
+                <Schedule
+                    show={this.state.showScheduleModal}
+                    toggleDialog={this.toggleScheduleModal}
+                    eventId={this.state.eventId}
+                    eventName ={this.state.eventName}
+                />
 
                 <div className="btn-toolbar justify-content-between" role="toolbar"
                      aria-label="Toolbar with button groups">
@@ -598,11 +599,11 @@ export class Events extends React.Component {
                 </div>
 
                 <Content toggleDialog={this.toggleEditModal}
+                         toggleScheduleDialog={this.toggleScheduleModal}
                          setEventsState={this.setNewState}
                          getEvents={this.getEvents}
                          events={this.state.events}
                          show={this.state.showScheduleModal}
-                         toggleScheduleDialog={this.toggleScheduleModal}
                          eventId={this.state.editEventId}
                          eventName={this.state.editEventName}
                 />

@@ -29,5 +29,5 @@ public class EventDateRepositoryImpl implements EventDateRepository {
         criteriaQuery.orderBy(criteriaBuilder.asc(schedules.get("dateTime")));
         return entityManager.createQuery(criteriaQuery).getResultList();
     }
-    
+
 }
