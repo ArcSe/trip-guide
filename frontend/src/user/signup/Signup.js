@@ -76,10 +76,14 @@ class SignupForm extends Component {
 
         UserAPI.signup(signUpRequest)
         .then(response => {
-            Alert.success("Вы успешно зарегестрированы. Пожалуйста, войдите, чтобы продолжить!");
+            Alert.success("Вы успешно зарегистрированы. Пожалуйста, войдите, чтобы продолжить!");
             this.props.history.push("/login");
         }).catch(error => {
-            Alert.error((error && error.message) || "Упс! Что-то пошло не так. Пожалуйста, попробуйте снова!");
+            if ('errors' in error) {
+                error.errors.map(obj => Alert.error(obj.defaultMessage));
+            } else {
+                Alert.error((error && error.message) || "Упс! Что-то пошло не так. Пожалуйста, попробуйте снова!");
+            }
         });
     }
 
