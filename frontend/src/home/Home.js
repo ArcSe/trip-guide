@@ -298,6 +298,10 @@ class Pagination extends Component  {
     }
 
     render() {
+        if (this.props.totalPages <= 1) {
+            return null;
+        }
+
         return(
             <nav aria-label="Page navigation example">
                 <ul className="pagination justify-content-center">
@@ -444,7 +448,7 @@ class Content extends Component {
 
 
                             <div className="mb-0 text-muted">
-                                Рейтинг: {event.rating} ({event.votes})
+                                Рейтинг: {+(Math.round(event.rating + "e+2")  + "e-2")} ({event.votes})
                             </div>
                             <div className="text-muted">{event.address}, ближайшая дата</div>
                             <p className="card-text mb-auto">

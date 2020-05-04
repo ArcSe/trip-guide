@@ -235,7 +235,7 @@ class Pagination extends Component  {
             this.props.setCitiesState("activePage", activePage - 1);
         }
 
-        this.props.getCities();
+        setTimeout(this.props.getCities, 100);
     }
 
     handleNextButton() {
@@ -246,19 +246,25 @@ class Pagination extends Component  {
             this.props.setCitiesState("activePage", activePage + 1);
         }
 
-        this.props.getCities();
+        setTimeout(this.props.getCities, 100);
     }
 
     render() {
+        if (this.props.totalPages <= 1) {
+            return null;
+        }
+
         return(
             <nav aria-label="Page navigation example">
                 <ul className="pagination justify-content-center">
                     <li className="page-item disabled">
                         <button type="button" className="btn btn-light"
+                                disabled={this.props.activePage === 0}
                                 onClick={this.handleBackButton}>Предыдущая</button>
                     </li>
                     <li className="page-item">
                         <button type="button" className="btn btn-light"
+                                disabled={this.props.activePage === this.props.totalPages - 1}
                                 onClick={this.handleNextButton}>Следующая</button>
                     </li>
                 </ul>

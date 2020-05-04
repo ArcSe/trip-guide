@@ -462,6 +462,10 @@ class Pagination extends Component  {
     }
 
     render() {
+        if (this.props.totalPaged <= 1) {
+            return null;
+        }
+
         return(
             <nav aria-label="Page navigation example">
                 <ul className="pagination justify-content-center">
