@@ -42,6 +42,7 @@ class App extends Component {
             authenticated: true,
             loading: false
           });
+          console.log(response);
         }).catch(error => {
       this.setState({
         loading: false
@@ -82,10 +83,15 @@ class App extends Component {
               <Route path="/signup"
                      render={(props) => <Signup authenticated={this.state.authenticated} {...props} />} />
               <Route path="/oauth2/redirect" component={OAuth2RedirectHandler} />
-              <PrivateRoute path="/profile" authenticated={this.state.authenticated} currentUser={this.state.currentUser}
-                            component={Profile} />
-              <PrivateRoute path="/admin" authenticated={this.state.authenticated} currentUser={this.state.currentUser}
-                            component={Admin} />
+
+              {this.state.authenticated && (this.state.currentUser.role === "Admin") ?
+                  (<PrivateRoute path="/profile" authenticated={this.state.authenticated} currentUser={this.state.currentUser}
+                component={Admin} />
+                ) : (
+                    <PrivateRoute path="/profile" authenticated={this.state.authenticated} currentUser={this.state.currentUser}
+                                                                   component={Profile} />)
+              }
+
               <Route component={NotFound} />
             </Switch>
           </div>

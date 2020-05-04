@@ -35,6 +35,8 @@ public class User {
     @Column(nullable = false)
     private Boolean emailVerified = false;
 
+    private String role = "User";
+
     private String imageUrl;
 
     @JsonIgnore

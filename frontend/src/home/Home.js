@@ -193,7 +193,7 @@ class FilterCheckBox extends Component {
         return (
             <form className="form-inline">
                 {
-                    this.props.currentUser &&
+                    false &&
                     <div className="form-check ml-2">
                         <input type="checkbox" className="form-check-input"
                                id="notVisitedCheck"

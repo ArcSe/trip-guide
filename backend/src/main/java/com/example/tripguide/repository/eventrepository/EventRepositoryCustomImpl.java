@@ -45,7 +45,6 @@ public class EventRepositoryCustomImpl implements EventRepositoryCustom {
         return new PageImpl<>(resultList, pageable, total);
     }
 
-
     private void addRatingRestriction(CriteriaBuilder cb, Root<Event> eventRoot,
                                       List<Predicate> predicates, Float rating) {
         if (rating != null) {
