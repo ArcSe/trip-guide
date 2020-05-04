@@ -53,13 +53,13 @@ class Login extends Component {
 class SocialLogin extends Component {
     render() {
         return (
-            <div className="social-login">
+            <div className="social-login d-inline-flex">
                 <a className="btn btn-block social-btn google" href={GOOGLE_AUTH_URL}>
-                    <img src={googleLogo} alt="Google" /> Войти с Google</a>
+                    <img src={googleLogo} alt="Google" /></a>
                 <a className="btn btn-block social-btn facebook" href={FACEBOOK_AUTH_URL}>
-                    <img src={fbLogo} alt="Facebook" /> Войти с Facebook</a>
+                    <img src={fbLogo} alt="Facebook" /></a>
                 <a className="btn btn-block social-btn github" href={GITHUB_AUTH_URL}>
-                    <img src={githubLogo} alt="Github" /> Войти с Github</a>
+                    <img src={githubLogo} alt="Github" /></a>
             </div>
         );
     }
