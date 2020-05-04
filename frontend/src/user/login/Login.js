@@ -99,7 +99,7 @@ class LoginForm extends Component {
             window.location.reload();
             // Костыль вместо: this.props.history.push("/");
         }).catch(error => {
-            Alert.error((error && error.message) || 'Упс! Что-то пошло не так. Пожалуйста, попробуйте снова!');
+            Alert.error('Неверные данные!');
         });
     }
     
