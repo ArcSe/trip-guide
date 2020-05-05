@@ -382,6 +382,7 @@ class Content extends Component {
 
     handleScheduleButton(eventId, eventName){
        this.props.toggleScheduleDialog();
+       alert(eventName);
         this.props.setEventsState("editEventId", eventId);
         this.props.setEventsState("editEventName", eventName);
     }
@@ -578,6 +579,12 @@ export class Events extends React.Component {
                                    setDataState={this.setDataState}
                                    eventData={this.state.eventData}
                 />
+                <Schedule
+                    show={this.state.showScheduleModal}
+                    toggleDialog={this.toggleScheduleModal}
+                    eventId={this.state.editEventId}
+                    eventName ={this.state.editEventName}
+                />
 
                 <EditModalDialog show={this.state.showEditModal}
                                  toggleDialog={this.toggleEditModal}
@@ -586,12 +593,7 @@ export class Events extends React.Component {
                                  setDataState={this.setDataState}
                                  eventData={this.state.eventData}
                 />
-                <Schedule
-                    show={this.state.showScheduleModal}
-                    toggleDialog={this.toggleScheduleModal}
-                    eventId={this.state.eventId}
-                    eventName ={this.state.eventName}
-                />
+
 
                 <div className="btn-toolbar justify-content-between" role="toolbar"
                      aria-label="Toolbar with button groups">

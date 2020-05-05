@@ -4,13 +4,15 @@ import com.example.tripguide.model.Schedule;
 import com.example.tripguide.payload.request.ScheduleBasicRequest;
 import com.example.tripguide.payload.response.ScheduleBasicResponse;
 
+import java.time.LocalDateTime;
+
 public class ScheduleMapper {
 
     public Schedule basicRequestToEntity(ScheduleBasicRequest scheduleBasicRequest){
         Schedule schedule = new Schedule();
         schedule.setId(scheduleBasicRequest.getId());
         schedule.setPrice(scheduleBasicRequest.getPrice());
-        schedule.setDateTime(scheduleBasicRequest.getDateTime());
+        schedule.setDateTime(LocalDateTime.now());
 
         return schedule;
     }

@@ -3,6 +3,7 @@ import EventAPI from "../util/EventAPI";
 import Alert from "react-s-alert";
 import Modal from "react-bootstrap/Modal";
 import {Button} from "react-bootstrap";
+import ScheduleAPI from "../util/ScheduleAPI";
 
 
 class CreateModalDialog extends Component {
@@ -16,6 +17,23 @@ class CreateModalDialog extends Component {
             }
         };
 
+        this.handleCreateButton = this.handleCreateButton.bind(this);
+
+    }
+
+
+    handleCreateButton() {
+        alert(this.props.eventId);
+        const scheduleRequest = {eventId: this.props.eventId,
+                                price: this.state.createData.price};
+
+        ScheduleAPI.createSchedule(scheduleRequest)
+            .then(response => {
+                Alert.success("Расписание успешно добавлено!");
+
+            }).catch(error => {
+            Alert.error((error && error.message) || "Упс! Что-то пошло не так. Пожалуйста, попробуйте снова!");
+        });
     }
 
     render() {
@@ -41,7 +59,7 @@ class CreateModalDialog extends Component {
                     <Button variant="secondary">
                         Закрыть
                     </Button>
-                    <Button variant="primary"  >
+                    <Button variant="primary" onClick={this.handleCreateButton} >
                         Добавить
                     </Button>
                 </Modal.Footer>
@@ -59,8 +77,8 @@ export class Schedule extends Component{
             createModal: false,
             createModalSchedule: false,
             schedule: {
-                idEvent: this.props.eventId,
-                nameEvent: this.props.eventName,
+                eventId: this.props.eventId,
+                eventName: this.props.eventName,
                 price: null,
                 date: null,
             }
@@ -102,12 +120,13 @@ export class Schedule extends Component{
                 <CreateModalDialog
                     toggleDialog={this.toggleCreateModal}
                     show = {this.state.createModalSchedule}
+                    eventId = {this.props.eventId}
                 />
 
                 <Modal size="xl" show={this.props.show} onHide={this.props.toggleDialog}
                        aria-labelledby="example-custom-modal-styling-title">
                     <Modal.Header closeButton>
-                        <Modal.Title id="example-modal-sizes-title-xl">Расписание {this.state.schedule.nameEvent}</Modal.Title>
+                        <Modal.Title id="example-modal-sizes-title-xl">Расписание {this.props.eventName}</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <div>

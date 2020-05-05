@@ -30,4 +30,20 @@ public class EventDateRepositoryImpl implements EventDateRepository {
         return entityManager.createQuery(criteriaQuery).getResultList();
     }
 
+    public LocalDateTime findClosestDate(Long eventId) {
+        CriteriaBuilder criteriaBuilder = this.entityManager.getCriteriaBuilder();
+        CriteriaQuery<Schedule> criteriaQuery = criteriaBuilder.createQuery(Schedule.class);
+
+        Root<Schedule> schedules = criteriaQuery.from(Schedule.class);
+        List<Predicate> predicates = new ArrayList<>();
+
+        Join<Schedule, Event> events = schedules.join("events", JoinType.INNER);
+        predicates.add(criteriaBuilder.equal(schedules.get("event").get("id"), eventId));
+        predicates.add(criteriaBuilder.greaterThanOrEqualTo(schedules.get("dateTime"), LocalDateTime.now()));
+        criteriaQuery.where(predicates.toArray(new Predicate[0]));
+        criteriaQuery.orderBy(criteriaBuilder.asc(schedules.get("dateTime")));
+        List<Schedule> result = entityManager.createQuery(criteriaQuery).getResultList();
+        return result.get(0).getDateTime();
+    }
+
 }
