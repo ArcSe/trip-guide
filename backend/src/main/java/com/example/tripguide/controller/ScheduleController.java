@@ -6,6 +6,7 @@ import com.example.tripguide.model.Schedule;
 import com.example.tripguide.payload.request.ScheduleBasicRequest;
 import com.example.tripguide.payload.response.ScheduleBasicResponse;
 import com.example.tripguide.repository.ScheduleRepository;
+import com.example.tripguide.repository.eventrepository.EventDateRepository;
 import com.example.tripguide.repository.eventrepository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @RestController
@@ -24,6 +26,7 @@ public class ScheduleController {
     private ScheduleRepository scheduleRepository;
     private EventRepository eventRepository;
     private ScheduleMapper scheduleMapper;
+    private EventDateRepository eventDateRepository;
 
     @Autowired
 
@@ -31,6 +34,13 @@ public class ScheduleController {
         this.scheduleRepository = scheduleRepository;
         this.eventRepository = eventRepository;
         this.scheduleMapper = new ScheduleMapper();
+    }
+
+    @GetMapping("/schedule/nearestDate/{id}")
+    public LocalDateTime getNearestDate(@PathVariable Long id) {
+        Event event = this.eventRepository.getOne(id);
+        LocalDateTime nearestDate = this.scheduleRepository.findClosestDate(id);
+        return nearestDate;
     }
 
     @GetMapping("/schedule/event/{id}")

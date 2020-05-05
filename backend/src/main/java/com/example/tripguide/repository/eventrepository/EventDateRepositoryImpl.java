@@ -37,7 +37,7 @@ public class EventDateRepositoryImpl implements EventDateRepository {
         Root<Schedule> schedules = criteriaQuery.from(Schedule.class);
         List<Predicate> predicates = new ArrayList<>();
 
-        Join<Schedule, Event> events = schedules.join("events", JoinType.INNER);
+        Join<Schedule, Event> events = schedules.join("event", JoinType.INNER);
         predicates.add(criteriaBuilder.equal(schedules.get("event").get("id"), eventId));
         predicates.add(criteriaBuilder.greaterThanOrEqualTo(schedules.get("dateTime"), LocalDateTime.now()));
         criteriaQuery.where(predicates.toArray(new Predicate[0]));

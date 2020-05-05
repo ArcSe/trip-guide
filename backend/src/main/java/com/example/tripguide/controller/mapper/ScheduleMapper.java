@@ -12,7 +12,7 @@ public class ScheduleMapper {
         Schedule schedule = new Schedule();
         schedule.setId(scheduleBasicRequest.getId());
         schedule.setPrice(scheduleBasicRequest.getPrice());
-        schedule.setDateTime(LocalDateTime.now());
+        schedule.setDateTime(scheduleBasicRequest.getDateTime());
 
         return schedule;
     }

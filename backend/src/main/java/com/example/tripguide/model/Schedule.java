@@ -27,6 +27,7 @@ public class Schedule {
     private Event event;
 
     private Integer price;
-
+    
+    @Column(nullable = false)
     private LocalDateTime dateTime;
 }
