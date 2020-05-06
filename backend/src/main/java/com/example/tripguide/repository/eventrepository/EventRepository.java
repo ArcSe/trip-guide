@@ -1,6 +1,5 @@
 package com.example.tripguide.repository.eventrepository;
 
-import com.example.tripguide.model.City;
 import com.example.tripguide.model.Event;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

@@ -4,6 +4,7 @@ import Alert from "react-s-alert";
 import Modal from "react-bootstrap/Modal";
 import {Button} from "react-bootstrap";
 import ScheduleAPI from "../util/ScheduleAPI";
+import DatePicker from "react-datepicker";
 
 
 class CreateModalDialog extends Component {
@@ -52,6 +53,7 @@ class CreateModalDialog extends Component {
                                        this.setState({createData})} }
                                    placeholder="Введите стоимость"/>
                             <label htmlFor="exampleInputEmail1">Выберете дату</label>
+
                         </div>
                     </form>
                 </Modal.Body>
@@ -116,43 +118,32 @@ export class Schedule extends Component{
 
     render() {
         return(
-            <div className="container">
+            <div>
                 <CreateModalDialog
                     toggleDialog={this.toggleCreateModal}
                     show = {this.state.createModalSchedule}
                     eventId = {this.props.eventId}
                 />
-
-                <Modal size="xl" show={this.props.show} onHide={this.props.toggleDialog}
-                       aria-labelledby="example-custom-modal-styling-title">
-                    <Modal.Header closeButton>
-                        <Modal.Title id="example-modal-sizes-title-xl">Расписание {this.props.eventName}</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <div>
-                            <button type="button" className="mb-2 btn btn-outline-dark"
-                                    onClick={this.toggleCreateModal}>Добавить</button>
-                        </div>
-                        <div className="list-group">
-                            <div>
-                                <li className="mb-1 list-group-item d-flex justify-content-between">
-                                    <p className="mt-2 flex-grow-1">event</p>
-                                    <div className="btn-group" >
-                                        <button type="button" className="mr-1 btn btn-outline-success"
-                                        >Изменить</button>
-                                        <button type="button" className="mr-1 btn btn-outline-danger"
-                                        >Удалить</button>
-                                    </div>
-                                </li>
+                <div className="btn-group" >
+                    <button type="button" className="mb-1 btn btn-outline-dark"
+                            onClick={this.toggleCreateModal}>Добавить</button>
+                    <button type="button" className="mb-1 btn btn-outline-dark"
+                            onClick={this.props.toggleDialog}>Назад</button>
+                </div>
+                <div className="list-group">
+                    <div>
+                        <li className="mb-1 list-group-item d-flex justify-content-between">
+                            <p className="mt-2 flex-grow-1">event</p>
+                            <div className="btn-group" >
+                                <button type="button" className="mr-1 btn btn-outline-success"
+                                >Изменить</button>
+                                <button type="button" className="mr-1 btn btn-outline-danger"
+                                >Удалить</button>
                             </div>
-                        </div>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button variant="secondary" onClick={this.props.toggleDialog}>
-                            Закрыть
-                        </Button>
-                    </Modal.Footer>
-                </Modal>
+                        </li>
+                    </div>
+                </div>
+
             </div>
 
         )

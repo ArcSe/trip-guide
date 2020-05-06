@@ -8,7 +8,6 @@ import EventAPI from "../util/EventAPI";
 import CategoryAPI from "../util/CategoryAPI";
 import CityAPI from "../util/CityAPI";
 import {Schedule} from "../admin/Schedule"
-import {Users} from "./Users";
 
 
 
@@ -304,7 +303,7 @@ class SearchComponent extends Component {
 
     handleSearchChange(event) {
         event.preventDefault();
-        this.props.setEventState("search", event.target.value);
+        this.props.setEventsState("search", event.target.value);
     }
 
     handleClearClick() {
@@ -382,7 +381,6 @@ class Content extends Component {
 
     handleScheduleButton(eventId, eventName){
        this.props.toggleScheduleDialog();
-       alert(eventName);
         this.props.setEventsState("editEventId", eventId);
         this.props.setEventsState("editEventName", eventName);
     }
@@ -405,29 +403,39 @@ class Content extends Component {
 
     render() {
         return(
-            <div className="list-group">
-                {
-                    this.props.events.map( event =>
-                        <div>
-                            <li className="mb-1 list-group-item d-flex justify-content-between">
-                                <p className="mt-2 flex-grow-1">{event.name}</p>
-                                <p className="mt-2 flex-grow-1">{event.address}</p>
-                                <p className="mt-2 flex-grow-1">{event.rating}</p>
-                                <p className="mt-2 flex-grow-1">{event.city.name}</p>
-                                <p className="mt-2 flex-grow-1">{event.category.name}</p>
+            <div>
+                <div className="btn-toolbar justify-content-between" role="toolbar"
+                     aria-label="Toolbar with button groups">
+                    <CreateButton toggleDialog={this.props.toggleCreateModal}/>
+                    <SearchComponent search={this.props.search}
+                                     getEvents={this.props.getEvents}
+                                     getEventsByName={this.props.getEventsByName}
+                                     setEventsState={this.props.setNewState}/>
+                </div>
+                <div className="list-group">
+                    {
+                        this.props.events.map( event =>
+                            <div>
+                                <li className="mb-1 list-group-item d-flex justify-content-between">
+                                    <p className="mt-2 flex-grow-1">{event.name}</p>
+                                    <p className="mt-2 flex-grow-1">{event.address}</p>
+                                    <p className="mt-2 flex-grow-1">{event.rating}</p>
+                                    <p className="mt-2 flex-grow-1">{event.city.name}</p>
+                                    <p className="mt-2 flex-grow-1">{event.category.name}</p>
 
-                                <div className="btn-group" >
-                                    <button type="button" className="mr-1 btn btn-outline-dark"
-                                            onClick={() => this.handleScheduleButton(event.id, event.name)}>Расписание
-                                    </button>
-                                    <button type="button" className="mr-1 btn btn-outline-success"
-                                            onClick={() => this.handleEditButton(event.id)}>Изменить</button>
-                                    <button type="button" className="mr-1 btn btn-outline-danger"
-                                            onClick={() => this.handleDeleteButton(event.id)}>Удалить</button>
-                                </div>
-                            </li>
-                        </div>)
-                }
+                                    <div className="btn-group" >
+                                        <button type="button" className="mr-1 btn btn-outline-dark"
+                                                onClick={() => this.handleScheduleButton(event.id, event.name)}>Расписание
+                                        </button>
+                                        <button type="button" className="mr-1 btn btn-outline-success"
+                                                onClick={() => this.handleEditButton(event.id)}>Изменить</button>
+                                        <button type="button" className="mr-1 btn btn-outline-danger"
+                                                onClick={() => this.handleDeleteButton(event.id)}>Удалить</button>
+                                    </div>
+                                </li>
+                            </div>)
+                    }
+                </div>
             </div>
         )
     }
@@ -579,12 +587,6 @@ export class Events extends React.Component {
                                    setDataState={this.setDataState}
                                    eventData={this.state.eventData}
                 />
-                <Schedule
-                    show={this.state.showScheduleModal}
-                    toggleDialog={this.toggleScheduleModal}
-                    eventId={this.state.editEventId}
-                    eventName ={this.state.editEventName}
-                />
 
                 <EditModalDialog show={this.state.showEditModal}
                                  toggleDialog={this.toggleEditModal}
@@ -595,24 +597,28 @@ export class Events extends React.Component {
                 />
 
 
-                <div className="btn-toolbar justify-content-between" role="toolbar"
-                     aria-label="Toolbar with button groups">
-                    <CreateButton toggleDialog={this.toggleCreateModal}/>
-                    <SearchComponent search={this.state.search}
-                                     getEvents={this.getEvents}
-                                     getEventsByName={this.getEventsByName}
-                                     setEventsState={this.setNewState}/>
-                </div>
-
-                <Content toggleDialog={this.toggleEditModal}
-                         toggleScheduleDialog={this.toggleScheduleModal}
-                         setEventsState={this.setNewState}
-                         getEvents={this.getEvents}
-                         events={this.state.events}
-                         show={this.state.showScheduleModal}
-                         eventId={this.state.editEventId}
-                         eventName={this.state.editEventName}
-                />
+                {this.state.showScheduleModal ?
+                    (<Schedule
+                    show={this.state.showScheduleModal}
+                    toggleDialog={this.toggleScheduleModal}
+                    eventId={this.state.editEventId}
+                    eventName ={this.state.editEventName}
+                    />)
+                    :
+                    (<Content toggleDialog={this.toggleEditModal}
+                              toggleCreateModal={this.toggleCreateModal}
+                              search={this.state.search}
+                              getEventsByName={this.getEventsByName}
+                              setNewState={this.setNewState}
+                             toggleScheduleDialog={this.toggleScheduleModal}
+                             setEventsState={this.setNewState}
+                             getEvents={this.getEvents}
+                             events={this.state.events}
+                             show={this.state.showScheduleModal}
+                             eventId={this.state.editEventId}
+                             eventName={this.state.editEventName}
+                    />)
+                }
 
                 <Pagination totalPages={this.state.totalPages}
                             activePage={this.state.activePage}

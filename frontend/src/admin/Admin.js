@@ -3,7 +3,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '../admin/Admin.css'
 import {Cities} from './Cities'
 import {Categories} from './Categories'
-import {Users} from './Users'
 import {Events} from './Events'
 import userLogo from "../img/user.jpg";
 
@@ -42,8 +41,6 @@ class Tabs extends Component {
                 <div className="btn-toolbar justify-content-between" role="toolbar"
                      aria-label="Toolbar with button groups">
                     <div className="btn-group" role="group" aria-label="First group">
-                        <button type="button" className="ml-3 btn btn-outline-dark"
-                                onClick={() => this.props.handleClick("users")}>Пользователи</button>
                         <button type="button" className="ml-2 btn btn-outline-dark"
                                 onClick={() => this.props.handleClick("events")}>События</button>
                         <button type="button" className="ml-2 btn btn-outline-dark"
@@ -68,7 +65,6 @@ class Content extends Component {
             <div className="profile-button">
                 <div className="row">
                     <div className="container">
-                        {(this.props.tab === "users") && <Users />}
                         {(this.props.tab === "events") && <Events />}
                         {(this.props.tab === "categories") && <Categories />}
                         {(this.props.tab === "cities") && <Cities />}

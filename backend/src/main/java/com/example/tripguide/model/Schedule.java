@@ -2,8 +2,6 @@ package com.example.tripguide.model;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -27,7 +25,7 @@ public class Schedule {
     private Event event;
 
     private Integer price;
-    
+
     @Column(nullable = false)
     private LocalDateTime dateTime;
 }
