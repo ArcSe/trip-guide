@@ -279,21 +279,23 @@ class Pagination extends Component  {
     }
 
     handleBackButton() {
+        console.log(`${this.props.page}`);
         const page = this.props.page;
 
         if (page !== 0) {
             this.props.setPageState("page", page - 1);
-            this.props.getEvents();
+            setTimeout(this.props.getEvents, 100);
         }
     }
 
     handleNextButton() {
+        console.log(`${this.props.page}`);
         const page = this.props.page;
         const totalPages = this.props.totalPages;
 
         if (page !== totalPages - 1) {
             this.props.setPageState("page", page + 1);
-            this.props.getEvents();
+            setTimeout(this.props.getEvents, 100);
         }
     }
 
@@ -307,10 +309,12 @@ class Pagination extends Component  {
                 <ul className="pagination justify-content-center">
                     <li className="page-item disabled">
                         <button type="button" className="btn btn-light"
+                                disabled={this.props.page === 0}
                                 onClick={this.handleBackButton}>Предыдущая</button>
                     </li>
                     <li className="page-item">
                         <button type="button" className="btn btn-light"
+                                disabled={this.props.page === this.props.totalPages - 1}
                                 onClick={this.handleNextButton}>Следующая</button>
                     </li>
                 </ul>
@@ -363,6 +367,8 @@ class Content extends Component {
 
         EventAPI.getEvents(eventsRequest)
             .then(response => {
+                console.log(response);
+                this.props.setPageState("page", response.number);
                 this.props.setPageState("totalPages", response.totalPages);
                 this.setState({events: response.content});
             }).catch(error => console.log(error));
@@ -467,7 +473,7 @@ class Content extends Component {
                             </div>
                             }
 
-                            <a href="#" className="card-link">Перейти</a>
+                            <a href={`/event/${event.id}`} className="card-link">Перейти</a>
                         </div>
                     </div>
                 )
@@ -501,8 +507,8 @@ export default class Home extends Component {
                 loadingCity: true,
             },
             pageable: {
-                page: 1,
-                size: 2,
+                page: 0,
+                size: 1,
                 totalPages: null,
             },
         };

@@ -7,6 +7,7 @@ import Signup from '../user/signup/Signup';
 import Profile from '../user/profile/Profile';
 import Admin from '../admin/Admin';
 import OAuth2RedirectHandler from '../user/oauth2/OAuth2RedirectHandler';
+import Event from '../event/Event';
 import NotFound from '../common/NotFound';
 import LoadingIndicator from '../common/LoadingIndicator';
 import UserAPI from "../util/UserAPI";
@@ -91,6 +92,10 @@ class App extends Component {
                     <PrivateRoute path="/profile" authenticated={this.state.authenticated} currentUser={this.state.currentUser}
                                                                    component={Profile} />)
               }
+
+              <Route path="/event"
+                     render={() => <Event />} />
+
 
               <Route component={NotFound} />
             </Switch>

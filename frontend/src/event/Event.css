@@ -1,0 +1,139 @@
+.buy-content {
+    display: flex;
+    position: absolute;
+    bottom:0;
+}
+
+.event-description-header {
+    font-size: 28px;
+    margin: 5px 0;
+    font-weight: bold;
+}
+
+.event-schedule {
+    padding-top: 80px;
+}
+
+.event-schedule-item-date-col {
+    flex-grow: 0;
+    min-width: 80px;
+    padding: 20px 0;
+}
+
+.event-schedule-item-date {
+    text-align: center;
+}
+
+.schedule-date_date {
+    font-size: 40px;
+    line-height: 30px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.schedule-date_month {
+    font-size: 14px;
+    line-height: 24px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.event-schedule-item-time-col {
+    flex-grow: 2;
+    min-width: 150px;
+}
+
+.event-schedule-session {
+    padding: 0 30px 0 30px;
+    font-size: 16px;
+}
+
+.event-schedule-item-info-col {
+    flex-grow: 4;
+    width: 500px;
+}
+
+.event-schedule-session-place {
+    min-width: 450px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.event-address {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+
+.price {
+    white-space: nowrap;
+    width: 100%;
+    text-align: center;
+    font-size: 12px;
+    font-weight: normal;
+    color: #a2a2a2;
+    bottom: 0;
+    transition: 0.4s all ease;
+}
+
+
+.event-schedule-header-line-title {
+    display: inline-block;
+    margin: 0;
+    vertical-align: middle;
+    font-size: 28px;
+    font-weight: bold;
+    line-height: 26px;
+}
+
+.event-schedule-item {
+    position: relative;
+    width: 100%;
+    border-top: 1px solid #e3e3e3;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+
+.event-schedule-header-line {
+    margin-bottom: 10px;
+}
+
+.left {
+    height: 160px;
+    width: 320px;
+    min-width: 320px;
+    background-size: contain;
+    background-position: center;
+    position: relative;
+    margin-right: 30px;
+    overflow: hidden;
+}
+
+.genres-tag {
+    display: inline-block;
+    margin: 0 50px 0 0;
+    max-width: 92%;
+    vertical-align: top;
+    height: 20px;
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.event-nav {
+    margin-bottom: 5px;
+}
+
+.event-header {
+    display: flex;
+    position: relative;
+    width: 100%;
+    padding: 0;
+    flex-direction: row;
+    justify-content: flex-start;
+}

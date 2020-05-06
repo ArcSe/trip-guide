@@ -42,6 +42,7 @@ public class EventRepositoryCustomImpl implements EventRepositoryCustom {
         criteriaQuery.where(predicates.toArray(new Predicate[0]));
         List<Event> resultList = entityManager.createQuery(criteriaQuery).getResultList();
         int total = resultList.size();
+        // System.out.println(pageable);
         return new PageImpl<>(resultList, pageable, total);
     }
 
