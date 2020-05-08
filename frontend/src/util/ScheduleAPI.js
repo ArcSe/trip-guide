@@ -20,9 +20,18 @@ class ScheduleAPI  {
         this.checkAccessToken();
 
         return APIUtils.request({
-            url: `${API_BASE_URL}/api/schedule`,
+            url: `${API_BASE_URL}/api/schedules`,
             method: 'POST',
             body: JSON.stringify(scheduleRequest)
+        });
+    }
+
+    deleteSchedule(scheduleId) {
+        this.checkAccessToken();
+
+        return APIUtils.request2({
+            url: `${API_BASE_URL}/api/schedules/${scheduleId}`,
+            method: 'DELETE'
         });
     }
 

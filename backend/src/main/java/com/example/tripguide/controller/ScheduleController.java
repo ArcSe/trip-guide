@@ -1,6 +1,7 @@
 package com.example.tripguide.controller;
 
 import com.example.tripguide.controller.mapper.ScheduleMapper;
+import com.example.tripguide.exception.BadRequestException;
 import com.example.tripguide.model.Event;
 import com.example.tripguide.model.Schedule;
 import com.example.tripguide.payload.request.ScheduleBasicRequest;
@@ -57,7 +58,7 @@ public class ScheduleController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/schedule")
+    @PostMapping("/schedules")
     public ResponseEntity<ScheduleBasicResponse> createSchedule(@RequestBody ScheduleBasicRequest scheduleBasicRequest)
             throws URISyntaxException {
 
@@ -70,5 +71,13 @@ public class ScheduleController {
                 .body(response);
     }
 
+    @DeleteMapping("/schedules/{id}")
+    public ResponseEntity<?> deleteEvent(@PathVariable Long id) {
+        if (this.scheduleRepository.findById(id).isEmpty()) {
+            throw new BadRequestException("Такого события не существует!");
+        }
+        this.scheduleRepository.deleteById(id);
+        return ResponseEntity.ok().build();
+    }
 
 }

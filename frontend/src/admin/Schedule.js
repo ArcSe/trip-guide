@@ -12,11 +12,7 @@ class CreateModalDialog extends Component {
         super(props);
         this.state = {
             startDate: new Date(),
-            createData: {
-                idEvent: null,
-                price: null,
-                date: null,
-            }
+            price: null,
         };
 
         this.handleCreateButton = this.handleCreateButton.bind(this);
@@ -32,14 +28,15 @@ class CreateModalDialog extends Component {
 
 
     handleCreateButton() {
-        alert(this.props.eventId);
         const scheduleRequest = {eventId: this.props.eventId,
-                                price: this.state.createData.price};
+            price: this.state.price,
+            dateTime: this.state.startDate};
 
         ScheduleAPI.createSchedule(scheduleRequest)
-            .then(response => {
+            .then(() => {
                 Alert.success("Расписание успешно добавлено!");
-
+                this.props.toggleDialog();
+                this.props.getSchedule();
             }).catch(error => {
             Alert.error((error && error.message) || "Упс! Что-то пошло не так. Пожалуйста, попробуйте снова!");
         });
@@ -56,9 +53,9 @@ class CreateModalDialog extends Component {
                         <div className="form-group">
                             <label htmlFor="exampleInputEmail1">Введите стоимость</label>
                             <input type="text" className="form-control" id="textInput"
-                                   onChange={e =>{let {createData} = this.state;
-                                       createData.price = e.target.value;
-                                       this.setState({createData})} }
+                                   onChange={e =>{let {price} = this.state;
+                                       price = e.target.value;
+                                       this.setState({price})} }
                                    placeholder="Введите стоимость"/>
                             <label htmlFor="exampleInputEmail1">Выберете дату</label>
                             <div></div>
@@ -109,11 +106,11 @@ class Content extends Component {
         this.props.setEventsState("editEventId", eventId);
     }
 
-    handleDeleteButton(eventId) {
-        EventAPI.deleteEvent(eventId)
+    handleDeleteButton(scheduleId) {
+        ScheduleAPI.deleteSchedule(scheduleId)
             .then(() => {
                 Alert.success("Событие успешно удалено!");
-                this.props.getEvents();
+                this.props.getSchedule();
             }).catch(error => {
             Alert.error((error && error.message) || "Упс! Что-то пошло не так. Пожалуйста, попробуйте снова!");
         });
@@ -142,7 +139,7 @@ class Content extends Component {
                                         >Изменить
                                         </button>
                                         <button type="button" className="mr-1 btn btn-outline-danger"
-                                        >Удалить
+                                                onClick={() => this.handleDeleteButton(schedule.id)} >Удалить
                                         </button>
                                     </div>
                                 </li>
@@ -266,6 +263,7 @@ export class Schedule extends Component{
                     toggleDialog={this.toggleCreateModal}
                     show = {this.state.createModalSchedule}
                     eventId = {this.props.eventId}
+                    getSchedule = {this.getSchedule}
                 />
                 <Content toggleDialog = {this.props.toggleDialog}
                          toggleCreateModal={this.toggleCreateModal}
