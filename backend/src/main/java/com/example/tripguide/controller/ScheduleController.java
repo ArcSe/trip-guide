@@ -43,9 +43,9 @@ public class ScheduleController {
         return nearestDate;
     }
 
-    @GetMapping("/schedule/event/{id}")
-    public Page<ScheduleBasicResponse> getAllByEvent(@PathVariable Long id, Pageable pageable) {
-        Event event = this.eventRepository.getOne(id);
+    @GetMapping("/schedule/event/{eventId}")
+    public Page<ScheduleBasicResponse> getAllByEvent(@PathVariable Long eventId, Pageable pageable) {
+        Event event = this.eventRepository.getOne(eventId);
         Page<Schedule> pageSchedule = this.scheduleRepository.findAllByEvent(pageable, event);
         return pageSchedule.map(this.scheduleMapper::entityToBasicResponse);
     }

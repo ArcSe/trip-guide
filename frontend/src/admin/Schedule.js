@@ -11,6 +11,7 @@ class CreateModalDialog extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            startDate: new Date(),
             createData: {
                 idEvent: null,
                 price: null,
@@ -19,7 +20,14 @@ class CreateModalDialog extends Component {
         };
 
         this.handleCreateButton = this.handleCreateButton.bind(this);
+        this.setStartDate = this.setStartDate.bind(this);
 
+    }
+
+    setStartDate(date){
+        this.setState({
+            startDate: date
+        });
     }
 
 
@@ -53,7 +61,16 @@ class CreateModalDialog extends Component {
                                        this.setState({createData})} }
                                    placeholder="Введите стоимость"/>
                             <label htmlFor="exampleInputEmail1">Выберете дату</label>
-
+                            <div></div>
+                            <DatePicker
+                                selected={this.state.startDate}
+                                onChange={date => this.setStartDate(date)}
+                                showTimeSelect
+                                timeFormat="HH:mm"
+                                timeIntervals={15}
+                                timeCaption="time"
+                                dateFormat="MMMM d E, yyyy HH:mm"
+                            />
                         </div>
                     </form>
                 </Modal.Body>
@@ -70,34 +87,21 @@ class CreateModalDialog extends Component {
     }
 }
 
-
-export class Schedule extends Component{
+class Content extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            show: this.props.show,
-            createModal: false,
-            createModalSchedule: false,
-            schedule: {
-                eventId: this.props.eventId,
-                eventName: this.props.eventName,
-                price: null,
-                date: null,
-            }
-        }
+
+
         this.handleEditButton = this.handleEditButton.bind(this);
         this.handleDeleteButton = this.handleDeleteButton.bind(this);
-        this.toggleScheduleModal = this.toggleScheduleModal.bind(this);
-        this.toggleCreateModal = this.toggleCreateModal.bind(this);
+        this.handleScheduleButton = this.handleScheduleButton.bind(this);
+
     }
 
-
-    toggleCreateModal(){
-        this.setState({createModalSchedule: !this.state.createModalSchedule});
-    }
-
-    toggleScheduleModal() {
-        this.setState({show: !this.state.show});
+    handleScheduleButton(eventId, eventName) {
+        this.props.toggleScheduleDialog();
+        this.props.setEventsState("editEventId", eventId);
+        this.props.setEventsState("editEventName", eventName);
     }
 
     handleEditButton(eventId){
@@ -119,33 +123,165 @@ export class Schedule extends Component{
     render() {
         return(
             <div>
-                <CreateModalDialog
-                    toggleDialog={this.toggleCreateModal}
-                    show = {this.state.createModalSchedule}
-                    eventId = {this.props.eventId}
-                />
                 <div className="btn-group" >
                     <button type="button" className="mb-1 btn btn-outline-dark"
-                            onClick={this.toggleCreateModal}>Добавить</button>
+                            onClick={this.props.toggleCreateModal}>Добавить</button>
                     <button type="button" className="mb-1 btn btn-outline-dark"
                             onClick={this.props.toggleDialog}>Назад</button>
                 </div>
                 <div className="list-group">
-                    <div>
-                        <li className="mb-1 list-group-item d-flex justify-content-between">
-                            <p className="mt-2 flex-grow-1">event</p>
-                            <div className="btn-group" >
-                                <button type="button" className="mr-1 btn btn-outline-success"
-                                >Изменить</button>
-                                <button type="button" className="mr-1 btn btn-outline-danger"
-                                >Удалить</button>
-                            </div>
-                        </li>
-                    </div>
+                    {
+                        this.props.schedules.map(schedule =>
+                            <div>
+                                <li className="mb-1 list-group-item d-flex justify-content-between">
+                                    <p className="mt-2 flex-grow-1">{schedule.event.name}</p>
+                                    <p className="mt-2 flex-grow-1">{schedule.price}</p>
+                                    <p className="mt-2 flex-grow-1">{schedule.dateTime}</p>
+                                    <div className="btn-group">
+                                        <button type="button" className="mr-1 btn btn-outline-success"
+                                        >Изменить
+                                        </button>
+                                        <button type="button" className="mr-1 btn btn-outline-danger"
+                                        >Удалить
+                                        </button>
+                                    </div>
+                                </li>
+                            </div>)
+                    }
                 </div>
 
             </div>
 
         )
     }
+}
+class Pagination extends Component  {
+    constructor(props) {
+        super(props);
+
+        this.handleBackButton = this.handleBackButton.bind(this);
+        this.handleNextButton = this.handleNextButton.bind(this);
+    }
+
+    handleBackButton() {
+        const activePage = this.props.activePage;
+
+        if (activePage !== 0) {
+            this.props.setScheduleState("activePage", activePage - 1);
+        }
+
+        setTimeout(this.props.getSchedule, 100);
+    }
+
+    handleNextButton() {
+        const activePage = this.props.activePage;
+        const totalPages = this.props.totalPages;
+
+        if (activePage !== totalPages - 1) {
+            this.props.setScheduleState("activePage", activePage + 1);
+        }
+
+        setTimeout(this.props.getSchedule, 100);
+    }
+
+    render() {
+        if (this.props.totalPages <= 1) {
+            return null;
+        }
+
+        return(
+            <nav aria-label="Page navigation example">
+                <ul className="pagination justify-content-center">
+                    <li className="page-item disabled">
+                        <button type="button" className="btn btn-light"
+                                disabled={this.props.activePage === 0}
+                                onClick={this.handleBackButton}>Предыдущая</button>
+                    </li>
+                    <li className="page-item">
+                        <button type="button" className="btn btn-light"
+                                disabled={this.props.activePage === this.props.totalPages - 1}
+                                onClick={this.handleNextButton}>Следующая</button>
+                    </li>
+                </ul>
+            </nav>
+        )
+    }
+}
+
+export class Schedule extends Component{
+    constructor(props) {
+        super(props);
+        this.state = {
+            show: this.props.show,
+            createModal: false,
+            createModalSchedule: false,
+            eventId: this.props.eventId,
+            eventName: this.props.eventName,
+            activePage: 0,
+            totalPages: 0,
+            pageSize: 5,
+            schedules: [],
+        }
+
+        this.toggleScheduleModal = this.toggleScheduleModal.bind(this);
+        this.toggleCreateModal = this.toggleCreateModal.bind(this);
+        this.getSchedule = this.getSchedule.bind(this)
+        this.setNewState = this.setNewState.bind(this);
+    }
+
+
+    componentDidMount() {
+        this.getSchedule();
+    }
+
+    setNewState(key, value) {
+        this.setState({[key]: value});
+    }
+
+    getSchedule() {
+        ScheduleAPI.getSchedule({page: this.state.activePage,
+            size: this.state.pageSize, eventId: this.props.eventId})
+            .then(response => {
+                this.setState({totalPages: response.totalPages})
+                this.setState({schedules: response.content});
+            });
+
+    }
+
+    toggleCreateModal(){
+        this.setState({createModalSchedule: !this.state.createModalSchedule});
+    }
+
+    toggleScheduleModal() {
+        this.setState({show: !this.state.show});
+    }
+
+    render() {
+        if (!this.state.schedules){
+            return null;
+        }
+        return(
+            <div>
+                <CreateModalDialog
+                    toggleDialog={this.toggleCreateModal}
+                    show = {this.state.createModalSchedule}
+                    eventId = {this.props.eventId}
+                />
+                <Content toggleDialog = {this.props.toggleDialog}
+                         toggleCreateModal={this.toggleCreateModal}
+                         setNewState={this.setNewState}
+                         getSchedule={this.getSchedule}
+                         schedules={this.state.schedules}
+                         eventId={this.props.editEventId}
+                         eventName={this.props.editEventName}
+                />
+                <Pagination totalPages={this.state.totalPages}
+                            activePage={this.state.activePage}
+                            setScheduleState={this.setNewState}
+                            getSchedule={this.getSchedule}/>
+            </div>
+
+        )
+    }
+
 }

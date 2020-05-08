@@ -7,7 +7,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import EventAPI from "../util/EventAPI";
 import CategoryAPI from "../util/CategoryAPI";
 import CityAPI from "../util/CityAPI";
-import {Schedule} from "../admin/Schedule"
+import {Schedule} from "./Schedule"
 
 
 
@@ -471,7 +471,7 @@ class Pagination extends Component  {
     }
 
     render() {
-        if (this.props.totalPaged <= 1) {
+        if (this.props.totalPages <= 1) {
             return null;
         }
 
