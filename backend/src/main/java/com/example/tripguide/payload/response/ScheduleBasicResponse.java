@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 public class ScheduleBasicResponse {
     private Long id;
     private Long eventId;
+    private String eventName;
     private Integer price;
     private Integer day;
     private String month;

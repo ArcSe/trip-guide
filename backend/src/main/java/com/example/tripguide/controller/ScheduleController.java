@@ -38,21 +38,11 @@ public class ScheduleController {
     }
 
     @GetMapping("/schedule")
-    public Page<ScheduleBasicResponse> getScheduleByEvent(@RequestParam Long eventId,
-                                                          @RequestParam(defaultValue = "false") Boolean upcoming ,
-                                                          Pageable pageable) {
+    public Page<ScheduleBasicResponse> getScheduleByEvent(@RequestParam Long eventId, Pageable pageable) {
         Event event = this.eventRepository.getOne(eventId);
-
-        Page<Schedule> schedulePage;
-        if (upcoming) {
-            LocalDateTime currentDate = LocalDateTime.now();
-            schedulePage =
-                    this.scheduleRepository.findAllByEventAndDateTimeGreaterThanOrderByDateTimeAsc(pageable, event, currentDate);
-
-        } else {
-            schedulePage =
-                    this.scheduleRepository.findAllByEventOrderByDateTimeAsc(pageable, event);
-        }
+        LocalDateTime currentDate = LocalDateTime.now();
+        Page<Schedule> schedulePage =
+                this.scheduleRepository.findAllByEventAndDateTimeGreaterThanOrderByDateTimeAsc(pageable, event, currentDate);
 
         return schedulePage.map(this.scheduleMapper::entityToBasicResponse);
     }

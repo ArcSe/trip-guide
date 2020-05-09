@@ -42,13 +42,12 @@ class EventHeader extends Component {
     }
 
     getSchedules() {
-        const schedulesRequest = { eventId: this.props.event.id, upcoming: true };
+        const schedulesRequest = { eventId: this.props.event.id };
         ScheduleAPI.getSchedulesByEvent(schedulesRequest)
             .then(response => {
                 this.setState({schedules: response.content});
                 this.setState({loading: false});
             })
-            .catch(error => console.log(error));
     }
 
     render() {
@@ -137,7 +136,7 @@ class EventPictures extends Component {
                     </div>
                     <a className="carousel-control-prev" href="#carouselExampleIndicators" role="button"
                        data-slide="prev">
-                        <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                        b<span className="carousel-control-prev-icon" aria-hidden="true"></span>
                         <span className="sr-only">Previous</span>
                     </a>
                     <a className="carousel-control-next" href="#carouselExampleIndicators" role="button"
@@ -207,7 +206,7 @@ class EventSchedule extends Component {
     }
 
     getSchedules() {
-        const schedulesRequest = { eventId: this.props.eventId, upcoming: true };
+        const schedulesRequest = { eventId: this.props.eventId };
         ScheduleAPI.getSchedulesByEvent(schedulesRequest)
             .then(response => {
                 this.setState({schedules: response.content});
@@ -301,7 +300,7 @@ class EventContent extends Component {
 
     getEvent() {
         const eventRequest = {eventId: this.props.eventId};
-        EventAPI.getEvent(eventRequest)
+        EventAPI.getEventById(eventRequest)
             .then(response => {
                 this.setState({event: response});
                 this.setState({loading: false});
