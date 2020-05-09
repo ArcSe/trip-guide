@@ -28,6 +28,7 @@ public class ScheduleMapper {
         scheduleBasicResponse.setId(schedule.getId());
         scheduleBasicResponse.setPrice(schedule.getPrice());
         scheduleBasicResponse.setEventId(schedule.getEvent().getId());
+        scheduleBasicResponse.setEventName(schedule.getEvent().getName());
         scheduleBasicResponse.setDay(dateTime.getDayOfMonth());
         scheduleBasicResponse.setMonth(dateTime.getMonth()
                 .getDisplayName(TextStyle.FULL, new Locale("ru")));

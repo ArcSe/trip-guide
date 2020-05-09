@@ -3,7 +3,7 @@ import APIUtils from "./APIUtils";
 
 class EventAPI  {
 
-    getEvent(eventRequest) {
+    getEventById(eventRequest) {
         const eventId = eventRequest.eventId;
 
         return APIUtils.request({
@@ -12,8 +12,7 @@ class EventAPI  {
         });
     }
 
-    // Зачем это???
-    getEvents1(eventsRequest) {
+    getEventsAdmin(eventsRequest) {
         const page = eventsRequest.page;
         const size = eventsRequest.size;
 
