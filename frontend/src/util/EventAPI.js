@@ -3,7 +3,17 @@ import APIUtils from "./APIUtils";
 
 class EventAPI  {
 
-    getEvent(eventsRequest) {
+    getEvent(eventRequest) {
+        const eventId = eventRequest.eventId;
+
+        return APIUtils.request({
+            url: `${API_BASE_URL}/api/event/${eventId}`,
+            method: `GET`
+        });
+    }
+
+    // Зачем это???
+    getEvents1(eventsRequest) {
         const page = eventsRequest.page;
         const size = eventsRequest.size;
 

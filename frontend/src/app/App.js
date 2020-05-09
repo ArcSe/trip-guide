@@ -93,7 +93,7 @@ class App extends Component {
                                                                    component={Profile} />)
               }
 
-              <Route path="/event"
+              <Route path="/event/:id"
                      render={() => <Event />} />
 
 

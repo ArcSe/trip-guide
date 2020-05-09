@@ -6,8 +6,6 @@ class RatingAPI {
     updateRating(ratingRequest) {
         this.checkAccessToken();
 
-        console.log(ratingRequest);
-        console.log(`${API_BASE_URL}/api/rating`);
         return APIUtils.request({
             url: `${API_BASE_URL}/api/rating`,
             method: 'PUT',

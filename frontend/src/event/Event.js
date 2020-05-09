@@ -1,7 +1,17 @@
 import React, {Component} from 'react';
+import { withRouter } from "react-router-dom";
+import EventAPI from "../util/EventAPI";
+import ScheduleAPI from "../util/ScheduleAPI";
+import { useParams } from "react-router-dom";
 import './Event.css';
+import APIUtils from "../util/APIUtils";
 
 class EventNavBar extends Component {
+    constructor(props) {
+        super(props);
+    }
+
+
     render() {
         return (
             <div className="event-nav sticky-top">
@@ -16,7 +26,40 @@ class EventNavBar extends Component {
 }
 
 class EventHeader extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            schedules: [],
+            loading: true
+        };
+
+        this.getSchedules = this.getSchedules.bind(this);
+    }
+
+    componentDidMount() {
+        this.getSchedules();
+    }
+
+    getSchedules() {
+        const schedulesRequest = { eventId: this.props.event.id, upcoming: true };
+        ScheduleAPI.getSchedulesByEvent(schedulesRequest)
+            .then(response => {
+                this.setState({schedules: response.content});
+                this.setState({loading: false});
+            })
+            .catch(error => console.log(error));
+    }
+
     render() {
+        if (this.state.loading) {
+            return null;
+        }
+
+        const category = this.props.event.category.name;
+        const city = this.props.event.city.name;
+        const name = this.props.event.name;
+
         return (
             <div className="event-header">
 
@@ -28,13 +71,11 @@ class EventHeader extends Component {
 
                 <div className="right">
                     <div className="genres-tag">
-                        <div className="genres-tag-item d-inline mr-2">Кино</div>
-                        <div className="genres-tag-item d-inline">Санкт-Петербург</div>
+                        <div className="genres-tag-item d-inline mr-2">{category}</div>
+                        <div className="genres-tag-item d-inline">{city}</div>
                     </div>
 
-                    <h2 className="event-header-title">Длинное название
-                        мероприятия раз два три четыре пят   мероприятия раз два три четыре
-                    </h2>
+                    <h2 className="event-header-title">{name}</h2>
 
                     <div className="buy-content">
                         <div className="dropdown mr-2">
@@ -43,10 +84,14 @@ class EventHeader extends Component {
                                     aria-expanded="false">
                                 Выберете дату
                             </button>
+
                             <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a className="dropdown-item" href="#">Дата1</a>
-                                <a className="dropdown-item" href="#">Дата2</a>
-                                <a className="dropdown-item" href="#">Дата3</a>
+                                {
+                                    this.state.schedules.map(schedule =>
+                                        <a className="dropdown-item" href="#">
+                                            {`${schedule.day} ${schedule.month} ${schedule.time}`}</a>
+                                    )
+                                }
                             </div>
                         </div>
 
@@ -60,6 +105,10 @@ class EventHeader extends Component {
 }
 
 class EventPictures extends Component {
+    constructor(props) {
+        super(props);
+    }
+
     render() {
         return (
             <div className="event-pictures">
@@ -103,7 +152,14 @@ class EventPictures extends Component {
 }
 
 class EventDescription extends Component {
+    constructor(props) {
+        super(props);
+    }
+
     render() {
+        let description = this.props.event.description;
+        let category = this.props.event.category.name;
+
         return (
             <div className="event-description" id="description">
                 <div className="event-description-header">
@@ -111,14 +167,8 @@ class EventDescription extends Component {
                 </div>
 
                 <div className="event-description-content">
-                    <p>Серия фильмов о Гарри Поттере — серия фильмов, основанных на книгах о
-                        Гарри Поттере английской писательницы Дж. К. Роулинг.
-                        Серия выпущена компанией Warner Bros. и состоит из 8 фильмов в жанре фэнтези,
-                        включая основную серию — начиная с «Гарри Поттер и философский камень» (2001)
-                        и заканчивая «Гарри Поттер и Дары Смерти. Часть 2» (2011) —
-                        а также спин-офф «Фантастические твари и где они обитают» и его сиквел
-                        «Фантастические твари: Преступления Грин-де-Вальда».</p>
-                    <p><strong>Категория:</strong> Здесь категория</p>
+                    <p>{description}</p>
+                    <p><strong>Категория: </strong>{category}</p>
                 </div>
             </div>
         )
@@ -126,6 +176,10 @@ class EventDescription extends Component {
 }
 
 class EventComments extends Component {
+    constructor(props) {
+        super(props);
+    }
+
     render() {
         return (
             <div className="event-comments" id="comments">
@@ -137,7 +191,35 @@ class EventComments extends Component {
 }
 
 class EventSchedule extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            schedules: [],
+            loading: true,
+        };
+
+        this.getSchedules = this.getSchedules.bind(this);
+    }
+
+    componentDidMount() {
+        this.getSchedules();
+    }
+
+    getSchedules() {
+        const schedulesRequest = { eventId: this.props.eventId, upcoming: true };
+        ScheduleAPI.getSchedulesByEvent(schedulesRequest)
+            .then(response => {
+                this.setState({schedules: response.content});
+                this.setState({loading: false});
+            })
+    }
+
     render() {
+        if (this.state.loading) {
+            return null;
+        }
+
         return (
             <div className="event-schedule" id="schedule">
                 <div className="event-schedule-header">
@@ -150,487 +232,49 @@ class EventSchedule extends Component {
 
                 <div className="event-schedule-list">
                     <div className="event-schedule-list-inner block">
-                        <div className="event-schedule-item">
 
-                            <div className="event-schedule-item-date-col">
-                                <div className="event-schedule-item-date">
-                                    <div className="schedule-date_date">
-                                        16
+                        {
+                            this.state.schedules.map(schedule =>
+
+                                <div className="event-schedule-item">
+
+                                    <div className="event-schedule-item-date-col">
+                                        <div className="event-schedule-item-date">
+                                            <div className="schedule-date_date">
+                                                {schedule.day}
+                                            </div>
+                                            <div className="schedule-date_month">
+                                                {schedule.month}
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div className="schedule-date_month">
-                                        Мая
+
+                                    <div className="event-schedule-item-time-col">
+                                        <div className="event-schedule-session">
+                                            <div className="event-schedule-session-time">
+                                                {schedule.time}
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
 
-                            <div className="event-schedule-item-time-col">
-                                <div className="event-schedule-session">
-                                    <div className="event-schedule-session-time">
-                                        15:30
+                                    <div className="event-schedule-item-info-col">
+                                        <div className="event-schedule-session-place">
+                                            <div className="event-address">
+                                                ул. Победы, д. 42
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
 
-                            <div className="event-schedule-item-info-col">
-                                <div className="event-schedule-session-place">
-                                    <div className="event-address">
-                                        ул. Победы, д. 42
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="event-schedule-item-ticket-col">
-                                <div className="box one">
-                                    <button type="button" className="btn btn-primary">Купить билет</button>
-                                    <div className="price">билеты по 799 р.</div>
-                                </div>
-                            </div>
-
-                        </div>
-                        <div className="event-schedule-item">
-
-                            <div className="event-schedule-item-date-col">
-                                <div className="event-schedule-item-date">
-                                    <div className="schedule-date_date">
-                                        16
-                                    </div>
-                                    <div className="schedule-date_month">
-                                        Мая
+                                    <div className="event-schedule-item-ticket-col">
+                                        <div className="box one">
+                                            <button type="button" className="btn btn-primary">Купить билет</button>
+                                            <div className="price">билеты по {schedule.price} р.</div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            )
+                        }
 
-                            <div className="event-schedule-item-time-col">
-                                <div className="event-schedule-session">
-                                    <div className="event-schedule-session-time">
-                                        15:30
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="event-schedule-item-info-col">
-                                <div className="event-schedule-session-place">
-                                    <div className="event-address">
-                                        ул. Победы, д. 42
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="event-schedule-item-ticket-col">
-                                <div className="box one">
-                                    <button type="button" className="btn btn-primary">Купить билет</button>
-                                    <div className="price">билеты по 799 р.</div>
-                                </div>
-                            </div>
-
-                        </div>
-                        <div className="event-schedule-item">
-
-                            <div className="event-schedule-item-date-col">
-                                <div className="event-schedule-item-date">
-                                    <div className="schedule-date_date">
-                                        16
-                                    </div>
-                                    <div className="schedule-date_month">
-                                        Мая
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="event-schedule-item-time-col">
-                                <div className="event-schedule-session">
-                                    <div className="event-schedule-session-time">
-                                        15:30
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="event-schedule-item-info-col">
-                                <div className="event-schedule-session-place">
-                                    <div className="event-address">
-                                        ул. Победы, д. 42
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="event-schedule-item-ticket-col">
-                                <div className="box one">
-                                    <button type="button" className="btn btn-primary">Купить билет</button>
-                                    <div className="price">билеты по 799 р.</div>
-                                </div>
-                            </div>
-
-                        </div>
-                        <div className="event-schedule-item">
-
-                            <div className="event-schedule-item-date-col">
-                                <div className="event-schedule-item-date">
-                                    <div className="schedule-date_date">
-                                        16
-                                    </div>
-                                    <div className="schedule-date_month">
-                                        Мая
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="event-schedule-item-time-col">
-                                <div className="event-schedule-session">
-                                    <div className="event-schedule-session-time">
-                                        15:30
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="event-schedule-item-info-col">
-                                <div className="event-schedule-session-place">
-                                    <div className="event-address">
-                                        ул. Победы, д. 42
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="event-schedule-item-ticket-col">
-                                <div className="box one">
-                                    <button type="button" className="btn btn-primary">Купить билет</button>
-                                    <div className="price">билеты по 799 р.</div>
-                                </div>
-                            </div>
-
-                        </div>
-                        <div className="event-schedule-item">
-
-                            <div className="event-schedule-item-date-col">
-                                <div className="event-schedule-item-date">
-                                    <div className="schedule-date_date">
-                                        16
-                                    </div>
-                                    <div className="schedule-date_month">
-                                        Мая
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="event-schedule-item-time-col">
-                                <div className="event-schedule-session">
-                                    <div className="event-schedule-session-time">
-                                        15:30
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="event-schedule-item-info-col">
-                                <div className="event-schedule-session-place">
-                                    <div className="event-address">
-                                        ул. Победы, д. 42
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="event-schedule-item-ticket-col">
-                                <div className="box one">
-                                    <button type="button" className="btn btn-primary">Купить билет</button>
-                                    <div className="price">билеты по 799 р.</div>
-                                </div>
-                            </div>
-
-                        </div>
-                        <div className="event-schedule-item">
-
-                            <div className="event-schedule-item-date-col">
-                                <div className="event-schedule-item-date">
-                                    <div className="schedule-date_date">
-                                        16
-                                    </div>
-                                    <div className="schedule-date_month">
-                                        Мая
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="event-schedule-item-time-col">
-                                <div className="event-schedule-session">
-                                    <div className="event-schedule-session-time">
-                                        15:30
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="event-schedule-item-info-col">
-                                <div className="event-schedule-session-place">
-                                    <div className="event-address">
-                                        ул. Победы, д. 42
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="event-schedule-item-ticket-col">
-                                <div className="box one">
-                                    <button type="button" className="btn btn-primary">Купить билет</button>
-                                    <div className="price">билеты по 799 р.</div>
-                                </div>
-                            </div>
-
-                        </div>
-                        <div className="event-schedule-item">
-
-                            <div className="event-schedule-item-date-col">
-                                <div className="event-schedule-item-date">
-                                    <div className="schedule-date_date">
-                                        16
-                                    </div>
-                                    <div className="schedule-date_month">
-                                        Мая
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="event-schedule-item-time-col">
-                                <div className="event-schedule-session">
-                                    <div className="event-schedule-session-time">
-                                        15:30
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="event-schedule-item-info-col">
-                                <div className="event-schedule-session-place">
-                                    <div className="event-address">
-                                        ул. Победы, д. 42
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="event-schedule-item-ticket-col">
-                                <div className="box one">
-                                    <button type="button" className="btn btn-primary">Купить билет</button>
-                                    <div className="price">билеты по 799 р.</div>
-                                </div>
-                            </div>
-
-                        </div>
-                        <div className="event-schedule-item">
-
-                            <div className="event-schedule-item-date-col">
-                                <div className="event-schedule-item-date">
-                                    <div className="schedule-date_date">
-                                        16
-                                    </div>
-                                    <div className="schedule-date_month">
-                                        Мая
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="event-schedule-item-time-col">
-                                <div className="event-schedule-session">
-                                    <div className="event-schedule-session-time">
-                                        15:30
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="event-schedule-item-info-col">
-                                <div className="event-schedule-session-place">
-                                    <div className="event-address">
-                                        ул. Победы, д. 42
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="event-schedule-item-ticket-col">
-                                <div className="box one">
-                                    <button type="button" className="btn btn-primary">Купить билет</button>
-                                    <div className="price">билеты по 799 р.</div>
-                                </div>
-                            </div>
-
-                        </div>
-                        <div className="event-schedule-item">
-
-                            <div className="event-schedule-item-date-col">
-                                <div className="event-schedule-item-date">
-                                    <div className="schedule-date_date">
-                                        16
-                                    </div>
-                                    <div className="schedule-date_month">
-                                        Мая
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="event-schedule-item-time-col">
-                                <div className="event-schedule-session">
-                                    <div className="event-schedule-session-time">
-                                        15:30
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="event-schedule-item-info-col">
-                                <div className="event-schedule-session-place">
-                                    <div className="event-address">
-                                        ул. Победы, д. 42
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="event-schedule-item-ticket-col">
-                                <div className="box one">
-                                    <button type="button" className="btn btn-primary">Купить билет</button>
-                                    <div className="price">билеты по 799 р.</div>
-                                </div>
-                            </div>
-
-                        </div>
-                        <div className="event-schedule-item">
-
-                            <div className="event-schedule-item-date-col">
-                                <div className="event-schedule-item-date">
-                                    <div className="schedule-date_date">
-                                        16
-                                    </div>
-                                    <div className="schedule-date_month">
-                                        Мая
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="event-schedule-item-time-col">
-                                <div className="event-schedule-session">
-                                    <div className="event-schedule-session-time">
-                                        15:30
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="event-schedule-item-info-col">
-                                <div className="event-schedule-session-place">
-                                    <div className="event-address">
-                                        ул. Победы, д. 42
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="event-schedule-item-ticket-col">
-                                <div className="box one">
-                                    <button type="button" className="btn btn-primary">Купить билет</button>
-                                    <div className="price">билеты по 799 р.</div>
-                                </div>
-                            </div>
-
-                        </div>
-                        <div className="event-schedule-item">
-
-                            <div className="event-schedule-item-date-col">
-                                <div className="event-schedule-item-date">
-                                    <div className="schedule-date_date">
-                                        16
-                                    </div>
-                                    <div className="schedule-date_month">
-                                        Мая
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="event-schedule-item-time-col">
-                                <div className="event-schedule-session">
-                                    <div className="event-schedule-session-time">
-                                        15:30
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="event-schedule-item-info-col">
-                                <div className="event-schedule-session-place">
-                                    <div className="event-address">
-                                        ул. Победы, д. 42
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="event-schedule-item-ticket-col">
-                                <div className="box one">
-                                    <button type="button" className="btn btn-primary">Купить билет</button>
-                                    <div className="price">билеты по 799 р.</div>
-                                </div>
-                            </div>
-
-                        </div>
-                        <div className="event-schedule-item">
-
-                            <div className="event-schedule-item-date-col">
-                                <div className="event-schedule-item-date">
-                                    <div className="schedule-date_date">
-                                        16
-                                    </div>
-                                    <div className="schedule-date_month">
-                                        Мая
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="event-schedule-item-time-col">
-                                <div className="event-schedule-session">
-                                    <div className="event-schedule-session-time">
-                                        15:30
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="event-schedule-item-info-col">
-                                <div className="event-schedule-session-place">
-                                    <div className="event-address">
-                                        ул. Победы, д. 42
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="event-schedule-item-ticket-col">
-                                <div className="box one">
-                                    <button type="button" className="btn btn-primary">Купить билет</button>
-                                    <div className="price">билеты по 799 р.</div>
-                                </div>
-                            </div>
-
-                        </div>
-                        <div className="event-schedule-item">
-
-                            <div className="event-schedule-item-date-col">
-                                <div className="event-schedule-item-date">
-                                    <div className="schedule-date_date">
-                                        16
-                                    </div>
-                                    <div className="schedule-date_month">
-                                        Мая
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="event-schedule-item-time-col">
-                                <div className="event-schedule-session">
-                                    <div className="event-schedule-session-time">
-                                        15:30
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="event-schedule-item-info-col">
-                                <div className="event-schedule-session-place">
-                                    <div className="event-address">
-                                        ул. Победы, д. 42
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="event-schedule-item-ticket-col">
-                                <div className="box one">
-                                    <button type="button" className="btn btn-primary">Купить билет</button>
-                                    <div className="price">билеты по 799 р.</div>
-                                </div>
-                            </div>
-
-                        </div>
                     </div>
                 </div>
             </div>
@@ -639,8 +283,71 @@ class EventSchedule extends Component {
 
 }
 
-class Event extends Component {
+class EventContent extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            event: null,
+            loading: true,
+        };
+
+        this.getEvent = this.getEvent.bind(this);
+    }
+
+    componentDidMount() {
+        this.getEvent();
+    }
+
+    getEvent() {
+        const eventRequest = {eventId: this.props.eventId};
+        EventAPI.getEvent(eventRequest)
+            .then(response => {
+                this.setState({event: response});
+                this.setState({loading: false});
+            });
+
+    }
+
     render() {
+        if (this.state.loading) {
+            return null;
+        }
+
+        return (
+            <div>
+                <EventHeader event={this.state.event} />
+
+                <EventDescription event={this.state.event} />
+
+                <EventPictures event={this.state.event} />
+            </div>
+        )
+    }
+}
+
+class Event extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            eventId: null,
+            loading: false,
+        };
+
+        this.getEventId = this.getEventId.bind(this);
+    }
+
+    componentDidMount() {
+        this.getEventId();
+    }
+
+    getEventId() {
+    }
+
+    render() {
+        const eventId = this.props.match.params.id;
+
         return (
             <div className="container">
 
@@ -648,15 +355,11 @@ class Event extends Component {
 
                 <div className="event-content">
 
-                    <EventHeader />
-
-                    <EventDescription />
-
-                    <EventPictures />
+                    <EventContent eventId={eventId} />
 
                     <EventComments />
 
-                    <EventSchedule />
+                    <EventSchedule eventId={eventId} />
 
                 </div>
 
@@ -665,4 +368,4 @@ class Event extends Component {
     }
 }
 
-export default Event
+export default withRouter(Event)

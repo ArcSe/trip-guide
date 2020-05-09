@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -30,25 +31,30 @@ public class ScheduleController {
     private EventDateRepository eventDateRepository;
 
     @Autowired
-
     public ScheduleController(ScheduleRepository scheduleRepository, EventRepository eventRepository) {
         this.scheduleRepository = scheduleRepository;
         this.eventRepository = eventRepository;
         this.scheduleMapper = new ScheduleMapper();
     }
 
-    @GetMapping("/schedule/nearestDate/{id}")
-    public LocalDateTime getNearestDate(@PathVariable Long id) {
-        Event event = this.eventRepository.getOne(id);
-        LocalDateTime nearestDate = this.scheduleRepository.findClosestDate(id);
-        return nearestDate;
-    }
-
-    @GetMapping("/schedule/event/{eventId}")
-    public Page<ScheduleBasicResponse> getAllByEvent(@PathVariable Long eventId, Pageable pageable) {
+    @GetMapping("/schedule")
+    public Page<ScheduleBasicResponse> getScheduleByEvent(@RequestParam Long eventId,
+                                                          @RequestParam(defaultValue = "false") Boolean upcoming ,
+                                                          Pageable pageable) {
         Event event = this.eventRepository.getOne(eventId);
-        Page<Schedule> pageSchedule = this.scheduleRepository.findAllByEvent(pageable, event);
-        return pageSchedule.map(this.scheduleMapper::entityToBasicResponse);
+
+        Page<Schedule> schedulePage;
+        if (upcoming) {
+            LocalDateTime currentDate = LocalDateTime.now();
+            schedulePage =
+                    this.scheduleRepository.findAllByEventAndDateTimeGreaterThanOrderByDateTimeAsc(pageable, event, currentDate);
+
+        } else {
+            schedulePage =
+                    this.scheduleRepository.findAllByEventOrderByDateTimeAsc(pageable, event);
+        }
+
+        return schedulePage.map(this.scheduleMapper::entityToBasicResponse);
     }
 
     @GetMapping("/schedule/{id}")
@@ -58,7 +64,7 @@ public class ScheduleController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/schedules")
+    @PostMapping("/schedule")
     public ResponseEntity<ScheduleBasicResponse> createSchedule(@RequestBody ScheduleBasicRequest scheduleBasicRequest)
             throws URISyntaxException {
 

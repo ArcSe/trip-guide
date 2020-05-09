@@ -3,6 +3,18 @@ import APIUtils from "./APIUtils";
 
 class ScheduleAPI  {
 
+    getSchedulesByEvent(scheduleRequest) {
+        const eventId = scheduleRequest.eventId;
+        const upcoming = scheduleRequest.upcoming ? scheduleRequest.upcoming : false;
+        const page = scheduleRequest.pageable ? scheduleRequest.pageable.page : 0;
+        const size = scheduleRequest.pageable ? scheduleRequest.pageable.size : -1;
+
+        return APIUtils.request({
+            url: `${API_BASE_URL}/api/schedule?eventId=${eventId}&upcoming=${upcoming}&page=${page}&size=${size}`,
+            method: `GET`
+        });
+    }
+
     getSchedule(scheduleRequest) {
         this.checkAccessToken();
 

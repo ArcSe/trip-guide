@@ -29,8 +29,6 @@ public class EventController {
     private CityRepository cityRepository;
     private CategoryRepository categoryRepository;
     private EventMapper eventMapper;
-    @PersistenceContext
-    private EntityManager entityManager;
 
     @Autowired
     public EventController(EventRepository eventRepository, CityRepository cityRepository,
@@ -41,11 +39,15 @@ public class EventController {
         this.eventMapper = new EventMapper();
     }
 
+    // Events должно быть, зачем это здесь?
+    /*
     @GetMapping("/event")
     public Page<EventBasicResponse> getAllEvents(Pageable pageable) {
         Page<Event> pageEvent = this.eventRepository.findAll(pageable);
         return pageEvent.map(this.eventMapper::entityToBasicResponse);
     }
+
+     */
 
 
     //Добавить в критерий поиск ближайшей даты

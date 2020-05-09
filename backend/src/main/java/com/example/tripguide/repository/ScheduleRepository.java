@@ -8,12 +8,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 public interface ScheduleRepository extends JpaRepository<Schedule, Long>, EventDateRepository {
     Optional<Schedule> findById(Long id);
 
-    Page<Schedule> findAllByEvent(Pageable pageable, Event event);
+    Page<Schedule> findAllByEventAndDateTimeGreaterThanOrderByDateTimeAsc
+            (Pageable pageable, Event event, LocalDateTime dateTime);
+
+    Page<Schedule> findAllByEventOrderByDateTimeAsc(Pageable pageable, Event event);
 
     void deleteById(Long id);
 
