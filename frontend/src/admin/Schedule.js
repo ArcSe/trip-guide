@@ -6,6 +6,53 @@ import {Button} from "react-bootstrap";
 import ScheduleAPI from "../util/ScheduleAPI";
 import DatePicker from "react-datepicker";
 
+class EditModalDialog extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            editData:{
+                id: null,
+                price:null,
+                dateTime:null,
+            }
+        };
+
+        this.handleUpdateButton = this.handleUpdateButton.bind(this);
+    }
+
+
+    handleUpdateButton(){
+        const scheduleRequest = {
+            id: this.props.scheduleId,
+            eventId : this.props.eventId,
+            price: this.state.editData.name,
+            dateTime: this.state.editData.address,
+        };
+
+    }
+
+
+    render() {
+        return(
+            <Modal show={this.props.show} onHide={this.props.toggleDialog}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Изменение события</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={this.props.toggleDialog}>
+                        Закрыть
+                    </Button>
+                    <Button variant="primary" onClick={this.handleUpdateButton}>
+                        Изменить
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+        )
+    }
+}
 
 class CreateModalDialog extends Component {
     constructor(props) {
@@ -101,9 +148,9 @@ class Content extends Component {
         this.props.setEventsState("editEventName", eventName);
     }
 
-    handleEditButton(eventId){
+    handleEditButton(scheduleId){
         this.props.toggleDialog();
-        this.props.setEventsState("editEventId", eventId);
+        this.props.setNewState("editScheduleId", scheduleId);
     }
 
     handleDeleteButton(scheduleId) {
@@ -136,7 +183,7 @@ class Content extends Component {
                                     <p className="mt-2 flex-grow-1">{schedule.dateTime}</p>
                                     <div className="btn-group">
                                         <button type="button" className="mr-1 btn btn-outline-success"
-                                        >Изменить
+                                                onClick={() => this.handleEditButton(schedule.id)} >Изменить
                                         </button>
                                         <button type="button" className="mr-1 btn btn-outline-danger"
                                                 onClick={() => this.handleDeleteButton(schedule.id)} >Удалить
@@ -211,7 +258,9 @@ export class Schedule extends Component{
         this.state = {
             show: this.props.show,
             createModal: false,
+            editModalSchedule: false,
             createModalSchedule: false,
+            editScheduleId: '',
             eventId: this.props.eventId,
             eventName: this.props.eventName,
             activePage: 0,
@@ -222,13 +271,19 @@ export class Schedule extends Component{
 
         this.toggleScheduleModal = this.toggleScheduleModal.bind(this);
         this.toggleCreateModal = this.toggleCreateModal.bind(this);
+        this.toggleEditModal = this.toggleEditModal.bind(this);
         this.getSchedule = this.getSchedule.bind(this)
         this.setNewState = this.setNewState.bind(this);
+        this.toggleEditModal = this.toggleEditModal.bind(this);
     }
 
 
     componentDidMount() {
         this.getSchedule();
+    }
+
+    toggleEditModal() {
+        this.setState({editModalSchedule: !this.state.editModalSchedule});
     }
 
     setNewState(key, value) {
@@ -243,6 +298,9 @@ export class Schedule extends Component{
                 this.setState({schedules: response.content});
             });
 
+    }
+    toggleEditModal() {
+        this.setState({showEditModal: !this.state.showEditModal});
     }
 
     toggleCreateModal(){
@@ -265,13 +323,21 @@ export class Schedule extends Component{
                     eventId = {this.props.eventId}
                     getSchedule = {this.getSchedule}
                 />
-                <Content toggleDialog = {this.props.toggleDialog}
+                <EditModalDialog
+                    scheduleId={this.state.editScheduleId}
+                    toggleDialog={this.toggleEditModal}
+                    show = {this.state.editModalSchedule}
+                    eventId = {this.props.eventId}
+                    getSchedule = {this.getSchedule}
+                />
+                <Content toggleDialog = {this.toggleEditModal}
                          toggleCreateModal={this.toggleCreateModal}
                          setNewState={this.setNewState}
                          getSchedule={this.getSchedule}
                          schedules={this.state.schedules}
                          eventId={this.props.editEventId}
                          eventName={this.props.editEventName}
+                         scheduleId={this.state.editScheduleId}
                 />
                 <Pagination totalPages={this.state.totalPages}
                             activePage={this.state.activePage}
