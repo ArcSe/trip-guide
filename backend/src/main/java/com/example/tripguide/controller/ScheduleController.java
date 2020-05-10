@@ -4,7 +4,9 @@ import com.example.tripguide.controller.mapper.ScheduleMapper;
 import com.example.tripguide.exception.BadRequestException;
 import com.example.tripguide.model.Event;
 import com.example.tripguide.model.Schedule;
+import com.example.tripguide.payload.request.EventBasicRequest;
 import com.example.tripguide.payload.request.ScheduleBasicRequest;
+import com.example.tripguide.payload.response.EventBasicResponse;
 import com.example.tripguide.payload.response.ScheduleBasicResponse;
 import com.example.tripguide.repository.ScheduleRepository;
 import com.example.tripguide.repository.eventrepository.EventDateRepository;
@@ -67,7 +69,21 @@ public class ScheduleController {
                 .body(response);
     }
 
-    @DeleteMapping("/schedules/{id}")
+    @PutMapping("/schedule/{id}")
+    public ResponseEntity<ScheduleBasicResponse> updateSchedule(@PathVariable Long id, @RequestBody ScheduleBasicRequest request) {
+        Schedule result = this.scheduleRepository.getOne(id);
+        result.setPrice(request.getPrice());
+        result.setDateTime(request.getDateTime());
+        result.setEvent(this.eventRepository.getOne(request.getEventId()));
+
+        Schedule resultEdit = this.scheduleRepository.save(result);
+        ScheduleBasicResponse response = this.scheduleMapper.entityToBasicResponse(resultEdit);
+        return ResponseEntity.ok().body(response);
+
+
+    }
+
+    @DeleteMapping("/schedule/{id}")
     public ResponseEntity<?> deleteEvent(@PathVariable Long id) {
         if (this.scheduleRepository.findById(id).isEmpty()) {
             throw new BadRequestException("Такого события не существует!");

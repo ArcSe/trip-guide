@@ -31,8 +31,19 @@ class ScheduleAPI  {
         this.checkAccessToken();
 
         return APIUtils.request({
-            url: `${API_BASE_URL}/api/schedules`,
+            url: `${API_BASE_URL}/api/schedule`,
             method: 'POST',
+            body: JSON.stringify(scheduleRequest)
+        });
+    }
+
+    editSchedule(scheduleRequest) {
+        this.checkAccessToken();
+        const eventId = scheduleRequest.id;
+
+        return APIUtils.request({
+            url: `${API_BASE_URL}/api/schedule/${eventId}`,
+            method: 'PUT',
             body: JSON.stringify(scheduleRequest)
         });
     }
@@ -41,7 +52,7 @@ class ScheduleAPI  {
         this.checkAccessToken();
 
         return APIUtils.request2({
-            url: `${API_BASE_URL}/api/schedules/${scheduleId}`,
+            url: `${API_BASE_URL}/api/schedule/${scheduleId}`,
             method: 'DELETE'
         });
     }
