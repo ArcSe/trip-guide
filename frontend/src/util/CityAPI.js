@@ -16,20 +16,10 @@ class CityAPI  {
     getCities(citiesRequest) {
         const page = citiesRequest.page;
         const size = citiesRequest.size;
+        const name = citiesRequest.name ? citiesRequest.name : "";
 
         return APIUtils.request({
-            url: `${API_BASE_URL}/api/cities/?page=${page}&size=${size}`,
-            method: 'GET'
-        });
-    }
-
-    getCitiesByName(citiesRequest) {
-        this.checkAccessToken();
-        const name = citiesRequest.name;
-        console.log(`${API_BASE_URL}/api/city/?name=${name}`);
-
-        return APIUtils.request({
-            url: `${API_BASE_URL}/api/city/?name=${name}`,
+            url: `${API_BASE_URL}/api/cities/?page=${page}&size=${size}&name=${name}`,
             method: 'GET'
         });
     }

@@ -2,7 +2,10 @@ import React, {Component} from 'react';
 import { withRouter } from "react-router-dom";
 import EventAPI from "../util/EventAPI";
 import ScheduleAPI from "../util/ScheduleAPI";
-import { useParams } from "react-router-dom";
+import Lightbox from "react-lightbox-component";
+import SimpleReactLightbox from "simple-react-lightbox";
+import { SRLWrapper } from "simple-react-lightbox";
+
 import './Event.css';
 import APIUtils from "../util/APIUtils";
 
@@ -17,7 +20,6 @@ class EventNavBar extends Component {
             <div className="event-nav sticky-top">
                 <nav className="navbar navbar-expand-lg navbar-light bg-light">
                     <a className="nav-link" href="#description">Описание</a>
-                    <a className="nav-link" href="#comments">Отзывы</a>
                     <a className="nav-link" href="#schedule">Афиша</a>
                 </nav>
             </div>
@@ -70,31 +72,13 @@ class EventHeader extends Component {
 
                 <div className="right">
                     <div className="genres-tag">
-                        <div className="genres-tag-item d-inline mr-2">{category}</div>
                         <div className="genres-tag-item d-inline">{city}</div>
                     </div>
 
                     <h2 className="event-header-title">{name}</h2>
 
                     <div className="buy-content">
-                        <div className="dropdown mr-2">
-                            <button className="btn btn-primary-outline dropdown-toggle " type="button"
-                                    id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                    aria-expanded="false">
-                                Выберете дату
-                            </button>
-
-                            <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                {
-                                    this.state.schedules.map(schedule =>
-                                        <a className="dropdown-item" href="#">
-                                            {`${schedule.day} ${schedule.month} ${schedule.time}`}</a>
-                                    )
-                                }
-                            </div>
-                        </div>
-
-                        <button className="btn btn-primary">Купить</button>
+                        <p><strong>Категория: </strong>{category}</p>
                     </div>
 
                 </div>
@@ -103,7 +87,250 @@ class EventHeader extends Component {
     }
 }
 
+const options = {
+    buttons: {
+        backgroundColor: 'rgba(140, 94, 88, 0.8)',
+        iconColor: 'rgba(241, 191, 152, 0.7)'
+    },
+    settings: {
+        overlayColor: 'rgba(255, 237, 225, 0.95)',
+        showThumbnails: false,
+        transitionSpeed: 1000,
+        transitionTimingFunction: 'linear'
+    },
+    caption: {
+        showCaption: false
+    }
+};
+
 class EventPictures extends Component {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        return (
+            <SimpleReactLightbox>
+                <EventPicturesT />
+            </SimpleReactLightbox>
+        )
+    }
+
+}
+
+class EventPicturesT extends Component {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        return (
+            <SRLWrapper options={options}>
+                <div className="container">
+                    <div className="row">
+                        <div className="col-lg-3 col-md-4 col-6">
+                            <a
+                                href="https://www.simple-react-lightbox.dev/docs/gallery/unsplash17.jpg"
+                                data-attribute="SRL"
+                                className="pseudo-element"
+                            >
+                                <img className="img-fluid height=160"
+                                     src="https://www.simple-react-lightbox.dev/docs/gallery/unsplash17.jpg"
+                                     alt="A small boat"
+                                />
+                            </a>
+                        </div>
+
+                        <div className="col-lg-3 col-md-4 col-6">
+                            <a
+                                href="https://www.simple-react-lightbox.dev/docs/gallery/unsplash19.jpg"
+                                data-attribute="SRL"
+                                className="pseudo-element"
+                            >
+                                <img className="img-fluid"
+                                     src="https://www.simple-react-lightbox.dev/docs/gallery/unsplash19.jpg"
+                                     alt="Penguins kissed by the sun"
+                                />
+                            </a>
+                        </div>
+
+                        <div className="col-lg-3 col-md-4 col-6">
+                            <a
+                                href="https://www.simple-react-lightbox.dev/docs/gallery/unsplash04.jpg"
+                                data-attribute="SRL"
+                                className="pseudo-element"
+                            >
+                                <img className="img-fluid"
+                                     src="https://www.simple-react-lightbox.dev/docs/gallery/unsplash04.jpg"
+                                     alt="Penguins kissed by the sun"
+                                />
+                            </a>
+                        </div>
+
+                        <div className="col-lg-3 col-md-4 col-6">
+                            <a
+                                href="https://www.simple-react-lightbox.dev/docs/gallery/unsplash05.jpg"
+                                data-attribute="SRL"
+                                className="pseudo-element"
+                            >
+                                <img className="img-fluid"
+                                     src="https://www.simple-react-lightbox.dev/docs/gallery/unsplash05.jpg"
+                                     alt="A peaceful lake."
+                                />
+                            </a>
+                        </div>
+
+                        <div className="col-lg-3 col-md-4 col-6">
+                            <a
+                                href="https://www.simple-react-lightbox.dev/docs/gallery/unsplash20.jpg"
+                                data-attribute="SRL"
+                                className="pseudo-element"
+                            >
+                                <img className="img-fluid"
+                                     src="https://www.simple-react-lightbox.dev/docs/gallery/unsplash20.jpg"
+                                     alt="A peaceful lake."
+                                />
+                            </a>
+                        </div>
+
+                        <div className="col-lg-3 col-md-4 col-6">
+                            <a
+                                href="https://www.simple-react-lightbox.dev/docs/gallery/unsplash21.jpg"
+                                data-attribute="SRL"
+                                className="pseudo-element"
+                            >
+                                <img className="img-fluid"
+                                     src="https://www.simple-react-lightbox.dev/docs/gallery/unsplash21.jpg"
+                                     alt="Small insect"
+                                />
+                            </a>
+                        </div>
+
+                        <div className="col-lg-3 col-md-4 col-6">
+                            <a
+                                href="https://www.simple-react-lightbox.dev/docs/gallery/unsplash04.jpg"
+                                data-attribute="SRL"
+                                className="pseudo-element"
+                            >
+                                <img className="img-fluid"
+                                     src="https://www.simple-react-lightbox.dev/docs/gallery/unsplash04.jpg"
+                                     alt="Penguins kissed by the sun"
+                                />
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            </SRLWrapper>
+        )
+    }
+}
+
+class EventPicturesT1 extends Component {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        return (
+            <div>
+                <SRLWrapper options={options}>
+                    <div id="gallery-with-links" className="container content">
+                        <div className="row">
+                            <div className="col-md-4 col-6 col-image-with-link">
+                                <a
+                                    href="https://www.simple-react-lightbox.dev/docs/gallery/unsplash17.jpg"
+                                    data-attribute="SRL"
+                                    className="pseudo-element"
+                                >
+                                    <img className="img-fluid height=160"
+                                        src="https://www.simple-react-lightbox.dev/docs/gallery/unsplash17.jpg"
+                                        alt="A small boat"
+                                    />
+                                </a>
+                            </div>
+                            <div className="col-md-4 col-6 col-image-with-link">
+                                <a
+                                    href="https://www.simple-react-lightbox.dev/docs/gallery/unsplash19.jpg"
+                                    data-attribute="SRL"
+                                    className="pseudo-element"
+                                >
+                                    <img className="img-fluid"
+                                        src="https://www.simple-react-lightbox.dev/docs/gallery/unsplash19.jpg"
+                                        alt="Penguins kissed by the sun"
+                                    />
+                                </a>
+                            </div>
+                            <div className="col-md-4 col-6 col-image-with-link">
+                                <a
+                                    href="https://www.simple-react-lightbox.dev/docs/gallery/unsplash04.jpg"
+                                    data-attribute="SRL"
+                                    className="pseudo-element"
+                                >
+                                    <img className="img-fluid"
+                                        src="https://www.simple-react-lightbox.dev/docs/gallery/unsplash04.jpg"
+                                        alt="Penguins kissed by the sun"
+                                    />
+                                </a>
+                            </div>
+                            <div className="col-md-3 col-6 col-image-with-link">
+                                <a
+                                    href="https://www.simple-react-lightbox.dev/docs/gallery/unsplash05.jpg"
+                                    data-attribute="SRL"
+                                    className="pseudo-element"
+                                >
+                                    <img className="img-fluid"
+                                        src="https://www.simple-react-lightbox.dev/docs/gallery/unsplash05.jpg"
+                                        alt="A peaceful lake."
+                                    />
+                                </a>
+                            </div>
+                            <div className="col-md-3 col-6 col-image-with-link">
+                                <a
+                                    href="https://www.simple-react-lightbox.dev/docs/gallery/unsplash20.jpg"
+                                    data-attribute="SRL"
+                                    className="pseudo-element"
+                                >
+                                    <img className="img-fluid"
+                                        src="https://www.simple-react-lightbox.dev/docs/gallery/unsplash20.jpg"
+                                        alt="A peaceful lake."
+                                    />
+                                </a>
+                            </div>
+                            <div className="col-md-3 col-6 col-image-with-link">
+                                <a
+                                    href="https://www.simple-react-lightbox.dev/docs/gallery/unsplash21.jpg"
+                                    data-attribute="SRL"
+                                    className="pseudo-element"
+                                >
+                                    <img className="img-fluid"
+                                        src="https://www.simple-react-lightbox.dev/docs/gallery/unsplash21.jpg"
+                                        alt="Small insect"
+                                    />
+                                </a>
+                            </div>
+                            <div className="col-md-3 col-6 col-image-with-link">
+                                <a
+                                    href="https://www.simple-react-lightbox.dev/docs/gallery/unsplash22.jpg"
+                                    data-attribute="SRL"
+                                    className="pseudo-element"
+                                >
+                                    <img className="img-fluid"
+                                        src="https://www.simple-react-lightbox.dev/docs/gallery/unsplash22.jpg"
+                                        alt="Desert lizard"
+                                    />
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </SRLWrapper>
+            </div>
+        )
+    }
+}
+
+
+class EventPicturesCarousel extends Component {
     constructor(props) {
         super(props);
     }
@@ -167,7 +394,6 @@ class EventDescription extends Component {
 
                 <div className="event-description-content">
                     <p>{description}</p>
-                    <p><strong>Категория: </strong>{category}</p>
                 </div>
             </div>
         )
@@ -264,10 +490,17 @@ class EventSchedule extends Component {
                                         </div>
                                     </div>
 
+                                    <div className="event-schedule-item-price-col">
+                                        <div className="event-schedule-session-price">
+                                            <div className="event-price">
+                                                {schedule.price}&#8381;
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <div className="event-schedule-item-ticket-col">
                                         <div className="box one">
                                             <button type="button" className="btn btn-primary">Купить билет</button>
-                                            <div className="price">билеты по {schedule.price} р.</div>
                                         </div>
                                     </div>
                                 </div>

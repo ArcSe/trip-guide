@@ -49,8 +49,13 @@
 }
 
 .event-schedule-item-info-col {
-    flex-grow: 4;
-    width: 500px;
+    flex-grow: 2;
+    width: 200px;
+}
+
+.event-schedule-item-price-col {
+    flex-grow: 2;
+    width: 300px;
 }
 
 .event-schedule-session-place {
@@ -61,6 +66,11 @@
 }
 
 .event-address {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.event-price {
     font-size: 15px;
     font-weight: bold;
 }

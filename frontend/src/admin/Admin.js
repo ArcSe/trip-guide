@@ -100,7 +100,7 @@ export default class Admin extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            currentTab: null,
+            currentTab: "events",
         };
 
         this.handleTabClick = this.handleTabClick.bind(this);

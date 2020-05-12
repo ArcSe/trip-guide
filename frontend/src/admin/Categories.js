@@ -137,11 +137,14 @@ class SearchComponent extends Component {
     }
 
     handleClearClick() {
-        this.props.getCategories();
+        this.props.setCategoriesState("search", "");
+        this.props.setCategoriesState("activePage", 0);
+        setTimeout(this.props.getCategories, 100);
     }
 
     handleSearchButton() {
-        this.props.getCategoriesByName(this.props.search);
+        this.props.setCategoriesState("activePage", 0);
+        setTimeout(this.props.getCategories, 100);
     }
 
     render() {
@@ -281,14 +284,12 @@ export class Categories extends Component {
             showCreateModal: false,
             showEditModal: false,
             editCategoryId: null,
-            search: null,
+            search: "",
             activePage: 0,
             totalPages: 0,
             pageSize: 5,
         };
 
-
-        this.getCategoriesByName = this.getCategoriesByName.bind(this);
         this.getCategories = this.getCategories.bind(this);
         this.setNewState = this.setNewState.bind(this);
         this.toggleCreateModal = this.toggleCreateModal.bind(this);
@@ -300,16 +301,15 @@ export class Categories extends Component {
     }
 
     getCategories() {
-        CategoryAPI.getCategories({page: this.state.activePage, size: this.state.pageSize})
+        const categoriesRequest = {
+            page: this.state.activePage,
+            size: this.state.pageSize,
+            name: this.state.search,
+        };
+
+        CategoryAPI.getCategories(categoriesRequest)
             .then(response => {
                 this.setState({totalPages: response.totalPages});
-                this.setState({categories: response.content});
-            });
-    }
-
-    getCategoriesByName() {
-        CategoryAPI.getCategoriesByName({name: this.state.search})
-            .then(response => {
                 this.setState({categories: response.content});
             });
     }
@@ -351,7 +351,6 @@ export class Categories extends Component {
                     <CreateButton toggleDialog={this.toggleCreateModal}/>
                     <SearchComponent search={this.state.search}
                                      getCategories={this.getCategories}
-                                     getCategoriesByName={this.getCategoriesByName}
                                      setCategoriesState={this.setNewState}/>
                 </div>
 
