@@ -5,13 +5,30 @@ import {Cities} from './Cities'
 import {Categories} from './Categories'
 import {Events} from './Events'
 import userLogo from "../img/user.jpg";
+import {Button} from "react-bootstrap";
+import UserAPI from "../util/UserAPI";
 
 class AdminInformation extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            selectedFile: null }
+
+        this.fileChangedHandler = this.fileChangedHandler.bind(this);
+        this.uploadHandler = this.uploadHandler.bind(this);
     }
 
+    fileChangedHandler = event => {
+        this.setState({selectedFile: event.target.files[0]})
+    }
 
+    uploadHandler = () => {
+
+        const loadRequest = {userId: this.props.currentUser.id, file: this.state.selectedFile};
+
+        UserAPI.loadPhoto(loadRequest);
+        console.log("done");
+    }
     render() {
         return (
             <div className='profile-container'>
@@ -23,7 +40,11 @@ class AdminInformation extends Component {
                             <p className="lead">Администратор</p>
                             <p className="lead">Email: {this.props.currentUser.email}</p>
                         </div>
-                    </div>
+                    </div >
+                    <form method="POST" encType="multipart/form-data">
+                        <button  onClick={this.uploadHandler}>Загрузить</button>
+                        <input type="file" onChange={this.fileChangedHandler}/>
+                    </form>
                 </div>
             </div>
         )

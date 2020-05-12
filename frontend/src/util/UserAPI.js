@@ -28,6 +28,18 @@ class UserAPI {
         });
     }
 
+    loadPhoto(loadRequest){
+        this.checkAccessToken();
+        const id = loadRequest.userId;
+        const file = loadRequest.file;
+
+        return APIUtils.request({
+            url: `${API_BASE_URL}/api/usersPhoto/${id}`,
+            method: 'POST',
+            body: JSON.stringify(file)
+        });
+    }
+
     updateUserEvent(eventRequest) {
         this.checkAccessToken();
         const id = eventRequest.userId;

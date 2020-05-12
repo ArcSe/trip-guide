@@ -1,11 +1,15 @@
 package com.example.tripguide.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
+    @Value("${upload.path}")
+    private String uploadPath;
 
     private final long MAX_AGE_SECS = 3600;
 
@@ -17,5 +21,11 @@ public class WebMvcConfig implements WebMvcConfigurer {
         .allowedHeaders("*")
         .allowCredentials(true)
         .maxAge(MAX_AGE_SECS);
+    }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/img/**")
+                .addResourceLocations("file://" + uploadPath + "/");
     }
 }
