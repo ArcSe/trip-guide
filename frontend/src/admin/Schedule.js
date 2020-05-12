@@ -12,7 +12,7 @@ class EditModalDialog extends Component {
         this.state = {
             startDate: new Date(),
             id: null,
-            price:null,
+            price:this.props.price,
 
         };
 
@@ -57,6 +57,7 @@ class EditModalDialog extends Component {
                         <div className="form-group">
                             <label htmlFor="exampleInputEmail1">Введите стоимость</label>
                             <input type="text" className="form-control" id="textInput"
+                                   value={this.props.price}
                                    onChange={e =>{let {price} = this.state;
                                        price = e.target.value;
                                        this.setState({price})} }/>
@@ -101,6 +102,7 @@ class CreateModalDialog extends Component {
     }
 
     setStartDate(date){
+        alert(this.props.price);
         this.setState({
             startDate: date
         });
@@ -181,9 +183,10 @@ class Content extends Component {
         this.props.setEventsState("editEventName", eventName);
     }
 
-    handleEditButton(scheduleId, date, price){
+    handleEditButton(scheduleId, price){
         this.props.toggleEditDialog();
         this.props.setNewState("editScheduleId", scheduleId);
+        this.props.setNewState("schedulePrice", price);
     }
 
     handleDeleteButton(scheduleId) {
@@ -216,7 +219,7 @@ class Content extends Component {
                                     <p className="mt-2 flex-grow-1">{schedule.day} {schedule.month} {schedule.time}</p>
                                     <div className="btn-group">
                                         <button type="button" className="mr-1 btn btn-outline-success"
-                                                onClick={() => this.handleEditButton(schedule.id)} >Изменить
+                                                onClick={() => this.handleEditButton(schedule.id, schedule.price)} >Изменить
                                         </button>
                                         <button type="button" className="mr-1 btn btn-outline-danger"
                                                 onClick={() => this.handleDeleteButton(schedule.id)} >Удалить
@@ -294,6 +297,7 @@ export class Schedule extends Component{
             editModalSchedule: false,
             createModalSchedule: false,
             editScheduleId: null,
+            schedulePrice: null,
             eventId: this.props.eventId,
             eventName: this.props.eventName,
             activePage: 0,
@@ -358,6 +362,7 @@ export class Schedule extends Component{
                     show = {this.state.editModalSchedule}
                     eventId = {this.props.eventId}
                     getSchedule = {this.getSchedulesByEvent}
+                    price = {this.state.schedulePrice}
                 />
                 <Content toggleEditDialog = {this.toggleEditModal}
                          toggleDialog = {this.props.toggleDialog}
