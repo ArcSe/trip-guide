@@ -456,7 +456,7 @@ class Content extends Component {
                             <div className="mb-0 text-muted">
                                 Рейтинг: {+(Math.round(event.rating + "e+2")  + "e-2")} ({event.votes})
                             </div>
-                            <div className="text-muted">{event.address}, ближайшая дата</div>
+                            <div className="text-muted">{event.address}</div>
                             <p className="card-text mb-auto">
                                 {event.description.length > 200 ?
                                     `${event.description.substring(0, 200)}...` : event.description}
