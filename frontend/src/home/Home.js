@@ -417,14 +417,10 @@ class Content extends Component {
             <div>
                 <button type="button" className="btn btn-primary mt-1 mb-1" onClick={this.getEvents}>Фильтровать</button>
                 {this.state.events.map(event =>
-                    <div className="row no-gutters border rounded overflow-hidden flex-md-row shadow-sm h-md-250 position-relative">
+                    <div className="row no-gutters border rounded overflow-hidden flex-md-row shadow-sm h-md-250 position-relative mb-1">
                         <div className="col-auto d-lg-block my-auto">
-                            <svg className="bd-placeholder-img" width="250" height="200"
-                                 preserveAspectRatio="xMidYMid slice"
-                                 focusable="false" role="img" aria-label="Placeholder: Thumbnail">
-                                <rect width="100%" height="100%" fill="#55595c"/>
-                                <text x="50%" y="50%" fill="#eceeef" dy=".3em">Картинка</text>
-                            </svg>
+                            <img width="250" height="250" alt="Картинка" className="img-responsive"
+                                 src="https://media.proshoper.ru/thumbs/products/pyaterochka/2020/05/05/3330008.jpg.250x250_q85.jpg" />
                         </div>
                         <div className="col p-4  position-static">
 
@@ -462,7 +458,7 @@ class Content extends Component {
 
 
                             <div className="mb-0 text-muted">
-                                Рейтинг: {+(Math.round(event.rating + "e+2")  + "e-2")} ({event.votes})
+                                Рейтинг: {+(Math.round(event.rating + "e+2")  + "e-2")} ({event.votes} оценки)
                             </div>
                             <div className="text-muted">{event.address}</div>
                             <p className="card-text mb-auto">
