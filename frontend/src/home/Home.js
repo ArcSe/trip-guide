@@ -32,12 +32,10 @@ class CityDropDown extends Component {
             .then(response => {
                 const cities = response.content;
                 this.setState({cities: cities});
-                console.log(cities);
                 this.props.setFilterState("city", cities[0]);
                 this.props.setFilterState("loadingCity", false);
                 this.setState({loading: false});
-            })
-            .catch(error => console.log(`${error.message}`));
+            });
     }
 
     render() {

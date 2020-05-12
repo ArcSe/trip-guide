@@ -17,7 +17,7 @@ class EventNavBar extends Component {
 
     render() {
         return (
-            <div className="event-nav sticky-top">
+            <div className="event-nav">
                 <nav className="navbar navbar-expand-lg navbar-light bg-light">
                     <a className="nav-link" href="#description">Описание</a>
                     <a className="nav-link" href="#schedule">Афиша</a>
@@ -128,91 +128,91 @@ class EventPicturesT extends Component {
             <SRLWrapper options={options}>
                 <div className="container">
                     <div className="row">
-                        <div className="col-lg-3 col-md-4 col-6">
+                        <div className="col-lg-3 col-md-4 col-6 m-1">
                             <a
                                 href="https://www.simple-react-lightbox.dev/docs/gallery/unsplash17.jpg"
                                 data-attribute="SRL"
                                 className="pseudo-element"
                             >
-                                <img className="img-fluid height=160"
+                                <img className="img-relative" width="250" height="250"
                                      src="https://www.simple-react-lightbox.dev/docs/gallery/unsplash17.jpg"
                                      alt="A small boat"
                                 />
                             </a>
                         </div>
 
-                        <div className="col-lg-3 col-md-4 col-6">
+                        <div className="col-lg-3 col-md-4 col-6 m-1">
                             <a
                                 href="https://www.simple-react-lightbox.dev/docs/gallery/unsplash19.jpg"
                                 data-attribute="SRL"
                                 className="pseudo-element"
                             >
-                                <img className="img-fluid"
+                                <img className="img-relative" width="250" height="250"
                                      src="https://www.simple-react-lightbox.dev/docs/gallery/unsplash19.jpg"
                                      alt="Penguins kissed by the sun"
                                 />
                             </a>
                         </div>
 
-                        <div className="col-lg-3 col-md-4 col-6">
+                        <div className="col-lg-3 col-md-4 col-6 m-1">
                             <a
                                 href="https://www.simple-react-lightbox.dev/docs/gallery/unsplash04.jpg"
                                 data-attribute="SRL"
                                 className="pseudo-element"
                             >
-                                <img className="img-fluid"
+                                <img className="img-relative" width="250" height="250"
                                      src="https://www.simple-react-lightbox.dev/docs/gallery/unsplash04.jpg"
                                      alt="Penguins kissed by the sun"
                                 />
                             </a>
                         </div>
 
-                        <div className="col-lg-3 col-md-4 col-6">
+                        <div className="col-lg-3 col-md-4 col-6 m-1">
                             <a
                                 href="https://www.simple-react-lightbox.dev/docs/gallery/unsplash05.jpg"
                                 data-attribute="SRL"
                                 className="pseudo-element"
                             >
-                                <img className="img-fluid"
+                                <img className="img-relative" width="250" height="250"
                                      src="https://www.simple-react-lightbox.dev/docs/gallery/unsplash05.jpg"
                                      alt="A peaceful lake."
                                 />
                             </a>
                         </div>
 
-                        <div className="col-lg-3 col-md-4 col-6">
+                        <div className="col-lg-3 col-md-4 col-6 m-1">
                             <a
                                 href="https://www.simple-react-lightbox.dev/docs/gallery/unsplash20.jpg"
                                 data-attribute="SRL"
                                 className="pseudo-element"
                             >
-                                <img className="img-fluid"
+                                <img className="img-relative" width="250" height="250"
                                      src="https://www.simple-react-lightbox.dev/docs/gallery/unsplash20.jpg"
                                      alt="A peaceful lake."
                                 />
                             </a>
                         </div>
 
-                        <div className="col-lg-3 col-md-4 col-6">
+                        <div className="col-lg-3 col-md-4 col-6 m-1">
                             <a
                                 href="https://www.simple-react-lightbox.dev/docs/gallery/unsplash21.jpg"
                                 data-attribute="SRL"
                                 className="pseudo-element"
                             >
-                                <img className="img-fluid"
+                                <img className="img-relative" width="250" height="250"
                                      src="https://www.simple-react-lightbox.dev/docs/gallery/unsplash21.jpg"
                                      alt="Small insect"
                                 />
                             </a>
                         </div>
 
-                        <div className="col-lg-3 col-md-4 col-6">
+                        <div className="col-lg-3 col-md-4 col-6 m-1">
                             <a
                                 href="https://www.simple-react-lightbox.dev/docs/gallery/unsplash04.jpg"
                                 data-attribute="SRL"
                                 className="pseudo-element"
                             >
-                                <img className="img-fluid"
+                                <img className="img-relative" width="250" height="250"
                                      src="https://www.simple-react-lightbox.dev/docs/gallery/unsplash04.jpg"
                                      alt="Penguins kissed by the sun"
                                 />
