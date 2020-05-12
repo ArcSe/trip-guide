@@ -511,7 +511,7 @@ export default class Home extends Component {
             },
             pageable: {
                 page: 0,
-                size: 1,
+                size: 10,
                 totalPages: null,
             },
         };

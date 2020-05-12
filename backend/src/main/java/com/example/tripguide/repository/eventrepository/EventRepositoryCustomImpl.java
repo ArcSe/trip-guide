@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -40,10 +41,14 @@ public class EventRepositoryCustomImpl implements EventRepositoryCustom {
         addDayOfWeekRestriction(criteriaBuilder, event, predicates, eventCriteriaRequest.getDayOfWeek());
 
         criteriaQuery.where(predicates.toArray(new Predicate[0]));
-        List<Event> resultList = entityManager.createQuery(criteriaQuery).getResultList();
-        int total = resultList.size();
-        // System.out.println(pageable);
-        return new PageImpl<>(resultList, pageable, total);
+        TypedQuery<Event> typedQuery = entityManager.createQuery(criteriaQuery);
+        int page = pageable.getPageNumber(), size = pageable.getPageSize();
+        int count = typedQuery.getResultList().size();
+        typedQuery.setFirstResult(page * size);
+        typedQuery.setMaxResults(size);
+        List<Event> resultList = typedQuery.getResultList();
+
+        return new PageImpl<>(resultList, pageable, count);
     }
 
     private void addRatingRestriction(CriteriaBuilder cb, Root<Event> eventRoot,
@@ -131,6 +136,10 @@ public class EventRepositoryCustomImpl implements EventRepositoryCustom {
 
     private LocalDateTime getUpcomingSaturday() {
         LocalDateTime result = LocalDateTime.now();
+
+        if (result.getDayOfWeek() == DayOfWeek.SATURDAY) {
+            return result.plusDays(7);
+        }
 
         while (result.getDayOfWeek() != DayOfWeek.SATURDAY) {
             result = result.plusDays(1);
