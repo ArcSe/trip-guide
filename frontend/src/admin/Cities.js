@@ -137,11 +137,14 @@ class SearchComponent extends Component {
     }
 
     handleClearClick() {
-        this.props.getCities();
+        this.props.setCitiesState("search", "");
+        this.props.setCitiesState("activePage", 0);
+        setTimeout(this.props.getCities, 100);
     }
 
     handleSearchButton() {
-        this.props.getCitiesByName(this.props.search);
+        this.props.setCitiesState("activePage", 0);
+        setTimeout(this.props.getCities, 100);
     }
 
     render() {
@@ -281,13 +284,12 @@ export class Cities extends Component {
             showCreateModal: false,
             showEditModal: false,
             editCityId: null,
-            search: null,
+            search: "",
             activePage: 0,
             totalPages: 0,
             pageSize: 5,
         };
 
-        this.getCitiesByName = this.getCitiesByName.bind(this);
         this.getCities = this.getCities.bind(this);
         this.setNewState = this.setNewState.bind(this);
         this.toggleCreateModal = this.toggleCreateModal.bind(this);
@@ -299,16 +301,14 @@ export class Cities extends Component {
     }
 
     getCities() {
-        CityAPI.getCities({page: this.state.activePage, size: this.state.pageSize})
+        const citiesRequest = {
+            page: this.state.activePage,
+            size: this.state.pageSize,
+            name: this.state.search,
+        };
+        CityAPI.getCities(citiesRequest)
             .then(response => {
                 this.setState({totalPages: response.totalPages});
-                this.setState({cities: response.content});
-            });
-    }
-
-    getCitiesByName() {
-        CityAPI.getCitiesByName({name: this.state.search})
-            .then(response => {
                 this.setState({cities: response.content});
             });
     }
@@ -352,7 +352,6 @@ export class Cities extends Component {
                     <CreateButton toggleDialog={this.toggleCreateModal}/>
                     <SearchComponent search={this.state.search}
                                      getCities={this.getCities}
-                                     getCitiesByName={this.getCitiesByName}
                                      setCitiesState={this.setNewState}/>
                 </div>
 

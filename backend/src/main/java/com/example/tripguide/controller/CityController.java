@@ -30,13 +30,8 @@ public class CityController {
     }
 
     @GetMapping("/cities")
-    public Page<CityBasicResponse> getAllCities(Pageable pageable) {
-        Page<City> pageCity = this.cityRepository.findAll(pageable);
-        return pageCity.map(this.cityMapper::entityToBasicResponse);
-    }
-
-    @GetMapping("/city")
-    public Page<CityBasicResponse> getCityByName(@RequestParam String name, Pageable pageable) {
+    public Page<CityBasicResponse> getAllCities(@RequestParam(required = false) String name,
+                                                Pageable pageable) {
         Page<City> pageCity = this.cityRepository.findByNameContaining(name, pageable);
         return pageCity.map(this.cityMapper::entityToBasicResponse);
     }

@@ -202,12 +202,15 @@ class FilterCheckBox extends Component {
                     </div>
                 }
 
-                <div className="form-check ml-2">
+                {
+                    false && <div className="form-check ml-2">
                         <input type="checkbox" className="form-check-input"
                                id="freeCheck"
                                onChange={this.handleFreeChange} checked={this.props.free}/>
                         <label className="form-check-label" htmlFor="freeCheck">Бесплатные</label>
                     </div>
+
+                }
 
             </form>
         )
@@ -426,7 +429,12 @@ class Content extends Component {
                         <div className="col p-4  position-static">
 
                             <div className="form-inline">
-                                <h3 className="mb-0">{event.name}</h3>
+
+                                <h3 className="mb-0">
+                                    <a className="card-link" href={`/event/${event.id}`}>
+                                        {event.name}
+                                    </a>
+                                </h3>
 
                                 {this.props.currentUser &&
                                 <div className="dropdown ml-2">
@@ -473,7 +481,6 @@ class Content extends Component {
                             </div>
                             }
 
-                            <a href={`/event/${event.id}`} className="card-link">Перейти</a>
                         </div>
                     </div>
                 )

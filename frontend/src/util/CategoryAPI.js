@@ -14,22 +14,12 @@ class CategoryAPI {
     }
 
     getCategories(categoriesRequest) {
-
         const page = categoriesRequest.page;
         const size = categoriesRequest.size;
+        const name = categoriesRequest.name ? categoriesRequest.name : "";
 
         return APIUtils.request({
-            url: `${API_BASE_URL}/api/categories/?page=${page}&size=${size}`,
-            method: 'GET'
-        });
-    }
-
-    getCategoriesByName(categoriesRequest) {
-        this.checkAccessToken();
-        const name = categoriesRequest.name;
-
-        return APIUtils.request({
-            url: `${API_BASE_URL}/api/category/?name=${name}`,
+            url: `${API_BASE_URL}/api/categories/?page=${page}&size=${size}&name=${name}`,
             method: 'GET'
         });
     }
