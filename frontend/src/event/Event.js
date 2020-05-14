@@ -500,7 +500,11 @@ class EventSchedule extends Component {
 
                                     <div className="event-schedule-item-ticket-col">
                                         <div className="box one">
-                                            <button type="button" className="btn btn-primary">Купить билет</button>
+                                            <a href="/buy">
+                                            <button type="button" className="btn btn-primary">
+                                                Купить билет
+                                            </button>
+                                            </a>
                                         </div>
                                     </div>
                                 </div>

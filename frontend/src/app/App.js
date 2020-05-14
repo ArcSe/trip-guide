@@ -13,10 +13,157 @@ import LoadingIndicator from '../common/LoadingIndicator';
 import UserAPI from "../util/UserAPI";
 import { ACCESS_TOKEN } from '../constants';
 import PrivateRoute from '../common/PrivateRoute';
+import Payment from '../payment/Payment';
 import Alert from 'react-s-alert';
 import 'react-s-alert/dist/s-alert-default.css';
 import 'react-s-alert/dist/s-alert-css-effects/slide.css';
 import './App.css';
+
+class HomeComponent extends Component {
+
+  render() {
+    return (
+        <div className="component">
+
+          <div className="app-top-box">
+            <AppHeader authenticated={this.props.authenticated} onLogout={this.props.onLogout} />
+          </div>
+
+          <div className="body">
+            <Home authenticated={this.props.authenticated} currentUser={this.props.currentUser} />
+          </div>
+        </div>
+    )
+  }
+}
+
+class LoginComponent extends Component {
+
+  render() {
+    return (
+        <div className="component">
+
+          <div className="app-top-box">
+            <AppHeader authenticated={this.props.authenticated} onLogout={this.props.onLogout} />
+          </div>
+
+          <div className="body">
+            <Login {...this.props} />
+          </div>
+
+        </div>
+    )
+  }
+}
+
+class SignupComponent extends Component {
+
+  render() {
+    return (
+        <div className="component">
+
+          <div className="app-top-box">
+            <AppHeader authenticated={this.props.authenticated} onLogout={this.props.onLogout} />
+          </div>
+
+          <div className="body">
+            <Signup {...this.props} />
+          </div>
+
+        </div>
+    )
+  }
+}
+
+class OAuthComponent extends Component {
+
+  render() {
+    return (
+        <div className="component">
+
+          <div className="app-top-box">
+            <AppHeader authenticated={this.props.authenticated} onLogout={this.props.onLogout} />
+          </div>
+
+          <div className="body">
+            <OAuth2RedirectHandler />
+          </div>
+
+        </div>
+    )
+  }
+}
+
+class ProfileComponent extends Component {
+  render() {
+    return (
+        <div className="component">
+
+          <div className="app-top-box">
+            <AppHeader authenticated={this.props.authenticated} onLogout={this.props.onLogout} />
+          </div>
+
+          <div className="body">
+            {this.props.authenticated && (this.props.currentUser.role === "Admin") ?
+                (<PrivateRoute path="/profile" authenticated={this.props.authenticated} currentUser={this.props.currentUser}
+                               component={Admin} />
+                ) : (
+                    <PrivateRoute path="/profile" authenticated={this.props.authenticated} currentUser={this.props.currentUser}
+                                  component={Profile} />)
+            }
+          </div>
+
+        </div>
+    )
+  }
+}
+
+class EventComponent extends Component {
+  render() {
+    return (
+        <div className="component">
+
+          <div className="app-top-box">
+            <AppHeader authenticated={this.props.authenticated} onLogout={this.props.onLogout} />
+          </div>
+
+          <div className="body">
+            <Event />
+          </div>
+
+        </div>
+    )
+  }
+}
+
+class BuyComponent extends Component {
+  render() {
+    return (
+        <div className="component">
+          <div className="body">
+            <Payment />
+          </div>
+        </div>
+    )
+  }
+}
+
+class NotFoundComponent extends Component {
+  render() {
+    return (
+        <div className="component">
+          <div className="app-top-box">
+            <AppHeader authenticated={this.props.authenticated} onLogout={this.props.onLogout} />
+          </div>
+
+          <div className="body">
+            <NotFound />
+          </div>
+
+        </div>
+    )
+  }
+}
 
 class App extends Component {
   constructor(props) {
@@ -43,7 +190,6 @@ class App extends Component {
             authenticated: true,
             loading: false
           });
-          console.log(response);
         }).catch(error => {
       this.setState({
         loading: false
@@ -60,7 +206,6 @@ class App extends Component {
     Alert.success("Вы успешно вышли!");
   }
 
-
   componentDidMount() {
     this.loadCurrentlyLoggedInUser();
   }
@@ -72,32 +217,43 @@ class App extends Component {
 
     return (
         <div className="app">
-          <div className="app-top-box">
-            <AppHeader authenticated={this.state.authenticated} onLogout={this.handleLogout} />
-          </div>
           <div className="app-body">
             <Switch>
-              <Route exact path="/"
-                     render={() => <Home authenticated={this.state.authenticated} currentUser={this.state.currentUser} />} />
-              <Route path="/login"
-                     render={(props) => <Login authenticated={this.state.authenticated} {...props} />} />
-              <Route path="/signup"
-                     render={(props) => <Signup authenticated={this.state.authenticated} {...props} />} />
-              <Route path="/oauth2/redirect" component={OAuth2RedirectHandler} />
 
-              {this.state.authenticated && (this.state.currentUser.role === "Admin") ?
-                  (<PrivateRoute path="/profile" authenticated={this.state.authenticated} currentUser={this.state.currentUser}
-                component={Admin} />
-                ) : (
-                    <PrivateRoute path="/profile" authenticated={this.state.authenticated} currentUser={this.state.currentUser}
-                                                                   component={Profile} />)
-              }
+              <Route exact path="/"
+                     render={() => <HomeComponent authenticated={this.state.authenticated}
+                                                  onLogout={this.handleLogout}
+                                                  currentUser={this.state.currentUser} />} />
+
+              <Route path="/login"
+                     render={(props) => <LoginComponent authenticated={this.state.authenticated}
+                                                        onLogout={this.handleLogout}
+                                                        {...props} />} />
+
+              <Route path="/signup"
+                     render={(props) => <SignupComponent authenticated={this.state.authenticated}
+                                                         onLogout={this.handleLogout}/>} />
+
+              <Route path="/oauth2/redirect"
+                     render={(props) => <OAuthComponent authenticated={this.state.authenticated}
+                                                        onLogout={this.handleLogout} />} />
+
+              <Route path="/profile"
+                     render={() => <ProfileComponent authenticated={this.state.authenticated}
+                                                     currentUser={this.state.currentUser}
+                                                     onLogout={this.handleLogout} />} />
 
               <Route path="/event/:id"
-                     render={() => <Event />} />
+                     render={() => <EventComponent authenticated={this.state.authenticated}
+                                          onLogout={this.handleLogout} />} />
 
+              <Route path="/buy"
+                     render={() => <BuyComponent />} />
 
-              <Route component={NotFound} />
+              <Route
+                  render={() => <NotFoundComponent authenticated={this.state.authenticated}
+                                                   onLogout={this.handleLogout} />} />
+
             </Switch>
           </div>
           <Alert stack={{limit: 3}}
