@@ -32,7 +32,14 @@ public class CategoryController {
     @GetMapping("/categories")
     public Page<CategoryBasicResponse> getAllCategories(@RequestParam(required = false) String name,
                                                         Pageable pageable){
-        Page<Category> pageCategory = this.categoryRepository.findByNameContaining(name, pageable);
+        Page<Category> pageCategory;
+
+        if (name == null) {
+            pageCategory = this.categoryRepository.findAll(pageable);
+        } else {
+            pageCategory = this.categoryRepository.findByNameContaining(name, pageable);
+        }
+
         return pageCategory.map(this.categoryMapper::entityToBasicResponse);
     }
 

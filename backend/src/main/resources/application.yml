@@ -1,4 +1,8 @@
 spring:
+
+    images:
+        path: D:/Images
+
     datasource:
         url: jdbc:mysql://localhost:3306/spring_social?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
         username: root

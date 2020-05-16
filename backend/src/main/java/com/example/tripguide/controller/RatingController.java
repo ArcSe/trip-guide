@@ -39,9 +39,6 @@ public class RatingController {
             throw new BadRequestException("Вы уже оценили это событие!");
         }
 
-        /*
-        Возможно, для этой логики нужно создавать Service уровень, но я не определился.
-         */
         Event event = this.eventRepository.getOne(request.getEventId());
         long eventNewVotes = event.getVotes() + 1;
         float eventNewRating = (event.getRating() * event.getVotes() + request.getRating()) / eventNewVotes;
