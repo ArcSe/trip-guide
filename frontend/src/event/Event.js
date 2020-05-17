@@ -34,25 +34,28 @@ class EventHeader extends Component {
         super(props);
 
         this.state = {
-            schedules: [],
+            cover: null,
             loading: true
         };
 
-        this.getSchedules = this.getSchedules.bind(this);
+        this.getCover = this.getCover.bind(this);
     }
 
     componentDidMount() {
-        this.getSchedules();
+        this.getCover();
     }
 
-    getSchedules() {
-        const schedulesRequest = { eventId: this.props.event.id };
-        ScheduleAPI.getSchedulesByEvent(schedulesRequest)
+    getCover() {
+        const id = this.props.event.id;
+        const imageRequest = { id: id };
+
+        ImageAPI.getCover(imageRequest)
             .then(response => {
-                this.setState({schedules: response.content});
+                this.setState({cover: response.response});
                 this.setState({loading: false});
-            })
+            });
     }
+
 
     render() {
         if (this.state.loading) {
@@ -68,7 +71,7 @@ class EventHeader extends Component {
 
                 <div className="left">
                     <img alt="Картинка" className="img-fluid"
-                         src="https://cdn.bileter.ru/data/shows_logos/1/K/9e6SvYNnX56V8YQmHnrG_al_FmJQIW8G.jpg"
+                         src={`${API_BASE_URL}/img/${this.state.cover}`}
                     />
                 </div>
 

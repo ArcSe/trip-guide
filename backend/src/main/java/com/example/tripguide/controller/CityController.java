@@ -54,7 +54,7 @@ public class CityController {
     public ResponseEntity<CityBasicResponse> createCity(@RequestBody CityBasicRequest request)
             throws URISyntaxException {
         if (this.cityRepository.existsByName(request.getName())) {
-            throw new BadRequestException("Такой город уже создан");
+            throw new BadRequestException("Такой город уже создан!");
         }
 
         City city = this.cityMapper.basicRequestToEntity(request);

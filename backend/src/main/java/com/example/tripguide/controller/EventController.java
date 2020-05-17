@@ -15,8 +15,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Optional;
@@ -45,7 +43,6 @@ public class EventController {
         return pageEvent.map(this.eventMapper::entityToBasicResponse);
     }
 
-    //Добавить в критерий поиск ближайшей даты
     @GetMapping("/events")
     public Page<Event> getEvents(Pageable pageable, EventCriteriaRequest eventCriteriaRequest) {
         return this.eventRepository.findAllByCriteria(eventCriteriaRequest, pageable);
@@ -62,7 +59,7 @@ public class EventController {
     public ResponseEntity<EventBasicResponse> createEvent(@RequestBody EventBasicRequest eventRequest) throws URISyntaxException {
         //Переделать проверку на более тщательную
         if (this.eventRepository.existsByName(eventRequest.getName())
-                && this.eventRepository.existsByAddressAndCity_Id(eventRequest.getAddress(), eventRequest.getCityId())){
+                && this.eventRepository.existsByAddressAndCityId(eventRequest.getAddress(), eventRequest.getCityId())){
             throw new BadRequestException("Такой город уже создан");
         }
 

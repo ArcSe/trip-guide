@@ -9,5 +9,5 @@ public interface RatingRepository extends JpaRepository<Rating, Long> {
 
     Rating save(Rating rating);
 
-    boolean existsByEvent_idAndUser_id(Long eventId, Long userId);
+    boolean existsByEventIdAndUserId(Long eventId, Long userId);
 }

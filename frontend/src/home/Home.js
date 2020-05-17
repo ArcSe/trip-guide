@@ -380,7 +380,6 @@ class Content extends Component {
     }
 
     getCover() {
-        console.log(`Getting cover`);
         const events = this.state.events;
 
         for (let event in events) {
@@ -439,14 +438,13 @@ class Content extends Component {
             <div>
                 <button type="button" className="btn btn-primary mt-1 mb-1" onClick={this.getEvents}>Фильтровать</button>
                 {this.state.events.map(event =>
-                    <div className="row no-gutters border rounded overflow-hidden flex-md-row shadow-sm h-md-250 position-relative mb-1">
+                    <div className="row no-gutters border rounded flex-md-row shadow-sm h-md-250 position-relative mb-1">
                         <div className="col-auto d-lg-block my-auto">
                             <img width="320" height="160" alt="Картинка" className="img-responsive"
-                                 src="https://cdn.bileter.ru/data/shows_logos/1/K/9e6SvYNnX56V8YQmHnrG_al_FmJQIW8G.jpg"
                                  src={`${API_BASE_URL}/img/${event.cover}`}
                             />
                         </div>
-                        <div className="col p-4  position-static">
+                        <div className="col p-4 position-static">
 
                             <div className="form-inline">
 
@@ -463,13 +461,13 @@ class Content extends Component {
                                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Оценить
                                     </button>
-                                    <div className="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                    <div className="dropdown-menu">
                                         <button className="dropdown-item" type="button"
                                                 onClick={() => this.handleRatingSet(event.id, 1)}>1</button>
                                         <button className="dropdown-item" type="button"
                                                 onClick={() => this.handleRatingSet(event.id, 2)}>2</button>
                                         <button className="dropdown-item" type="button"
-                                                    onClick={() => this.handleRatingSet(event.id, 3)}>3</button>
+                                                onClick={() => this.handleRatingSet(event.id, 3)}>3</button>
                                         <button className="dropdown-item" type="button"
                                                 onClick={() => this.handleRatingSet(event.id, 4)}>4</button>
                                         <button className="dropdown-item" type="button"
