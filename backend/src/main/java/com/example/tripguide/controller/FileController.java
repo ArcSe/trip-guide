@@ -100,7 +100,7 @@ public class FileController {
         String cover = event.getCover();
 
         if (cover == null) {
-            cover = "/cover.png";
+            cover = "cover.png";
         }
 
         return ResponseEntity.ok(Collections.singletonMap("response", cover));
@@ -113,7 +113,7 @@ public class FileController {
 
         String path = Paths.get(this.imagePath, id.toString()).toString();
         File file = new File(path);
-        Object[] photos = Arrays.stream(file.list()).map(x -> "/" + id.toString() + "/" + x)
+        Object[] photos = Arrays.stream(file.list()).map(x -> id.toString() + "/" + x)
                 .toArray();
 
         return ResponseEntity.ok(Collections.singletonMap("response", photos));

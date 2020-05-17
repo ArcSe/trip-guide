@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {API_BASE_URL} from "../constants";
 import DatePicker from "react-datepicker";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.js';
@@ -8,6 +9,7 @@ import CategoryAPI from "../util/CategoryAPI";
 import CityAPI from "../util/CityAPI";
 import UserAPI from "../util/UserAPI";
 import EventAPI from "../util/EventAPI";
+import ImageAPI from "../util/ImageAPI";
 import Alert from "react-s-alert";
 import RatingAPI from "../util/RatingAPI";
 
@@ -331,11 +333,13 @@ class Content extends Component {
         this.state = {
             userEvents: new Set(),
             events: [],
+            loading: true,
         };
 
         this.getEvents = this.getEvents.bind(this);
         this.getUserEvents = this.getUserEvents.bind(this);
         this.handleCheckBoxChange = this.handleCheckBoxChange.bind(this);
+        this.getCover = this.getCover.bind(this);
     }
 
     componentDidMount() {
@@ -368,11 +372,27 @@ class Content extends Component {
 
         EventAPI.getEvents(eventsRequest)
             .then(response => {
-                console.log(response);
                 this.props.setPageState("page", response.number);
                 this.props.setPageState("totalPages", response.totalPages);
                 this.setState({events: response.content});
+                this.getCover();
             }).catch(error => console.log(error));
+    }
+
+    getCover() {
+        console.log(`Getting cover`);
+        const events = this.state.events;
+
+        for (let event in events) {
+            const imageRequest = { id: events[event].id };
+            ImageAPI.getCover(imageRequest)
+                .then(response => {
+                    events[event].cover = response.response;
+                });
+        }
+
+        this.setState({events: events});
+        setTimeout(() => this.setState({loading: false}), 100);
     }
 
     handleCheckBoxChange(event, id) {
@@ -411,14 +431,20 @@ class Content extends Component {
     }
 
     render() {
+        if (this.state.loading) {
+            return null;
+        }
+
         return (
             <div>
                 <button type="button" className="btn btn-primary mt-1 mb-1" onClick={this.getEvents}>Фильтровать</button>
                 {this.state.events.map(event =>
                     <div className="row no-gutters border rounded overflow-hidden flex-md-row shadow-sm h-md-250 position-relative mb-1">
                         <div className="col-auto d-lg-block my-auto">
-                            <img width="250" height="250" alt="Картинка" className="img-responsive"
-                                 src="https://media.proshoper.ru/thumbs/products/pyaterochka/2020/05/05/3330008.jpg.250x250_q85.jpg" />
+                            <img width="320" height="160" alt="Картинка" className="img-responsive"
+                                 src="https://cdn.bileter.ru/data/shows_logos/1/K/9e6SvYNnX56V8YQmHnrG_al_FmJQIW8G.jpg"
+                                 src={`${API_BASE_URL}/img/${event.cover}`}
+                            />
                         </div>
                         <div className="col p-4  position-static">
 
