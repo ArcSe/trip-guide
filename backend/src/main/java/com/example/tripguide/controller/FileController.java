@@ -3,29 +3,19 @@ package com.example.tripguide.controller;
 import com.example.tripguide.exception.BadRequestException;
 import com.example.tripguide.model.Event;
 import com.example.tripguide.repository.eventrepository.EventRepository;
-import com.sun.mail.iap.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.activation.FileTypeMap;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -111,10 +101,17 @@ public class FileController {
         Event event = this.eventRepository.getOne(id);
         String cover = event.getCover();
 
-        String path = Paths.get(this.imagePath, id.toString()).toString();
-        File file = new File(path);
-        Object[] photos = Arrays.stream(file.list()).map(x -> id.toString() + "/" + x)
-                .toArray();
+        Path path = Paths.get(this.imagePath, id.toString());
+        List<String> photos = new ArrayList<>();
+
+        try (Stream<Path> paths = Files.walk(path)) {
+            photos = paths
+                    .filter(Files::isRegularFile)
+                    .map(p -> p.subpath(p.getNameCount() - 2, p.getNameCount()))
+                    .map(Path::toString)
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+        }
 
         return ResponseEntity.ok(Collections.singletonMap("response", photos));
     }

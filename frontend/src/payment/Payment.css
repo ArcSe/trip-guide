@@ -1,0 +1,318 @@
+.payment-container {
+    font-family: "PFCentroSansPro", Arial, Sans;
+    font-size: 12px;
+    color: #4d4f53;
+    margin: 20px;
+    display: block;
+    text-align: -webkit-center;
+}
+
+.payform {
+    display: block;
+    margin-top: 0em;
+    margin-block-end: 1em;
+}
+
+.pay-container {
+    border: 1px solid #cccccc;
+    border-radius: 8px;
+    padding: 30px;
+    width: 610px;
+    text-align: center;
+}
+
+.pay-container-header {
+    white-space: nowrap;
+    text-align: left;
+}
+
+.merchant-logo {
+    display: inline-block;
+    width: 150px;
+    max-width: 150px;
+    min-height: 60px;
+}
+
+.merchant-name {
+    margin-top: 5px;
+    display: inline-block;
+    white-space: normal;
+    vertical-align: top;
+    width: 370px;
+    color: #1f1f1f;
+    text-align: left;
+    font-weight: bold;
+    font-size: 22px;
+    padding: 0 25px;
+}
+
+.pay-container-table {
+    padding: 2em 0;
+}
+
+.param-name {
+    width: 200px;
+    font-size: 20px;
+    vertical-align: top;
+    line-height: 1.2em;
+    text-align: left;
+    color: rgb(77, 79, 83);
+    padding-right: 10px;
+}
+
+.param {
+    font-size: 20px;
+    text-align: left;
+    vertical-align: top;
+    line-height: 1.2em;
+    color: #1f1f1f;
+}
+
+.sum {
+    padding-top: 0.5em;
+    font-size: 22px;
+}
+
+.pay-container-content {
+    min-height: 280px;
+    padding-bottom: 2em;
+}
+
+.pay-container__content {
+    min-height: 280px;
+    padding-bottom: 2em;
+}
+
+.pay-container__cards {
+    height: 330px;
+    min-height: 280px;
+    position: relative;
+}
+
+.pay-container__card-front {
+    z-index: 5;
+    top: 32px;
+}
+
+.pay-container__card {
+    height: 248px;
+    width: 416px;
+    position: absolute;
+}
+
+.card-front .no-cardholder {
+    min-height: 90px;
+}
+
+.card-front {
+    background-color: #f5f6f7;
+    height: 100%;
+    border-radius: 10px;
+    padding: 20px 30px;
+    border: 1px solid #dddddd;
+    box-shadow: 2px 6px 9px 0 rgba(0,29,74,.4);
+    position: relative;
+    overflow: hidden;
+}
+
+.card-front.no-cardholder > .card-front__label {
+    margin-top: 50px;
+}
+
+.card-front__label {
+    color: #4d4f53;
+    font-size: 20px;
+    font-weight: 400;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.card-front__input {
+    width: 100%;
+    font-size: 24px;
+    display: block;
+    height: 38px;
+    padding: 0 10px;
+    margin-bottom: 15px;
+}
+
+input {
+    font-family: "PFCentroSansPro", Arial, Sans;
+    padding: 0 10px;
+    color: #1f1f1f;
+    border-radius: 5px;
+    border: 1px solid #b3b3b3;
+    background-color: #fff;
+    transition-property: box-shadow;
+    transition-duration: .25s;
+}
+
+.card-front__expiry-date {
+    position: relative;
+    z-index: 100;
+}
+
+.card-front__label_exp_date {
+    color: #4d4f53;
+    font-size: 20px;
+    font-weight: 400;
+}
+
+.card-front__label {
+    color: #4d4f53;
+    font-size: 20px;
+    font-weight: 400;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.card-front__select {
+    float: left;
+    margin-top: 5px;
+    color: #4d4f53;
+    font-size: 24px;
+    font-weight: 400;
+}
+
+.card-front__select input {
+    width: 50px;
+    height: 38px;
+    font-size: 24px;
+    padding: 0 5px;
+    text-align: center;
+}
+
+
+.card-front__pslogo {
+    float: right;
+    margin-top: 5px;
+    margin-right: 3px;
+}
+
+.pay-container__card-back {
+    z-index: 4;
+    left: 190px;
+    right: 0;
+}
+
+.card-back {
+    background-color: #f5f6f7;
+    height: 100%;
+    border-radius: 10px;
+    padding: 20px 30px;
+    box-shadow: 2px 6px 9px 0 rgba(0,29,74,.4);
+    padding-right: 0;
+    padding-left: 0;
+}
+
+.card-back__stripe {
+    height: 55px;
+    width: 100%;
+    background-color: #4d4f53;
+    margin: 15px 0;
+}
+
+.card-back__label {
+    font-size: 16px;
+    text-align: right;
+    margin-right: 35px;
+    color: rgb(77, 79, 83);
+    font-weight: 400;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.card-back__code {
+    text-align: right;
+    margin-right: 35px;
+    background-color: #ededed;
+    padding: 5px;
+}
+
+.card-back__code input {
+    text-align: center;
+    width: 77px;
+    height: 33px;
+    font-size: 22px;
+    font-family: Arial, Sans;
+}
+
+.card-back__code input {
+    text-align: center;
+    width: 77px;
+    height: 33px;
+    font-size: 22px;
+    font-family: Arial, Sans;
+}
+
+.card-back-cvvdesc {
+    float: right;
+    color: #888;
+    font-size: 10px;
+    text-align: right;
+    width: 100px;
+    margin-top: 5px;
+    margin-right: 35px;
+}
+
+label {
+    text-align: left;
+}
+
+.card-front__pslogo__cover {
+    width: 150px;
+    height: 38px;
+    position: absolute;
+    background: #f5f6f7;
+    top: 219px;
+    left: -40px;
+    opacity: 0.7;
+}
+
+.card-front__pslogo img {
+    width: 210px;
+    margin-top: 3px;
+}
+
+.pay-container__pay {
+    padding-bottom: 2em;
+}
+
+.pay-tr {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+div.pay-buttons {
+    margin-top: -84px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding-top: 2em;
+    transition: 0.15s ease;
+}
+
+.pay-button {
+    height: 60px;
+    border: 0px;
+    border-radius: 5px;
+    padding: 0px 2.5em;
+    font-size: 22px;
+    font-family: PFCentroSansPro, Sans, Arial;
+    text-transform: uppercase;
+    font-weight: bold;
+    width: 295px;
+}
+
+.pay-button.active, .payform-lang li.active {
+    color: #fff !important;
+    cursor: pointer;
+    background-image: -moz-linear-gradient(top, #55e300, #55e300);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#55e300), to(#55e300));
+    background-image: -webkit-linear-gradient(top, #55e300, #55e300);
+    background-image: -o-linear-gradient(top, #55e300, #55e300);
+    background-image: linear-gradient(to bottom, #55e300, #55e300);
+    background-repeat: repeat-x;
+}

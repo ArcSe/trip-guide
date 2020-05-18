@@ -196,7 +196,7 @@ class Content extends Component {
                 Alert.success("Категория успешно удалена!");
                 this.props.getCategories();
             }).catch(error => {
-            Alert.error((error && error.message) || "Упс! Что-то пошло не так. Пожалуйста, попробуйте снова!");
+            Alert.error((error && error.message) || "Невозможно удалить категорию, есть внешняя связь!");
         });
     }
 

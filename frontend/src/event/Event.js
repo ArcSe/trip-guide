@@ -146,7 +146,6 @@ class EventPicturesContent extends Component {
             .then(response => {
                 this.setState({photos: response.response });
                 this.setState({loading: false});
-                this.state.photos.map(photo => console.log(`${API_BASE_URL}/img/${photo}`));
             });
     }
 
@@ -227,15 +226,27 @@ class EventSchedule extends Component {
         super(props);
 
         this.state = {
+            address: "",
             schedules: [],
             loading: true,
         };
 
+        this.getEvent = this.getEvent.bind(this);
         this.getSchedules = this.getSchedules.bind(this);
     }
 
     componentDidMount() {
+        this.getEvent();
         this.getSchedules();
+    }
+
+    getEvent() {
+        console.log(`Getting event by id...`);
+        const eventRequest = { eventId: this.props.eventId };
+        EventAPI.getEventById(eventRequest)
+            .then(response => {
+                this.setState({ address: response.address });
+            })
     }
 
     getSchedules() {
@@ -292,7 +303,7 @@ class EventSchedule extends Component {
                                     <div className="event-schedule-item-info-col">
                                         <div className="event-schedule-session-place">
                                             <div className="event-address">
-                                                ул. Победы, д. 42
+                                                {this.state.address}
                                             </div>
                                         </div>
                                     </div>
@@ -307,7 +318,7 @@ class EventSchedule extends Component {
 
                                     <div className="event-schedule-item-ticket-col">
                                         <div className="box one">
-                                            <a href="/buy">
+                                            <a href={`/buy/${schedule.id}`}>
                                             <button type="button" className="btn btn-primary">
                                                 Купить билет
                                             </button>

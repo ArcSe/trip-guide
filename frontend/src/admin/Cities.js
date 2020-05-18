@@ -196,7 +196,7 @@ class Content extends Component {
                 Alert.success("Город успешно удален!");
                 this.props.getCities();
             }).catch(error => {
-            Alert.error((error && error.message) || "Упс! Что-то пошло не так. Пожалуйста, попробуйте снова!");
+            Alert.error((error && error.message) || "Невозможно удалить город, есть внешняя связь!");
         });
     }
 

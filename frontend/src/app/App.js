@@ -247,7 +247,7 @@ class App extends Component {
                      render={() => <EventComponent authenticated={this.state.authenticated}
                                           onLogout={this.handleLogout} />} />
 
-              <Route path="/buy"
+              <Route path="/buy/:id"
                      render={() => <BuyComponent />} />
 
               <Route

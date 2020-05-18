@@ -14,6 +14,15 @@ class ScheduleAPI  {
         });
     }
 
+    getScheduleById(scheduleRequest) {
+        const id = scheduleRequest.id;
+
+        return APIUtils.request({
+            url: `${API_BASE_URL}/api/schedule/${id}`,
+            method: 'GET'
+        });
+    }
+
     getSchedule(scheduleRequest) {
         this.checkAccessToken();
 

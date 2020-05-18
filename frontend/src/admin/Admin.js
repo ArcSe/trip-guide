@@ -12,7 +12,7 @@ class AdminInformation extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            selectedFile: null }
+            selectedFile: null };
 
         this.fileChangedHandler = this.fileChangedHandler.bind(this);
         this.uploadHandler = this.uploadHandler.bind(this);
@@ -20,15 +20,15 @@ class AdminInformation extends Component {
 
     fileChangedHandler = event => {
         this.setState({selectedFile: event.target.files[0]})
-    }
+    };
 
     uploadHandler = () => {
 
         const loadRequest = {userId: this.props.currentUser.id, file: this.state.selectedFile};
 
         UserAPI.loadPhoto(loadRequest);
-        console.log("done");
-    }
+    };
+
     render() {
         return (
             <div className='profile-container'>
