@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Optional;
@@ -51,15 +52,11 @@ public class CategoryController {
     }
 
     @PostMapping("/category")
-    public ResponseEntity<CategoryBasicResponse> createCategory(@RequestBody CategoryBasicRequest request)
+    public ResponseEntity<CategoryBasicResponse> createCategory(@Valid @RequestBody CategoryBasicRequest request)
             throws URISyntaxException {
 
         if (this.categoryRepository.existsByName(request.getName())) {
             throw new BadRequestException("Такая категория уже создана!");
-        }
-
-        if (request.getName() == null || request.getName().trim().length() == 0) {
-            throw new BadRequestException("Нельзя создать категорию с пустым названием!");
         }
 
         Category category = this.categoryMapper.basicRequestToEntity(request);
@@ -71,13 +68,9 @@ public class CategoryController {
     }
 
     @PutMapping("/category/{id}")
-    public ResponseEntity<CategoryBasicResponse> updateCategory(@PathVariable Long id, @RequestBody CategoryBasicRequest request) {
+    public ResponseEntity<CategoryBasicResponse> updateCategory(@PathVariable Long id, @Valid @RequestBody CategoryBasicRequest request) {
         if (this.categoryRepository.findById(id).isEmpty()) {
             throw new BadRequestException("Такой категории не существует!");
-        }
-
-        if (request.getName() == null || request.getName().trim().length() == 0) {
-            throw new BadRequestException("ельзя изменить название на пустую строку!");
         }
 
         Category category = this.categoryRepository.getOne(id);
