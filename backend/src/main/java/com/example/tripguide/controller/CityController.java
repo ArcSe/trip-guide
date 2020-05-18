@@ -57,6 +57,10 @@ public class CityController {
             throw new BadRequestException("Такой город уже создан!");
         }
 
+        if (request.getName() == null || request.getName().trim().length() == 0) {
+            throw new BadRequestException("Нельзя создать город с пустым названием!");
+        }
+
         City city = this.cityMapper.basicRequestToEntity(request);
         City result = this.cityRepository.save(city);
         CityBasicResponse response = this.cityMapper.entityToBasicResponse(result);
@@ -69,6 +73,10 @@ public class CityController {
     public ResponseEntity<CityBasicResponse> updateCity(@PathVariable Long id, @RequestBody CityBasicRequest request) {
         if (this.cityRepository.findById(id).isEmpty()) {
             throw new BadRequestException("Такого города не существует!");
+        }
+
+        if (request.getName() == null || request.getName().trim().length() == 0) {
+            throw new BadRequestException("Нельзя изменить название на пустую строку!");
         }
 
         City city = this.cityRepository.getOne(id);
