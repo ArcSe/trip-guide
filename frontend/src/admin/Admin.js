@@ -12,13 +12,20 @@ class AdminInformation extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            selectedFile: null };
+            selectedFile: null,
+            isLoad: false,
+        };
 
         this.fileChangedHandler = this.fileChangedHandler.bind(this);
         this.uploadHandler = this.uploadHandler.bind(this);
+        this.changeTheButton = this.changeTheButton.bind(this);
+    }
+    changeTheButton(){
+
     }
 
     fileChangedHandler = event => {
+        this.setState({isLoad: !this.state.isLoad})
         this.setState({selectedFile: event.target.files[0]})
     };
 
@@ -42,8 +49,11 @@ class AdminInformation extends Component {
                         </div>
                     </div >
                     <form method="POST" encType="multipart/form-data">
-                        <button  onClick={this.uploadHandler}>Загрузить</button>
-                        <input type="file" onChange={this.fileChangedHandler}/>
+                        {this.state.isLoad ?
+                            <button onClick={this.uploadHandler}>Загрузить</button>
+                            :
+                            <input type="file" onChange={this.fileChangedHandler}/>
+                        }
                     </form>
                 </div>
             </div>
@@ -58,7 +68,7 @@ class Tabs extends Component {
 
     render() {
         return (
-            <div className="profile-button" >
+            <div className="profile-button ml-sm-2" >
                 <div className="btn-toolbar justify-content-between" role="toolbar"
                      aria-label="Toolbar with button groups">
                     <div className="btn-group" role="group" aria-label="First group">
@@ -83,7 +93,7 @@ class Content extends Component {
 
     render() {
         return(
-            <div className="profile-button">
+            <div className="profile-button ">
                 <div className="row">
                     <div className="container">
                         {(this.props.tab === "events") && <Events />}

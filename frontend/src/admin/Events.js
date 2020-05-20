@@ -12,6 +12,7 @@ import {Schedule} from "./Schedule"
 
 
 
+
 class EditModalDialog extends Component {
     constructor(props) {
         super(props);
@@ -412,30 +413,49 @@ class Content extends Component {
                                      getEventsByName={this.props.getEventsByName}
                                      setEventsState={this.props.setNewState}/>
                 </div>
-                <div className="list-group">
+                <div className="table-responsive">
+                <table className="table">
+                    <thead className="thead">
+                    <tr>
+                        <th scope="col" className="lead">#</th>
+                        <th scope="col" className="lead">Название</th>
+                        <th scope="col" className="lead">Адресс</th>
+                        <th scope="col" className="lead">Рейтинг</th>
+                        <th scope="col" className="lead">Город</th>
+                        <th scope="col" className="lead">Категория</th>
+                        <th scope="col" className="lead"/>
+                    </tr>
+                    </thead>
                     {
                         this.props.events.map( event =>
-                            <div>
-                                <li className="mb-1 list-group-item d-flex justify-content-between">
-                                    <p className="mt-2 flex-grow-1">{event.name}</p>
-                                    <p className="mt-2 flex-grow-1">{event.address}</p>
-                                    <p className="mt-2 flex-grow-1">{event.rating}</p>
-                                    <p className="mt-2 flex-grow-1">{event.city.name}</p>
-                                    <p className="mt-2 flex-grow-1">{event.category.name}</p>
-
-                                    <div className="btn-group" >
-                                        <button type="button" className="mr-1 btn btn-outline-dark"
-                                                onClick={() => this.handleScheduleButton(event.id, event.name)}>Расписание
-                                        </button>
-                                        <button type="button" className="mr-1 btn btn-outline-success"
-                                                onClick={() => this.handleEditButton(event.id)}>Изменить</button>
-                                        <button type="button" className="mr-1 btn btn-outline-danger"
-                                                onClick={() => this.handleDeleteButton(event.id)}>Удалить</button>
-                                    </div>
-                                </li>
-                            </div>)
+                            <tbody>
+                                <tr>
+                                    <th scope="row" className="lead">{event.id}</th>
+                                    <td className="lead">{event.name}</td>
+                                    <td className="lead">{event.address}</td>
+                                    <td className="lead">{event.rating}</td>
+                                    <td className="lead">{event.city.name}</td>
+                                    <td className="lead">{event.category.name}</td>
+                                    <td className="lead">
+                                        <div className="btn-group ml-lg-5" >
+                                            <button type="button" className="mr-1 btn btn-outline-dark"
+                                                    onClick={() => this.handleScheduleButton(event.id, event.name)}>Расписание
+                                            </button>
+                                            <button type="button" className="mr-1 btn btn-outline-success"
+                                                    onClick={() => this.handleEditButton(event.id)}>Изменить</button>
+                                            <button type="button" className="mr-1 btn btn-outline-danger"
+                                                    onClick={() => this.handleDeleteButton(event.id)}>Удалить</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>)
                     }
+                </table>
                 </div>
+                <Pagination totalPages={this.props.totalPages}
+                            activePage={this.props.activePage}
+                            setEventsState={this.props.setEventsState}
+                            getEvents={this.props.getEvents}/>
             </div>
         )
     }
@@ -617,13 +637,13 @@ export class Events extends React.Component {
                              show={this.state.showScheduleModal}
                              eventId={this.state.editEventId}
                              eventName={this.state.editEventName}
+                              totalPages={this.state.totalPages}
+                              activePage={this.state.activePage}
+
                     />)
                 }
 
-                <Pagination totalPages={this.state.totalPages}
-                            activePage={this.state.activePage}
-                            setEventsState={this.setNewState}
-                            getEvents={this.getEvents}/>
+
             </div>
         )
     }

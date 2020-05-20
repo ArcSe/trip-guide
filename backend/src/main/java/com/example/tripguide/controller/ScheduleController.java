@@ -21,6 +21,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Optional;
 
 @RestController
@@ -76,13 +78,13 @@ public class ScheduleController {
         result.setDateTime(request.getDateTime());
         result.setEvent(this.eventRepository.getOne(request.getEventId()));
 
+        System.out.println(result.getDateTime().plusHours(3));
         Schedule resultEdit = this.scheduleRepository.save(result);
         ScheduleBasicResponse response = this.scheduleMapper.entityToBasicResponse(resultEdit);
         return ResponseEntity.ok().body(response);
 
 
     }
-
     @DeleteMapping("/schedule/{id}")
     public ResponseEntity<?> deleteEvent(@PathVariable Long id) {
         if (this.scheduleRepository.findById(id).isEmpty()) {

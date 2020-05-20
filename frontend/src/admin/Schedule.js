@@ -57,7 +57,7 @@ class EditModalDialog extends Component {
                         <div className="form-group">
                             <label htmlFor="exampleInputEmail1">Введите стоимость</label>
                             <input type="text" className="form-control" id="textInput"
-                                   value={this.props.price}
+                                   value={this.state.price}
                                    onChange={e =>{let {price} = this.state;
                                        price = e.target.value;
                                        this.setState({price})} }/>
@@ -102,7 +102,6 @@ class CreateModalDialog extends Component {
     }
 
     setStartDate(date){
-        alert(this.props.price);
         this.setState({
             startDate: date
         });
@@ -209,25 +208,39 @@ class Content extends Component {
                     <button type="button" className="mb-1 btn btn-outline-dark"
                             onClick={this.props.toggleDialog}>Назад</button>
                 </div>
-                <div className="list-group">
+                <div className="table-responsive">
+                    <table className="table">
+                        <thead className="thead">
+                        <tr>
+                            <th scope="col" className="lead">#</th>
+                            <th scope="col" className="lead">Название</th>
+                            <th scope="col" className="lead">Цена</th>
+                            <th scope="col" className="lead">Дата</th>
+                            <th scope="col" className="lead"/>
+                        </tr>
+                        </thead>
                     {
                         this.props.schedules.map(schedule =>
-                            <div>
-                                <li className="mb-1 list-group-item d-flex justify-content-between">
-                                    <p className="mt-2 flex-grow-1">{schedule.eventName}</p>
-                                    <p className="mt-2 flex-grow-1">{schedule.price}</p>
-                                    <p className="mt-2 flex-grow-1">{schedule.day} {schedule.month} {schedule.time}</p>
-                                    <div className="btn-group">
-                                        <button type="button" className="mr-1 btn btn-outline-success"
-                                                onClick={() => this.handleEditButton(schedule.id, schedule.price)} >Изменить
-                                        </button>
-                                        <button type="button" className="mr-1 btn btn-outline-danger"
-                                                onClick={() => this.handleDeleteButton(schedule.id)} >Удалить
-                                        </button>
-                                    </div>
-                                </li>
-                            </div>)
+                            <tbody>
+                            <tr>
+                                <th scope="row" className="lead">{schedule.id}</th>
+                                    <td className="lead">{schedule.eventName}</td>
+                                    <td className="lead">{schedule.price} руб</td>
+                                    <td className="lead">{schedule.day} {schedule.month} {schedule.time}</td>
+                                    <td>
+                                        <div className="btn-group ml-xl-5">
+                                            <button type="button" className="mr-1 btn btn-outline-success"
+                                                    onClick={() => this.handleEditButton(schedule.id, schedule.price)} >Изменить
+                                            </button>
+                                            <button type="button" className="mr-1 btn btn-outline-danger"
+                                                    onClick={() => this.handleDeleteButton(schedule.id)} >Удалить
+                                            </button>
+                                        </div>
+                                    </td>
+                            </tr>
+                            </tbody>)
                     }
+                    </table>
                 </div>
 
             </div>
@@ -259,6 +272,7 @@ class Pagination extends Component  {
 
         if (activePage !== totalPages - 1) {
             this.props.setScheduleState("activePage", activePage + 1);
+
         }
 
         setTimeout(this.props.getSchedulesByEvent, 100);
