@@ -68,7 +68,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .passwordEncoder(passwordEncoder());
     }
 
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -119,14 +118,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/events/**",
                         "/api/schedule/**",
                         "/api/event/**")
-                /*
-                .antMatchers("/auth/**",
-                        "/oauth2/**",
-                        "/api/categories/**",
-                        "/api/cities/**",
-                        "/api/events/**",
-                        "/api/schedule/**",
-                        "/api/event/**") */
                 .permitAll()
                 .anyRequest()
                 .authenticated()
@@ -145,7 +136,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .successHandler(oAuth2AuthenticationSuccessHandler)
                 .failureHandler(oAuth2AuthenticationFailureHandler);
 
-        // Add our custom Token based authentication filter
         http.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 }

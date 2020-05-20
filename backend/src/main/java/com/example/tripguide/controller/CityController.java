@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Optional;
@@ -51,7 +52,7 @@ public class CityController {
     }
 
     @PostMapping("/city")
-    public ResponseEntity<CityBasicResponse> createCity(@RequestBody CityBasicRequest request)
+    public ResponseEntity<CityBasicResponse> createCity(@Valid @RequestBody CityBasicRequest request)
             throws URISyntaxException {
         if (this.cityRepository.existsByName(request.getName())) {
             throw new BadRequestException("Такой город уже создан!");
@@ -66,7 +67,7 @@ public class CityController {
     }
 
     @PutMapping("/city/{id}")
-    public ResponseEntity<CityBasicResponse> updateCity(@PathVariable Long id, @RequestBody CityBasicRequest request) {
+    public ResponseEntity<CityBasicResponse> updateCity(@PathVariable Long id, @Valid @RequestBody CityBasicRequest request) {
         if (this.cityRepository.findById(id).isEmpty()) {
             throw new BadRequestException("Такого города не существует!");
         }

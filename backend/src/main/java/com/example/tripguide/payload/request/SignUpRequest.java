@@ -14,7 +14,7 @@ public class SignUpRequest {
     private String name;
 
     @NotBlank(message = "Email не может быть пустым")
-    @Email(message = "Email должен быть валидным")
+    @Email(message = "Email должен быть действительным")
     private String email;
 
     @NotBlank(message = "Пароль не может быть пустым")

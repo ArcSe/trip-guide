@@ -29,7 +29,11 @@ class EditModalDialog extends Component {
                 this.props.toggleDialog();
                 this.props.getCities();
             }).catch(error => {
-            Alert.error((error && error.message) || "Упс! Что-то пошло не так. Пожалуйста, попробуйте снова!");
+            if ('errors' in error) {
+                error.errors.map(obj => Alert.error(obj.defaultMessage));
+            } else {
+                Alert.error((error && error.message) || "Упс! Что-то пошло не так. Пожалуйста, попробуйте снова!");
+            }
         })
     }
 
@@ -89,7 +93,11 @@ class CreateModalDialog extends Component {
                 this.props.toggleDialog();
                 this.props.getCities();
             }).catch(error => {
-            Alert.error((error && error.message) || "Упс! Что-то пошло не так. Пожалуйста, попробуйте снова!");
+            if ('errors' in error) {
+                error.errors.map(obj => Alert.error(obj.defaultMessage));
+            } else {
+                Alert.error((error && error.message) || "Упс! Что-то пошло не так. Пожалуйста, попробуйте снова!");
+            }
         });
     }
 

@@ -97,9 +97,12 @@ class LoginForm extends Component {
             localStorage.setItem(ACCESS_TOKEN, response.accessToken);
             Alert.success("Вы успешно вошли!");
             window.location.reload();
-            // Костыль вместо: this.props.history.push("/");
         }).catch(error => {
-            Alert.error('Неверные данные!');
+            if ('errors' in error) {
+                error.errors.map(obj => Alert.error(obj.defaultMessage));
+            } else {
+                Alert.error("Неверные данные!");
+            }
         });
     }
     

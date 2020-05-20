@@ -161,15 +161,15 @@ class EventPicturesContent extends Component {
 
                         {
                             this.state.photos.map(photo =>
-                                <div>
-                                    <a className="m-1"
+                                <div className="col-lg-3 col-md-4 col-6 thumb">
+                                    <a
                                         href={`${API_BASE_URL}/img/${photo}`}
                                         data-attribute="SRL"
                                         className="pseudo-element"
                                     >
-                                        <img className="img-relative" width="200" height="200"
+                                        <img className="img-fluid"
                                              src={`${API_BASE_URL}/img/${photo}`}
-                                             alt="Photo"
+                                             alt="Фотография"
                                         />
                                     </a>
                                 </div>
