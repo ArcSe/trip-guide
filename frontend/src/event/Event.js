@@ -161,7 +161,8 @@ class EventPicturesContent extends Component {
 
                         {
                             this.state.photos.map(photo =>
-                                <div className="col-lg-3 col-md-4 col-6 thumb">
+                                <div className="col-lg-3 col-md-4 col-6 thumb justify-content-center
+                             text-center ">
                                     <a
                                         href={`${API_BASE_URL}/img/${photo}`}
                                         data-attribute="SRL"

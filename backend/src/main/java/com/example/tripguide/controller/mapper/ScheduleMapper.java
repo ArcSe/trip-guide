@@ -23,7 +23,7 @@ public class ScheduleMapper {
     }
 
     public ScheduleBasicResponse entityToBasicResponse(Schedule schedule){
-        LocalDateTime dateTime = schedule.getDateTime().plusHours(3);
+        LocalDateTime dateTime = schedule.getDateTime();
         ScheduleBasicResponse scheduleBasicResponse = new ScheduleBasicResponse();
         scheduleBasicResponse.setId(schedule.getId());
         scheduleBasicResponse.setPrice(schedule.getPrice());
