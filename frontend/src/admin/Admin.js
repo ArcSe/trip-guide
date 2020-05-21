@@ -48,13 +48,19 @@ class AdminInformation extends Component {
                             <p className="lead">Email: {this.props.currentUser.email}</p>
                         </div>
                     </div >
-                    <form method="POST" encType="multipart/form-data">
-                        {this.state.isLoad ?
-                            <button onClick={this.uploadHandler}>Загрузить</button>
-                            :
-                            <input type="file" onChange={this.fileChangedHandler}/>
-                        }
-                    </form>
+                    {
+                        false &&
+
+                        <form method="POST" encType="multipart/form-data">
+                            {this.state.isLoad ?
+                                <button onClick={this.uploadHandler}>Загрузить</button>
+                                :
+                                <input type="file" onChange={this.fileChangedHandler}/>
+                            }
+                        </form>
+                    }
+
+
                 </div>
             </div>
         )

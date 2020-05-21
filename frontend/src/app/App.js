@@ -86,7 +86,7 @@ class OAuthComponent extends Component {
           </div>
 
           <div className="body">
-            <OAuth2RedirectHandler />
+            <OAuth2RedirectHandler {...this.props} />
           </div>
 
         </div>
@@ -234,10 +234,9 @@ class App extends Component {
                      render={(props) => <SignupComponent authenticated={this.state.authenticated}
                                                          onLogout={this.handleLogout}/>} />
 
-              <Route path="/oauth2/redirect"
-                     render={(props) => <OAuthComponent authenticated={this.state.authenticated}
-                                                        onLogout={this.handleLogout} />} />
+               <Route path="/oauth2/redirect" component={OAuth2RedirectHandler} />
 
+               
               <Route path="/profile"
                      render={() => <ProfileComponent authenticated={this.state.authenticated}
                                                      currentUser={this.state.currentUser}

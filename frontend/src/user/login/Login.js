@@ -58,8 +58,6 @@ class SocialLogin extends Component {
                     <img src={googleLogo} alt="Google" /></a>
                 <a className="btn btn-block social-btn facebook" href={FACEBOOK_AUTH_URL}>
                     <img src={fbLogo} alt="Facebook" /></a>
-                <a className="btn btn-block social-btn github" href={GITHUB_AUTH_URL}>
-                    <img src={githubLogo} alt="Github" /></a>
             </div>
         );
     }
